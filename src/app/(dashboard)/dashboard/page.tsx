@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { AlertsPanel } from "@/components/alerts/alerts-panel"
+import { DashboardCharts } from "@/components/charts/dashboard-charts"
 
 import { getDashboardStats } from "./actions"
 import { getAlerts, getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions"
@@ -224,6 +225,9 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Charts */}
+      <DashboardCharts charts={stats.charts} />
 
       {/* Metodos mas usados y preparaciones recientes */}
       <div className="grid gap-6 lg:grid-cols-2">

@@ -33,6 +33,13 @@ export type DashboardStats = {
     rating: number | null
     beans: { name: string } | null
   }[]
+  // Chart data
+  charts: {
+    brewsPerWeek: { week: string; count: number }[]
+    ratingDistribution: { rating: number; count: number }[]
+    coffeeConsumption: { week: string; grams: number }[]
+    ratingByMethod: { method: string; avgRating: number; count: number }[]
+  }
 }
 
 export async function getDashboardStats(): Promise<ActionResult<DashboardStats>> {
@@ -61,7 +68,7 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
     recentBrewsResult,
   ] = await Promise.all([
     supabase.from("beans").select("status"),
-    supabase.from("brews").select("rating, brewed_at, brew_method"),
+    supabase.from("brews").select("rating, brewed_at, brew_method, dose_grams"),
     supabase.from("equipment").select("id", { count: "exact", head: true }),
     supabase.from("cupping_notes").select("id", { count: "exact", head: true }),
     supabase
@@ -105,6 +112,77 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
     .sort((a, b) => b.count - a.count)
     .slice(0, 5)
 
+  // Chart data calculations
+
+  // 1. Brews per week (last 8 weeks)
+  const brewsPerWeek: { week: string; count: number }[] = []
+  for (let i = 7; i >= 0; i--) {
+    const weekStart = new Date()
+    weekStart.setDate(weekStart.getDate() - (i * 7 + weekStart.getDay()))
+    weekStart.setHours(0, 0, 0, 0)
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekEnd.getDate() + 7)
+
+    const count = brews.filter((b) => {
+      const brewDate = new Date(b.brewed_at)
+      return brewDate >= weekStart && brewDate < weekEnd
+    }).length
+
+    const weekLabel = weekStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+    brewsPerWeek.push({ week: weekLabel, count })
+  }
+
+  // 2. Rating distribution
+  const ratingCounts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+  brews.forEach((b) => {
+    if (b.rating && b.rating >= 1 && b.rating <= 5) {
+      ratingCounts[b.rating] = (ratingCounts[b.rating] || 0) + 1
+    }
+  })
+  const ratingDistribution = Object.entries(ratingCounts)
+    .map(([rating, count]) => ({ rating: parseInt(rating), count }))
+    .sort((a, b) => a.rating - b.rating)
+
+  // 3. Coffee consumption per week (last 8 weeks)
+  const coffeeConsumption: { week: string; grams: number }[] = []
+  for (let i = 7; i >= 0; i--) {
+    const weekStart = new Date()
+    weekStart.setDate(weekStart.getDate() - (i * 7 + weekStart.getDay()))
+    weekStart.setHours(0, 0, 0, 0)
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekEnd.getDate() + 7)
+
+    const grams = brews
+      .filter((b) => {
+        const brewDate = new Date(b.brewed_at)
+        return brewDate >= weekStart && brewDate < weekEnd
+      })
+      .reduce((sum, b) => sum + (b.dose_grams || 0), 0)
+
+    const weekLabel = weekStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+    coffeeConsumption.push({ week: weekLabel, grams: Math.round(grams) })
+  }
+
+  // 4. Average rating by method
+  const methodRatings: Record<string, { total: number; count: number }> = {}
+  brews.forEach((b) => {
+    if (b.rating) {
+      if (!methodRatings[b.brew_method]) {
+        methodRatings[b.brew_method] = { total: 0, count: 0 }
+      }
+      methodRatings[b.brew_method].total += b.rating
+      methodRatings[b.brew_method].count += 1
+    }
+  })
+  const ratingByMethod = Object.entries(methodRatings)
+    .map(([method, data]) => ({
+      method,
+      avgRating: Math.round((data.total / data.count) * 10) / 10,
+      count: data.count,
+    }))
+    .sort((a, b) => b.avgRating - a.avgRating)
+    .slice(0, 6)
+
   return {
     success: true,
     data: {
@@ -125,6 +203,12 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
         rating: brew.rating as number | null,
         beans: brew.beans as unknown as { name: string } | null,
       })),
+      charts: {
+        brewsPerWeek,
+        ratingDistribution,
+        coffeeConsumption,
+        ratingByMethod,
+      },
     },
   }
 }
