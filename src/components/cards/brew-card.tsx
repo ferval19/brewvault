@@ -15,6 +15,7 @@ import {
 
 import { DeleteBrewDialog } from "@/app/(dashboard)/brews/delete-brew-dialog"
 import { getBrewMethodConfig } from "@/lib/brew-methods"
+import { getBrewMethodIllustration } from "@/lib/placeholder-illustrations"
 import type { Brew } from "@/app/(dashboard)/brews/actions"
 
 interface BrewCardProps {
@@ -47,6 +48,7 @@ export function BrewCard({ brew }: BrewCardProps) {
 
   const methodConfig = getBrewMethodConfig(brew.brew_method)
   const MethodIcon = methodConfig.icon
+  const MethodIllustration = getBrewMethodIllustration(brew.brew_method)
   const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
 
   return (
@@ -63,7 +65,7 @@ export function BrewCard({ brew }: BrewCardProps) {
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <MethodIcon className={`h-16 w-16 ${methodConfig.color} opacity-40`} />
+                <MethodIllustration className="w-24 h-24" />
               </div>
             )}
 

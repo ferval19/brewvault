@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ImageUpload } from "@/components/forms/image-upload"
+import { Info } from "lucide-react"
 
 import {
   brewMethods,
@@ -48,18 +49,22 @@ interface BrewFormData {
 
 interface BrewFormProps {
   brew?: Brew
+  defaultBrew?: Brew | null
   beans: BeanOption[]
   equipment: EquipmentOption[]
   onSuccess?: () => void
 }
 
-export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
+export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: BrewFormProps) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const brewers = equipment.filter((e) => e.type === "brewer" || e.type === "espresso_machine")
   const grinders = equipment.filter((e) => e.type === "grinder")
+
+  // Use defaultBrew for pre-filling new brews (not for editing)
+  const prefill = !brew && defaultBrew ? defaultBrew : null
 
   const {
     register,
@@ -69,18 +74,18 @@ export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
   } = useForm<BrewFormData>({
     defaultValues: {
       bean_id: brew?.bean_id || "",
-      equipment_id: brew?.equipment_id || undefined,
-      grinder_id: brew?.grinder_id || undefined,
-      brew_method: brew?.brew_method || "",
-      grind_size: brew?.grind_size || undefined,
-      dose_grams: brew?.dose_grams || 18,
-      water_grams: brew?.water_grams || 300,
-      water_temperature: brew?.water_temperature || 93,
-      total_time_seconds: brew?.total_time_seconds || undefined,
-      bloom_time_seconds: brew?.bloom_time_seconds || undefined,
-      bloom_water_grams: brew?.bloom_water_grams || undefined,
-      yield_grams: brew?.yield_grams || undefined,
-      filter_type: brew?.filter_type || undefined,
+      equipment_id: brew?.equipment_id || prefill?.equipment_id || undefined,
+      grinder_id: brew?.grinder_id || prefill?.grinder_id || undefined,
+      brew_method: brew?.brew_method || prefill?.brew_method || "",
+      grind_size: brew?.grind_size || prefill?.grind_size || undefined,
+      dose_grams: brew?.dose_grams || prefill?.dose_grams || 18,
+      water_grams: brew?.water_grams || prefill?.water_grams || 300,
+      water_temperature: brew?.water_temperature || prefill?.water_temperature || 93,
+      total_time_seconds: brew?.total_time_seconds || prefill?.total_time_seconds || undefined,
+      bloom_time_seconds: brew?.bloom_time_seconds || prefill?.bloom_time_seconds || undefined,
+      bloom_water_grams: brew?.bloom_water_grams || prefill?.bloom_water_grams || undefined,
+      yield_grams: brew?.yield_grams || prefill?.yield_grams || undefined,
+      filter_type: brew?.filter_type || prefill?.filter_type || undefined,
       notes: brew?.notes || "",
       rating: brew?.rating || undefined,
       image_url: brew?.image_url || null,
@@ -127,6 +132,15 @@ export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {prefill && (
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            Datos precargados de tu ultima preparacion. Selecciona el cafe y ajusta los parametros.
+          </AlertDescription>
         </Alert>
       )}
 

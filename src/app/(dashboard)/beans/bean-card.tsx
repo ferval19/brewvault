@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState, useMemo } from "react"
 import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { CoffeeBeansIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -84,7 +85,7 @@ export function BeanCard({ bean }: BeanCardProps) {
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-6xl opacity-30">☕</div>
+                <CoffeeBeansIllustration className="w-24 h-24" />
               </div>
             )}
 

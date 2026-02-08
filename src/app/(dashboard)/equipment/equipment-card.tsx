@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { Cog, Pencil, Calendar, MoreHorizontal, Eye, Trash2 } from "lucide-react"
+import { Pencil, Calendar, MoreHorizontal, Eye, Trash2 } from "lucide-react"
+import { getEquipmentIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +36,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
   const typeLabel = equipmentTypes.find((t) => t.value === equipment.type)?.label || equipment.type
   const gradient = typeGradients[equipment.type] || "from-gray-500/20 to-slate-600/20"
   const fullName = equipment.brand ? `${equipment.brand} ${equipment.model}` : equipment.model
+  const EquipmentIllustration = getEquipmentIllustration(equipment.type)
 
   return (
     <>
@@ -43,7 +45,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
           {/* Header gradient */}
           <div className={`relative aspect-[16/8] bg-gradient-to-br ${gradient}`}>
             <div className="absolute inset-0 flex items-center justify-center">
-              <Cog className="h-16 w-16 text-gray-600 opacity-30" />
+              <EquipmentIllustration className="w-20 h-20" />
             </div>
 
             {/* Overlay gradient */}

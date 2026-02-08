@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, MapPin, Globe, Coffee } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, MapPin, Globe } from "lucide-react"
+import { RoasterIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -33,7 +34,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
           {/* Header gradient */}
           <div className="relative aspect-[16/8] bg-gradient-to-br from-stone-600/20 to-amber-700/20">
             <div className="absolute inset-0 flex items-center justify-center">
-              <Coffee className="h-16 w-16 text-stone-600 opacity-30" />
+              <RoasterIllustration className="w-20 h-20" />
             </div>
 
             {/* Overlay gradient */}

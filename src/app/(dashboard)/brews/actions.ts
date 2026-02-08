@@ -300,3 +300,37 @@ export async function getEquipment(): Promise<ActionResult<EquipmentOption[]>> {
 
   return { success: true, data: data as EquipmentOption[] }
 }
+
+export async function getLastBrew(): Promise<ActionResult<Brew | null>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("brews")
+    .select(`
+      *,
+      beans (
+        id,
+        name,
+        roaster_id,
+        roasters (
+          id,
+          name
+        )
+      )
+    `)
+    .eq("user_id", userData.user.id)
+    .order("brewed_at", { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true, data: data as Brew | null }
+}

@@ -33,9 +33,12 @@ export function Sidebar() {
   return (
     <aside className="h-full w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
-          BrewVault
-        </h1>
+        <div className="flex items-center gap-2">
+          <Coffee className="h-6 w-6 text-amber-600" />
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+            BrewVault
+          </h1>
+        </div>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
           Tu diario de cafe
         </p>

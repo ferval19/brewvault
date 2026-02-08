@@ -8,37 +8,82 @@ import {
   Star,
   ArrowRight,
   CheckCircle2,
+  User,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import {
+  CoffeeBeansIllustration,
+  V60Illustration,
+  ChemexIllustration,
+  GrinderIllustration,
+  KettleIllustration,
+  ScaleIllustration,
+} from "@/lib/placeholder-illustrations"
+import { createClient } from "@/lib/supabase/server"
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let userName: string | null = null
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single()
+    userName = profile?.full_name || user.email?.split("@")[0] || null
+  }
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Coffee className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
             <span className="font-semibold text-base sm:text-lg">BrewVault</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2">
             <ThemeToggle />
-            <Link href="/login" className="hidden sm:block">
-              <Button variant="ghost" size="sm">
-                Iniciar sesion
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button size="sm">Comenzar</Button>
-            </Link>
+            {user ? (
+              <Link href="/beans">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <User className="h-4 w-4" />
+                  <span className="hidden sm:inline">{userName}</span>
+                  <span className="sm:hidden">Dashboard</span>
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="hidden sm:block">
+                  <Button variant="ghost" size="sm">
+                    Iniciar sesion
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="sm">Comenzar</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 relative overflow-hidden">
+        {/* Decorative illustrations */}
+        <div className="absolute top-20 left-0 opacity-20 dark:opacity-10 hidden lg:block">
+          <V60Illustration className="w-32 h-32 text-amber-600" />
+        </div>
+        <div className="absolute top-40 right-0 opacity-20 dark:opacity-10 hidden lg:block">
+          <ChemexIllustration className="w-28 h-28 text-amber-500" />
+        </div>
+        <div className="absolute bottom-10 left-10 opacity-15 dark:opacity-10 hidden lg:block">
+          <CoffeeBeansIllustration className="w-24 h-24 text-amber-700" />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8">
             <Star className="h-3 w-3 sm:h-4 sm:w-4 text-amber-500" />
             Tu diario digital de cafe de especialidad
@@ -56,9 +101,9 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <Link href="/signup" className="w-full sm:w-auto">
+            <Link href={user ? "/beans" : "/signup"} className="w-full sm:w-auto">
               <Button size="lg" className="w-full sm:w-auto h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base">
-                Empezar ahora
+                {user ? "Ir al dashboard" : "Empezar ahora"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -112,31 +157,37 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
             <FeatureCard
               icon={<Coffee className="h-6 w-6" />}
+              illustration={<CoffeeBeansIllustration className="w-16 h-16 text-amber-600/60" />}
               title="Biblioteca de Cafes"
               description="Registra origen, variedad, proceso, notas de sabor y mas. Nunca olvides un cafe que te encanto."
             />
             <FeatureCard
               icon={<BookOpen className="h-6 w-6" />}
+              illustration={<V60Illustration className="w-16 h-16 text-amber-600/60" />}
               title="Diario de Preparaciones"
               description="Documenta cada variable: dosis, temperatura, tiempo, molienda. Replica tus mejores tazas."
             />
             <FeatureCard
               icon={<BarChart3 className="h-6 w-6" />}
+              illustration={<BarChart3 className="w-14 h-14 text-amber-600/40" />}
               title="Dashboard Analitico"
               description="Visualiza tu consumo, gasto, origenes favoritos y metodos preferidos en graficos claros."
             />
             <FeatureCard
               icon={<Droplets className="h-6 w-6" />}
+              illustration={<KettleIllustration className="w-16 h-16 text-blue-500/60" />}
               title="Recetas de Agua"
               description="Guarda tus formulas de agua mineral con GH, KH, calcio, magnesio y TDS."
             />
             <FeatureCard
               icon={<Timer className="h-6 w-6" />}
+              illustration={<ScaleIllustration className="w-16 h-16 text-emerald-600/60" />}
               title="Control de Inventario"
               description="Sigue el stock de tus cafes con alertas de frescura y agotamiento automaticas."
             />
             <FeatureCard
               icon={<Star className="h-6 w-6" />}
+              illustration={<GrinderIllustration className="w-16 h-16 text-gray-600/60" />}
               title="Notas de Cata SCA"
               description="Evalua con el protocolo profesional: fragancia, acidez, cuerpo, balance y mas."
             />
@@ -193,11 +244,14 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded-3xl flex items-center justify-center">
-                <Coffee className="h-32 w-32 text-amber-600/50 dark:text-amber-400/30" />
+              <div className="aspect-square bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded-3xl flex items-center justify-center overflow-hidden">
+                <V60Illustration className="w-48 h-48 text-amber-600/70 dark:text-amber-400/50" />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 rounded-2xl flex items-center justify-center shadow-lg">
-                <BarChart3 className="h-12 w-12 text-neutral-400" />
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
+                <ScaleIllustration className="w-20 h-20 text-emerald-600/60" />
+              </div>
+              <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40 rounded-xl flex items-center justify-center shadow-md overflow-hidden">
+                <CoffeeBeansIllustration className="w-16 h-16 text-amber-700/60" />
               </div>
             </div>
           </div>
@@ -208,14 +262,16 @@ export default function Home() {
       <section className="py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-3 sm:mb-4">
-            Empieza tu diario hoy
+            {user ? "Continua tu viaje cafetero" : "Empieza tu diario hoy"}
           </h2>
           <p className="text-sm sm:text-lg text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8 px-2">
-            Unete a la comunidad de entusiastas que estan mejorando su cafe cada dia.
+            {user
+              ? "Registra tu proxima preparacion y sigue perfeccionando tu tecnica."
+              : "Unete a la comunidad de entusiastas que estan mejorando su cafe cada dia."}
           </p>
-          <Link href="/signup">
+          <Link href={user ? "/brews/new" : "/signup"}>
             <Button size="lg" className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base">
-              Crear cuenta gratis
+              {user ? "Nueva preparacion" : "Crear cuenta gratis"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -227,16 +283,24 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:gap-6">
             <div className="flex items-center gap-2">
-              <Coffee className="h-5 w-5" />
+              <Coffee className="h-5 w-5 text-amber-600" />
               <span className="font-semibold">BrewVault</span>
             </div>
             <div className="flex items-center gap-6 sm:gap-8 text-sm text-neutral-600 dark:text-neutral-400">
-              <Link href="/login" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
-                Iniciar sesion
-              </Link>
-              <Link href="/signup" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
-                Registrarse
-              </Link>
+              {user ? (
+                <Link href="/beans" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                    Iniciar sesion
+                  </Link>
+                  <Link href="/signup" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                    Registrarse
+                  </Link>
+                </>
+              )}
             </div>
             <div className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-500">
               2026 BrewVault
@@ -250,17 +314,26 @@ export default function Home() {
 
 function FeatureCard({
   icon,
+  illustration,
   title,
   description,
 }: {
   icon: React.ReactNode
+  illustration?: React.ReactNode
   title: string
   description: string
 }) {
   return (
-    <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors">
-      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center mb-3 sm:mb-4">
-        {icon}
+    <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors group">
+      <div className="flex items-start justify-between mb-3 sm:mb-4">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center">
+          {icon}
+        </div>
+        {illustration && (
+          <div className="opacity-60 group-hover:opacity-80 transition-opacity">
+            {illustration}
+          </div>
+        )}
       </div>
       <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-1 sm:mb-2">
         {title}
