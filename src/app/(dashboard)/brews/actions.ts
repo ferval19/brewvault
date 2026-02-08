@@ -141,6 +141,13 @@ export async function createBrew(
     return { success: false, error: "Datos invalidos" }
   }
 
+  // Get the bean to check stock
+  const { data: bean } = await supabase
+    .from("beans")
+    .select("id, name, current_weight_grams, low_stock_threshold_grams")
+    .eq("id", validatedFields.data.bean_id)
+    .single()
+
   const brewData = {
     ...validatedFields.data,
     user_id: userData.user.id,
@@ -153,8 +160,45 @@ export async function createBrew(
     return { success: false, error: error.message }
   }
 
+  // Deduct dose from bean stock
+  if (bean && bean.current_weight_grams !== null) {
+    const newWeight = Math.max(0, bean.current_weight_grams - validatedFields.data.dose_grams)
+    const threshold = bean.low_stock_threshold_grams || 100
+
+    await supabase
+      .from("beans")
+      .update({ current_weight_grams: newWeight })
+      .eq("id", bean.id)
+
+    // Create low stock alert if below threshold
+    if (newWeight <= threshold && bean.current_weight_grams > threshold) {
+      // Check if alert already exists
+      const { data: existingAlert } = await supabase
+        .from("alerts")
+        .select("id")
+        .eq("type", "low_stock")
+        .eq("entity_id", bean.id)
+        .eq("is_dismissed", false)
+        .single()
+
+      if (!existingAlert) {
+        await supabase.from("alerts").insert({
+          user_id: userData.user.id,
+          type: "low_stock",
+          entity_type: "bean",
+          entity_id: bean.id,
+          title: "Stock bajo",
+          message: `${bean.name} - ${newWeight}g restantes`,
+          priority: newWeight <= 50 ? "high" : "normal",
+        })
+      }
+    }
+  }
+
   revalidatePath("/brews")
   revalidatePath("/beans")
+  revalidatePath("/alerts")
+  revalidatePath("/analytics")
   return { success: true, data: undefined }
 }
 

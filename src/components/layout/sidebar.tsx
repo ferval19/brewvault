@@ -13,6 +13,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  ClipboardList,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -23,6 +24,7 @@ const navigation = [
   { name: "Equipamiento", href: "/equipment", icon: Wrench },
   { name: "Tostadores", href: "/roasters", icon: Factory },
   { name: "Agua", href: "/water", icon: Droplets },
+  { name: "Notas de Cata", href: "/cupping", icon: ClipboardList },
   { name: "Dashboard", href: "/analytics", icon: BarChart3 },
   { name: "Configuracion", href: "/settings", icon: Settings },
 ]

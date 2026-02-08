@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Pencil, Clock, Droplets, Scale, Thermometer } from "lucide-react"
+import { ArrowLeft, Pencil, Clock, Droplets, Scale, Thermometer, ClipboardList } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { getBrew } from "../actions"
+import { getCuppingNoteByBrewId } from "../../cupping/actions"
 import { brewMethods, grindSizes, filterTypes } from "@/lib/validations/brews"
 
 function formatTime(seconds: number): string {
@@ -28,6 +29,8 @@ export default async function BrewDetailPage({
   }
 
   const brew = result.data
+  const cuppingResult = await getCuppingNoteByBrewId(id)
+  const cuppingNote = cuppingResult.success ? cuppingResult.data : null
   const methodLabel = brewMethods.find((m) => m.value === brew.brew_method)?.label || brew.brew_method
   const grindLabel = grindSizes.find((g) => g.value === brew.grind_size)?.label || brew.grind_size
   const filterLabel = filterTypes.find((f) => f.value === brew.filter_type)?.label || brew.filter_type
@@ -194,6 +197,51 @@ export default async function BrewDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Nota de cata */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <ClipboardList className="h-5 w-5" />
+            Nota de Cata
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {cuppingNote ? (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-3xl font-bold">{cuppingNote.total_score ?? 0}<span className="text-lg text-muted-foreground">/100</span></p>
+                {cuppingNote.flavor_descriptors && cuppingNote.flavor_descriptors.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {cuppingNote.flavor_descriptors.slice(0, 3).map((d) => (
+                      <Badge key={d} variant="secondary" className="text-xs">
+                        {d}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link href={`/cupping/${cuppingNote.id}`}>
+                <Button variant="outline" size="sm">
+                  Ver detalle
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-muted-foreground mb-3">
+                Esta preparacion no tiene nota de cata
+              </p>
+              <Link href={`/cupping/new?brew_id=${id}`}>
+                <Button variant="outline" size="sm">
+                  <ClipboardList className="mr-2 h-4 w-4" />
+                  Crear nota de cata
+                </Button>
+              </Link>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

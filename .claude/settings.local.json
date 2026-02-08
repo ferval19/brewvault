@@ -20,7 +20,9 @@
       "Bash(git push:*)",
       "Bash(git commit:*)",
       "Bash(git diff:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(npx skills add:*)"
     ]
   }
 }

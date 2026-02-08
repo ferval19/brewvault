@@ -12,8 +12,10 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { AlertsPanel } from "@/components/alerts/alerts-panel"
 
 import { getDashboardStats } from "./actions"
+import { getAlerts, getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions"
 import { brewMethods } from "@/lib/validations/brews"
 
 export const metadata = {
@@ -21,7 +23,11 @@ export const metadata = {
 }
 
 export default async function AnalyticsPage() {
-  const result = await getDashboardStats()
+  const [result, alertsResult, alertCountResult] = await Promise.all([
+    getDashboardStats(),
+    getAlerts({ limit: 5 }),
+    getUnreadAlertCount(),
+  ])
 
   if (!result.success) {
     return (
@@ -32,6 +38,8 @@ export default async function AnalyticsPage() {
   }
 
   const stats = result.data
+  const alerts = alertsResult.success ? alertsResult.data : []
+  const alertCount = alertCountResult.success ? alertCountResult.data : 0
 
   return (
     <div className="space-y-6">
@@ -41,6 +49,11 @@ export default async function AnalyticsPage() {
           Resumen de tu coleccion de cafe
         </p>
       </div>
+
+      {/* Alerts Panel */}
+      {alertCount > 0 && (
+        <AlertsPanel alerts={alerts} totalCount={alertCount} />
+      )}
 
       {/* Main stats grid */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
