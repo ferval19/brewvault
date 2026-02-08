@@ -2,7 +2,7 @@ import Link from "next/link"
 import {
   Coffee,
   Flame,
-  Wrench,
+  Gauge,
   ClipboardList,
   TrendingUp,
   Star,
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
                 <p className="text-3xl font-bold mt-1">{stats.equipment.total}</p>
               </div>
               <div className="p-2 rounded-xl bg-gray-500/10">
-                <Wrench className="h-5 w-5 text-gray-500" />
+                <Gauge className="h-5 w-5 text-gray-500" />
               </div>
             </div>
           </div>

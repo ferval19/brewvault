@@ -53,7 +53,7 @@ export default async function Home() {
           <div className="flex items-center gap-1 sm:gap-2">
             <ThemeToggle />
             {user ? (
-              <Link href="/beans">
+              <Link href="/dashboard">
                 <Button variant="ghost" size="sm" className="gap-2">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">{userName}</span>
@@ -288,7 +288,7 @@ export default async function Home() {
             </div>
             <div className="flex items-center gap-6 sm:gap-8 text-sm text-neutral-600 dark:text-neutral-400">
               {user ? (
-                <Link href="/beans" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                <Link href="/dashboard" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Dashboard
                 </Link>
               ) : (

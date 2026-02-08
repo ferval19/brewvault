@@ -7,7 +7,7 @@ import {
   Home,
   Coffee,
   Flame,
-  Wrench,
+  Gauge,
 } from "lucide-react"
 import { MobileMenuDrawer } from "./mobile-menu-drawer"
 
@@ -15,7 +15,7 @@ const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Cafes", href: "/beans", icon: Coffee },
   { name: "Brews", href: "/brews", icon: Flame },
-  { name: "Equipo", href: "/equipment", icon: Wrench },
+  { name: "Equipo", href: "/equipment", icon: Gauge },
 ]
 
 export function MobileNav() {
