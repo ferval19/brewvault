@@ -20,6 +20,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 import { roastLevels, beanStatuses } from "@/lib/validations/beans"
 import { createBean, updateBean } from "@/app/(dashboard)/beans/actions"
+import { ImageUpload } from "@/components/forms/image-upload"
 
 interface BeanFormData {
   name: string
@@ -38,6 +39,7 @@ interface BeanFormData {
   price?: number | null
   currency?: string
   barcode?: string | null
+  photo_url?: string | null
   certifications?: string[] | null
   personal_rating?: number | null
   status?: string
@@ -62,6 +64,7 @@ interface BeanFormProps {
     price: number | null
     currency: string | null
     barcode: string | null
+    photo_url: string | null
     certifications: string[] | null
     personal_rating: number | null
     status: string
@@ -99,6 +102,7 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
       price: bean?.price || undefined,
       currency: bean?.currency || "EUR",
       barcode: bean?.barcode || "",
+      photo_url: bean?.photo_url || null,
       personal_rating: bean?.personal_rating || undefined,
       status: bean?.status || "active",
     },
@@ -179,6 +183,16 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        {/* Photo Upload */}
+        <div className="space-y-2">
+          <Label>Foto del cafe</Label>
+          <ImageUpload
+            value={watch("photo_url")}
+            onChange={(url) => setValue("photo_url", url)}
+            disabled={isLoading}
+          />
         </div>
       </div>
 

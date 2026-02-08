@@ -20,6 +20,7 @@ export const beanSchema = z.object({
   price: z.coerce.number().positive().optional().nullable(),
   currency: z.string().optional().default("EUR"),
   barcode: z.string().optional().nullable(),
+  photo_url: z.string().url().optional().nullable(),
   certifications: z.array(z.string()).optional().nullable(),
   personal_rating: z.coerce.number().int().min(1).max(5).optional().nullable(),
   status: z.enum(["active", "finished", "archived"]).optional().default("active"),

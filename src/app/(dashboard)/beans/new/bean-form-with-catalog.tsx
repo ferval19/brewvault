@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator"
 import { roastLevels, beanStatuses } from "@/lib/validations/beans"
 import { createBean } from "@/app/(dashboard)/beans/actions"
 import { CoffeeCatalogPicker } from "@/components/forms/coffee-catalog-picker"
+import { ImageUpload } from "@/components/forms/image-upload"
 import type { CatalogCoffee } from "@/lib/data/coffee-catalog"
 
 interface BeanFormData {
@@ -41,6 +42,7 @@ interface BeanFormData {
   price?: number | null
   currency?: string
   barcode?: string | null
+  photo_url?: string | null
   personal_rating?: number | null
   status?: string
 }
@@ -196,6 +198,16 @@ export function BeanFormWithCatalog({ roasters }: BeanFormWithCatalogProps) {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Photo Upload */}
+          <div className="space-y-2">
+            <Label>Foto del cafe</Label>
+            <ImageUpload
+              value={watch("photo_url")}
+              onChange={(url) => setValue("photo_url", url)}
+              disabled={isLoading}
+            />
           </div>
         </div>
 

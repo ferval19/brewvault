@@ -72,6 +72,17 @@ export default async function BeanDetailPage({
         </Link>
       </div>
 
+      {/* Photo */}
+      {bean.photo_url && (
+        <div className="w-full max-w-md aspect-video rounded-lg overflow-hidden">
+          <img
+            src={bean.photo_url}
+            alt={bean.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       {/* Status and rating */}
       <div className="flex flex-wrap gap-3">
         <Badge variant="secondary">{statusLabels[bean.status]}</Badge>

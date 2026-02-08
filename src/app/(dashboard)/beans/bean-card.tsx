@@ -65,6 +65,17 @@ export function BeanCard({ bean }: BeanCardProps) {
   return (
     <>
       <Card className="group relative overflow-hidden hover:shadow-md transition-shadow">
+        {/* Coffee Photo */}
+        {bean.photo_url && (
+          <div className="aspect-video w-full overflow-hidden">
+            <img
+              src={bean.photo_url}
+              alt={bean.name}
+              className="w-full h-full object-cover transition-transform group-hover:scale-105"
+            />
+          </div>
+        )}
+
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
