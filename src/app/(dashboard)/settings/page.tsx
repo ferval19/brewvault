@@ -1,25 +1,33 @@
 import Link from "next/link"
 import Image from "next/image"
-import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar, ChevronRight } from "lucide-react"
+import { headers } from "next/headers"
+import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar, ChevronRight, QrCode } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-import { getUserProfile, getStats } from "./actions"
+import { getUserProfile, getStats, getEquipmentForQR } from "./actions"
 import { getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions"
 import { ProfileForm } from "./profile-form"
 import { SignOutButton } from "./sign-out-button"
 import { NotificationSettings } from "./notification-settings"
+import { QuickBrewUrls } from "./quick-brew-urls"
 
 export const metadata = {
   title: "Configuracion",
 }
 
 export default async function SettingsPage() {
-  const [profileResult, statsResult, alertsResult] = await Promise.all([
+  const headersList = await headers()
+  const host = headersList.get("host") || "localhost:3000"
+  const protocol = host.includes("localhost") ? "http" : "https"
+  const baseUrl = `${protocol}://${host}`
+
+  const [profileResult, statsResult, alertsResult, equipmentResult] = await Promise.all([
     getUserProfile(),
     getStats(),
     getUnreadAlertCount(),
+    getEquipmentForQR(),
   ])
 
   if (!profileResult.success) {
@@ -33,6 +41,7 @@ export default async function SettingsPage() {
   const profile = profileResult.data
   const stats = statsResult.success ? statsResult.data : null
   const alertCount = alertsResult.success ? alertsResult.data : 0
+  const equipment = equipmentResult.success ? equipmentResult.data : []
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto">
@@ -160,6 +169,24 @@ export default async function SettingsPage() {
         </CardHeader>
         <CardContent>
           <NotificationSettings />
+        </CardContent>
+      </Card>
+
+      {/* Quick Brew URLs */}
+      <Card className="rounded-2xl">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div className="space-y-1">
+            <CardTitle className="text-lg">Quick Brew</CardTitle>
+            <CardDescription>
+              URLs para QR o NFC en tus cafeteras
+            </CardDescription>
+          </div>
+          <div className="p-2 rounded-xl bg-orange-500/10">
+            <QrCode className="h-5 w-5 text-orange-500" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <QuickBrewUrls equipment={equipment} baseUrl={baseUrl} />
         </CardContent>
       </Card>
 

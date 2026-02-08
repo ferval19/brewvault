@@ -222,3 +222,32 @@ export async function removePushSubscription(): Promise<ActionResult<undefined>>
 
   return { success: true, data: undefined }
 }
+
+export type EquipmentForQR = {
+  id: string
+  type: string
+  brand: string | null
+  model: string
+  image_url: string | null
+}
+
+export async function getEquipmentForQR(): Promise<ActionResult<EquipmentForQR[]>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("equipment")
+    .select("id, type, brand, model, image_url")
+    .in("type", ["brewer", "espresso_machine"])
+    .order("model")
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true, data: data as EquipmentForQR[] }
+}
