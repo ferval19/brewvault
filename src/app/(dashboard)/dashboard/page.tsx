@@ -8,7 +8,6 @@ import {
   Star,
   Calendar,
   ArrowRight,
-  Plus,
 } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -71,16 +70,30 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4">
         <Link href="/brews/new">
-          <Button variant="outline" className="w-full h-auto py-4 px-4 flex flex-col sm:flex-row items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-foreground transition-colors">
-            <Plus className="h-5 w-5" />
-            <span className="font-medium">Nueva brew</span>
-          </Button>
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-5 text-white hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-white/20">
+                <Flame className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold">Nueva brew</p>
+                <p className="text-sm text-white/80">Registrar preparacion</p>
+              </div>
+            </div>
+          </div>
         </Link>
         <Link href="/beans/new">
-          <Button variant="outline" className="w-full h-auto py-4 px-4 flex flex-col sm:flex-row items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-foreground transition-colors">
-            <Plus className="h-5 w-5" />
-            <span className="font-medium">Nuevo cafe</span>
-          </Button>
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-5 text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-white/20">
+                <Coffee className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold">Nuevo cafe</p>
+                <p className="text-sm text-white/80">Anadir a coleccion</p>
+              </div>
+            </div>
+          </div>
         </Link>
       </div>
 
