@@ -20,7 +20,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 import { createEquipment, updateEquipment } from "@/app/(dashboard)/equipment/actions"
 import type { Equipment } from "@/app/(dashboard)/equipment/actions"
-import { equipmentTypes } from "@/lib/validations/equipment"
+import { equipmentTypes, maintenanceIntervals } from "@/lib/validations/equipment"
 
 interface EquipmentFormData {
   type: string
@@ -29,6 +29,7 @@ interface EquipmentFormData {
   notes?: string | null
   purchase_date?: string | null
   last_maintenance?: string | null
+  maintenance_interval_days?: number | null
 }
 
 interface EquipmentFormProps {
@@ -55,6 +56,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       notes: equipment?.notes || "",
       purchase_date: equipment?.purchase_date || "",
       last_maintenance: equipment?.last_maintenance || "",
+      maintenance_interval_days: equipment?.maintenance_interval_days || undefined,
     },
   })
 
@@ -74,6 +76,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       notes: data.notes || null,
       purchase_date: data.purchase_date || null,
       last_maintenance: data.last_maintenance || null,
+      maintenance_interval_days: data.maintenance_interval_days || null,
     }
 
     const result = equipment
@@ -149,9 +152,9 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
         </div>
       </div>
 
-      {/* Fechas */}
+      {/* Fechas y mantenimiento */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Fechas</h3>
+        <h3 className="text-lg font-medium">Mantenimiento</h3>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -171,6 +174,30 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
               {...register("last_maintenance")}
             />
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="maintenance_interval_days">Recordar mantenimiento cada</Label>
+          <Select
+            value={watch("maintenance_interval_days")?.toString() || ""}
+            onValueChange={(value) =>
+              setValue("maintenance_interval_days", value ? parseInt(value) : null)
+            }
+          >
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Sin recordatorio" />
+            </SelectTrigger>
+            <SelectContent>
+              {maintenanceIntervals.map((interval) => (
+                <SelectItem key={interval.value} value={interval.value.toString()}>
+                  {interval.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Recibiras una alerta cuando sea hora de limpiar o mantener este equipo
+          </p>
         </div>
       </div>
 

@@ -17,6 +17,7 @@ export type Equipment = {
   notes: string | null
   purchase_date: string | null
   last_maintenance: string | null
+  maintenance_interval_days: number | null
   created_at: string
   updated_at: string
 }

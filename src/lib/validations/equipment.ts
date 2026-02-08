@@ -9,6 +9,14 @@ export const equipmentTypes = [
   { value: "other", label: "Otro" },
 ] as const
 
+export const maintenanceIntervals = [
+  { value: 7, label: "7 dias" },
+  { value: 14, label: "14 dias" },
+  { value: 30, label: "30 dias" },
+  { value: 60, label: "60 dias" },
+  { value: 90, label: "90 dias" },
+] as const
+
 export const equipmentSchema = z.object({
   type: z.enum(["grinder", "brewer", "espresso_machine", "kettle", "scale", "other"]),
   brand: z.string().nullable().optional(),
@@ -16,6 +24,7 @@ export const equipmentSchema = z.object({
   notes: z.string().nullable().optional(),
   purchase_date: z.string().nullable().optional(),
   last_maintenance: z.string().nullable().optional(),
+  maintenance_interval_days: z.number().nullable().optional(),
 })
 
 export type EquipmentInput = z.infer<typeof equipmentSchema>
