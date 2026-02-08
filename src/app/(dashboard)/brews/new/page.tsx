@@ -6,7 +6,13 @@ export const metadata = {
   title: "Nueva Preparacion",
 }
 
-export default async function NewBrewPage() {
+export default async function NewBrewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ equipment?: string }>
+}) {
+  const { equipment: equipmentId } = await searchParams
+
   const [beansResult, equipmentResult, lastBrewResult, favoritesResult] = await Promise.all([
     getActiveBeans(),
     getEquipment(),
@@ -34,6 +40,7 @@ export default async function NewBrewPage() {
           equipment={equipment}
           defaultBrew={lastBrew}
           favorites={favorites}
+          defaultEquipmentId={equipmentId}
         />
       </Suspense>
     </div>

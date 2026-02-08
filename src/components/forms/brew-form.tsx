@@ -54,10 +54,11 @@ interface BrewFormProps {
   beans: BeanOption[]
   equipment: EquipmentOption[]
   favorites?: FavoriteBrew[]
+  defaultEquipmentId?: string
   onSuccess?: () => void
 }
 
-export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], onSuccess }: BrewFormProps) {
+export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], defaultEquipmentId, onSuccess }: BrewFormProps) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -77,7 +78,7 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
   } = useForm<BrewFormData>({
     defaultValues: {
       bean_id: brew?.bean_id || "",
-      equipment_id: brew?.equipment_id || prefill?.equipment_id || undefined,
+      equipment_id: brew?.equipment_id || defaultEquipmentId || prefill?.equipment_id || undefined,
       grinder_id: brew?.grinder_id || prefill?.grinder_id || undefined,
       brew_method: brew?.brew_method || prefill?.brew_method || "",
       grind_size: brew?.grind_size || prefill?.grind_size || undefined,
