@@ -34,6 +34,7 @@ export const equipmentSchema = z.object({
   brand: z.string().nullable().optional(),
   model: z.string().min(1, "El modelo es requerido"),
   notes: z.string().nullable().optional(),
+  image_url: z.string().nullable().optional(),
   purchase_date: z.string().nullable().optional(),
   last_maintenance: z.string().nullable().optional(),
   maintenance_interval_days: z.number().nullable().optional(),

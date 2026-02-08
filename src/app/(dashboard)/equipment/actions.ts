@@ -16,6 +16,7 @@ export type Equipment = {
   brand: string | null
   model: string
   notes: string | null
+  image_url: string | null
   purchase_date: string | null
   last_maintenance: string | null
   maintenance_interval_days: number | null

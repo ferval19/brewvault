@@ -30,6 +30,7 @@ interface EquipmentFormData {
   brand?: string | null
   model: string
   notes?: string | null
+  image_url?: string | null
   purchase_date?: string | null
   last_maintenance?: string | null
   maintenance_interval_days?: number | null
@@ -59,6 +60,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       brand: equipment?.brand || "",
       model: equipment?.model || "",
       notes: equipment?.notes || "",
+      image_url: equipment?.image_url || null,
       purchase_date: equipment?.purchase_date || "",
       last_maintenance: equipment?.last_maintenance || "",
       maintenance_interval_days: equipment?.maintenance_interval_days || undefined,
@@ -73,6 +75,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
     setValue("brand", catalogEquipment.brand)
     setValue("model", catalogEquipment.model)
     setValue("notes", catalogEquipment.description || "")
+    setValue("image_url", catalogEquipment.image_url || null)
     setFromCatalog(true)
   }
 
@@ -91,6 +94,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       brand: data.brand || null,
       model: data.model,
       notes: data.notes || null,
+      image_url: data.image_url || null,
       purchase_date: data.purchase_date || null,
       last_maintenance: data.last_maintenance || null,
       maintenance_interval_days: data.maintenance_interval_days || null,
@@ -133,6 +137,19 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
               </AlertDescription>
             </Alert>
           )}
+        </div>
+      )}
+
+      {/* Image Preview */}
+      {watch("image_url") && (
+        <div className="flex justify-center">
+          <div className="relative w-48 h-48 rounded-2xl overflow-hidden bg-muted/30 border">
+            <img
+              src={watch("image_url") || ""}
+              alt={watch("model") || "Equipo"}
+              className="w-full h-full object-contain p-4"
+            />
+          </div>
         </div>
       )}
 
