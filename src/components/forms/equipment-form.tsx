@@ -123,7 +123,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
           {fromCatalog && (
             <Alert>
               <AlertDescription>
-                Datos precargados del catalogo. Puedes modificarlos si lo necesitas.
+                Datos precargados del catalogo. Informacion obtenida de la web oficial del fabricante.
               </AlertDescription>
             </Alert>
           )}

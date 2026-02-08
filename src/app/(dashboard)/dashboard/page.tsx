@@ -2,12 +2,13 @@ import Link from "next/link"
 import {
   Coffee,
   Flame,
-  Users,
-  Cog,
+  Wrench,
+  ClipboardList,
   TrendingUp,
   Star,
   Calendar,
   ArrowRight,
+  Plus,
 } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,10 +21,17 @@ import { getAlerts, getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions
 import { brewMethods } from "@/lib/validations/brews"
 
 export const metadata = {
-  title: "Dashboard",
+  title: "Inicio",
 }
 
-export default async function AnalyticsPage() {
+function getGreeting(): string {
+  const hour = new Date().getHours()
+  if (hour < 12) return "Buenos dias"
+  if (hour < 20) return "Buenas tardes"
+  return "Buenas noches"
+}
+
+export default async function DashboardPage() {
   const [result, alertsResult, alertCountResult] = await Promise.all([
     getDashboardStats(),
     getAlerts({ limit: 5 }),
@@ -41,11 +49,15 @@ export default async function AnalyticsPage() {
   const stats = result.data
   const alerts = alertsResult.success ? alertsResult.data : []
   const alertCount = alertCountResult.success ? alertCountResult.data : 0
+  const greeting = getGreeting()
 
   return (
     <div className="space-y-8">
+      {/* Header with greeting */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">
+          {greeting}{stats.userName ? `, ${stats.userName}` : ""}
+        </h1>
         <p className="text-muted-foreground mt-1">
           Resumen de tu coleccion de cafe
         </p>
@@ -55,6 +67,22 @@ export default async function AnalyticsPage() {
       {alertCount > 0 && (
         <AlertsPanel alerts={alerts} totalCount={alertCount} />
       )}
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 gap-4">
+        <Link href="/brews/new">
+          <Button variant="outline" className="w-full h-auto py-4 px-4 flex flex-col sm:flex-row items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-foreground transition-colors">
+            <Plus className="h-5 w-5" />
+            <span className="font-medium">Nueva brew</span>
+          </Button>
+        </Link>
+        <Link href="/beans/new">
+          <Button variant="outline" className="w-full h-auto py-4 px-4 flex flex-col sm:flex-row items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-foreground transition-colors">
+            <Plus className="h-5 w-5" />
+            <span className="font-medium">Nuevo cafe</span>
+          </Button>
+        </Link>
+      </div>
 
       {/* Main stats grid */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -96,22 +124,6 @@ export default async function AnalyticsPage() {
           </div>
         </Link>
 
-        <Link href="/roasters" className="group">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                  Tostadores
-                </p>
-                <p className="text-3xl font-bold mt-1">{stats.roasters.total}</p>
-              </div>
-              <div className="p-2 rounded-xl bg-stone-500/10">
-                <Users className="h-5 w-5 text-stone-500" />
-              </div>
-            </div>
-          </div>
-        </Link>
-
         <Link href="/equipment" className="group">
           <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
             <div className="flex items-start justify-between">
@@ -122,7 +134,23 @@ export default async function AnalyticsPage() {
                 <p className="text-3xl font-bold mt-1">{stats.equipment.total}</p>
               </div>
               <div className="p-2 rounded-xl bg-gray-500/10">
-                <Cog className="h-5 w-5 text-gray-500" />
+                <Wrench className="h-5 w-5 text-gray-500" />
+              </div>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/cupping" className="group">
+          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Catas
+                </p>
+                <p className="text-3xl font-bold mt-1">{stats.cupping.total}</p>
+              </div>
+              <div className="p-2 rounded-xl bg-purple-500/10">
+                <ClipboardList className="h-5 w-5 text-purple-500" />
               </div>
             </div>
           </div>

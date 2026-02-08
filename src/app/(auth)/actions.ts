@@ -37,7 +37,7 @@ export async function login(data: LoginInput): Promise<AuthActionResult> {
   }
 
   revalidatePath("/", "layout")
-  redirect("/beans")
+  redirect("/dashboard")
 }
 
 export async function signup(data: SignupInput): Promise<AuthActionResult> {

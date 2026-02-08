@@ -134,18 +134,23 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center pt-4 border-t">
-          <p className="text-sm text-muted-foreground">
-            {filteredCoffees.length} cafes encontrados
-          </p>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleConfirm} disabled={!selectedId}>
-              Usar este cafe
-            </Button>
+        <div className="pt-4 border-t space-y-3">
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-muted-foreground">
+              {filteredCoffees.length} cafes encontrados
+            </p>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleConfirm} disabled={!selectedId}>
+                Usar este cafe
+              </Button>
+            </div>
           </div>
+          <p className="text-xs text-muted-foreground text-center">
+            Datos e imagenes obtenidos de las webs oficiales de cada marca.
+          </p>
         </div>
       </DialogContent>
     </Dialog>

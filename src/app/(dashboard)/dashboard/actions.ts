@@ -7,6 +7,7 @@ export type ActionResult<T = undefined> =
   | { success: false; error: string; data?: never }
 
 export type DashboardStats = {
+  userName: string | null
   beans: {
     total: number
     active: number
@@ -18,10 +19,10 @@ export type DashboardStats = {
     thisMonth: number
     averageRating: number | null
   }
-  roasters: {
+  equipment: {
     total: number
   }
-  equipment: {
+  cupping: {
     total: number
   }
   topMethods: { method: string; count: number }[]
@@ -42,18 +43,27 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
     return { success: false, error: "No autenticado" }
   }
 
+  // Fetch user profile for name
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("id", userData.user.id)
+    .single()
+
+  const userName = profile?.full_name || userData.user.email?.split("@")[0] || null
+
   // Fetch all stats in parallel
   const [
     beansResult,
     brewsResult,
-    roastersResult,
     equipmentResult,
+    cuppingResult,
     recentBrewsResult,
   ] = await Promise.all([
     supabase.from("beans").select("status"),
     supabase.from("brews").select("rating, brewed_at, brew_method"),
-    supabase.from("roasters").select("id", { count: "exact", head: true }),
     supabase.from("equipment").select("id", { count: "exact", head: true }),
+    supabase.from("cupping_notes").select("id", { count: "exact", head: true }),
     supabase
       .from("brews")
       .select("id, brewed_at, brew_method, rating, beans(name)")
@@ -98,14 +108,15 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
   return {
     success: true,
     data: {
+      userName,
       beans: beanStats,
       brews: {
         total: brews.length,
         thisMonth: brewsThisMonth,
         averageRating,
       },
-      roasters: { total: roastersResult.count || 0 },
       equipment: { total: equipmentResult.count || 0 },
+      cupping: { total: cuppingResult.count || 0 },
       topMethods,
       recentBrews: (recentBrewsResult.data || []).map((brew) => ({
         id: brew.id as string,

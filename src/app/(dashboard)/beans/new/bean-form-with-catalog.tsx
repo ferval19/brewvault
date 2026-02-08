@@ -135,7 +135,7 @@ export function BeanFormWithCatalog({ roasters }: BeanFormWithCatalogProps) {
             <CoffeeCatalogPicker onSelect={handleCatalogSelect} />
             {selectedFromCatalog && (
               <p className="text-sm text-green-600 mt-2">
-                Formulario prellenado con: {selectedFromCatalog}
+                Formulario prellenado con: {selectedFromCatalog}. Datos obtenidos de la web oficial.
               </p>
             )}
           </div>
