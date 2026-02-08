@@ -18,7 +18,9 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: BrewVault - Specialty Coffee Tracker\n\nFeatures:\n- Next.js 14+ with App Router and TypeScript\n- Supabase authentication \\(Email, Google, GitHub\\)\n- Landing page with Apple-style design\n- Beans CRUD with catalog picker \\(40+ coffees\\)\n- Database schema with RLS policies\n- shadcn/ui components\n- SEO optimization \\(metadata, sitemap, robots\\)\n- Claude Code skills for development workflow\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git remote add:*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git diff:*)",
+      "Bash(cat:*)"
     ]
   }
 }
