@@ -43,10 +43,16 @@ export async function updateSession(request: NextRequest) {
     "/brews",
     "/equipment",
     "/roasters",
-    "/water",
+    "/cupping",
     "/analytics",
+    "/alerts",
     "/settings",
   ]
+
+  // Skip middleware for API routes
+  if (request.nextUrl.pathname.startsWith("/api")) {
+    return supabaseResponse
+  }
 
   const isProtectedPath = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
