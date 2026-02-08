@@ -23,17 +23,25 @@ import {
 import { createClient } from "@/lib/supabase/server"
 
 export default async function Home() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
+  let user = null
   let userName: string | null = null
-  if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("id", user.id)
-      .single()
-    userName = profile?.full_name || user.email?.split("@")[0] || null
+
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase.auth.getUser()
+    user = data?.user
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .single()
+      userName = profile?.full_name || user.email?.split("@")[0] || null
+    }
+  } catch {
+    // Si falla Supabase, mostramos la version no autenticada
+    user = null
   }
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
