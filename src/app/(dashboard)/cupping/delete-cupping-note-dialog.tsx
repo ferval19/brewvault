@@ -22,15 +22,23 @@ import { deleteCuppingNote } from "./actions"
 interface DeleteCuppingNoteDialogProps {
   noteId: string
   beanName: string
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 export function DeleteCuppingNoteDialog({
   noteId,
   beanName,
+  open: controlledOpen,
+  onOpenChange,
 }: DeleteCuppingNoteDialogProps) {
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [internalOpen, setInternalOpen] = useState(false)
+
+  const isControlled = controlledOpen !== undefined
+  const open = isControlled ? controlledOpen : internalOpen
+  const setOpen = isControlled ? (onOpenChange || (() => {})) : setInternalOpen
 
   async function handleDelete() {
     setIsDeleting(true)
@@ -46,11 +54,13 @@ export function DeleteCuppingNoteDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </AlertDialogTrigger>
+      {!isControlled && (
+        <AlertDialogTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </AlertDialogTrigger>
+      )}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Eliminar nota de cata</AlertDialogTitle>

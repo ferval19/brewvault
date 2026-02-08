@@ -173,7 +173,7 @@ export async function updateCuppingNote(
   }
 
   // Exclude brew_id from update — it shouldn't change
-  const { brew_id: _, ...updateData } = validatedFields.data
+  const { brew_id: _brew_id, ...updateData } = validatedFields.data
 
   const { error } = await supabase
     .from("cupping_notes")

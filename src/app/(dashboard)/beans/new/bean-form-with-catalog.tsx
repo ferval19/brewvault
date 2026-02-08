@@ -62,7 +62,6 @@ export function BeanFormWithCatalog({ roasters }: BeanFormWithCatalogProps) {
     handleSubmit,
     setValue,
     watch,
-    reset,
     formState: { errors },
   } = useForm<BeanFormData>({
     defaultValues: {

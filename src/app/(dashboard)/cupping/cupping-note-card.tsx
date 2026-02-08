@@ -1,11 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { ClipboardList, Pencil } from "lucide-react"
+import { ClipboardList, Pencil, MoreHorizontal, Eye, Trash2 } from "lucide-react"
+import { useState } from "react"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import { brewMethods } from "@/lib/validations/brews"
 import type { CuppingNote } from "./actions"
@@ -16,6 +23,7 @@ interface CuppingNoteCardProps {
 }
 
 export function CuppingNoteCard({ note }: CuppingNoteCardProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const beanName = note.brews?.beans?.name || "Sin cafe"
   const roasterName = note.brews?.beans?.roasters?.name
   const methodLabel = brewMethods.find((m) => m.value === note.brews?.brew_method)?.label || note.brews?.brew_method
@@ -27,66 +35,109 @@ export function CuppingNoteCard({ note }: CuppingNoteCardProps) {
       })
     : null
 
+  const scoreColor = note.total_score
+    ? note.total_score >= 85
+      ? "bg-green-500/90"
+      : note.total_score >= 75
+      ? "bg-amber-500/90"
+      : "bg-orange-500/90"
+    : "bg-gray-500/90"
+
   return (
-    <Card className="group hover:shadow-md transition-shadow">
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
-            <ClipboardList className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <Link
-                  href={`/cupping/${note.id}`}
-                  className="font-medium hover:underline block truncate"
-                >
-                  {beanName}
-                </Link>
-                {roasterName && (
-                  <p className="text-xs text-muted-foreground truncate">{roasterName}</p>
-                )}
-              </div>
-
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Link href={`/cupping/${note.id}/edit`}>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <DeleteCuppingNoteDialog
-                  noteId={note.id}
-                  beanName={beanName}
-                />
-              </div>
+    <>
+      <Link href={`/cupping/${note.id}`} className="group block">
+        <div className="relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          {/* Header gradient */}
+          <div className="relative aspect-[16/8] bg-gradient-to-br from-amber-400/20 to-orange-500/20">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <ClipboardList className="h-16 w-16 text-amber-600 opacity-30" />
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 mt-2">
-              {note.total_score != null && (
-                <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-100">
-                  {note.total_score}/100
-                </Badge>
-              )}
-              {methodLabel && (
-                <Badge variant="secondary" className="text-xs">
-                  {methodLabel}
-                </Badge>
-              )}
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+            {/* Top bar */}
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
               {brewDate && (
-                <span className="text-xs text-muted-foreground">{brewDate}</span>
+                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                  {brewDate}
+                </span>
+              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={`/cupping/${note.id}`}>
+                      <Eye className="mr-2 h-4 w-4" />
+                      Ver detalle
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/cupping/${note.id}/edit`}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Editar
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setShowDeleteDialog(true)
+                    }}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Eliminar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Bottom overlay with score */}
+            <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+              {methodLabel && (
+                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                  {methodLabel}
+                </span>
+              )}
+              {note.total_score != null && (
+                <span className={`px-3 py-1.5 rounded-full ${scoreColor} backdrop-blur-sm text-white text-sm font-bold`}>
+                  {note.total_score}/100
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-5 space-y-3">
+            <div>
+              <h3 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
+                {beanName}
+              </h3>
+              {roasterName && (
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {roasterName}
+                </p>
               )}
             </div>
 
             {note.flavor_descriptors && note.flavor_descriptors.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
+              <div className="flex flex-wrap gap-1.5">
                 {note.flavor_descriptors.slice(0, 4).map((descriptor) => (
-                  <Badge key={descriptor} variant="outline" className="text-xs">
+                  <Badge key={descriptor} variant="secondary" className="rounded-full text-xs">
                     {descriptor}
                   </Badge>
                 ))}
                 {note.flavor_descriptors.length > 4 && (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-muted-foreground px-2 py-0.5">
                     +{note.flavor_descriptors.length - 4}
                   </span>
                 )}
@@ -94,7 +145,14 @@ export function CuppingNoteCard({ note }: CuppingNoteCardProps) {
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </Link>
+
+      <DeleteCuppingNoteDialog
+        noteId={note.id}
+        beanName={beanName}
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+      />
+    </>
   )
 }

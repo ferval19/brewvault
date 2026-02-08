@@ -30,6 +30,7 @@ export type Brew = {
   filter_type: string | null
   notes: string | null
   rating: number | null
+  image_url: string | null
   brewed_at: string
   created_at: string
   updated_at: string
@@ -48,12 +49,6 @@ export type BeanOption = {
   status: string
 }
 
-type BeanOptionRaw = {
-  id: string
-  name: string
-  roasters: { name: string } | null
-  status: string
-}
 
 export type EquipmentOption = {
   id: string

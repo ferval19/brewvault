@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Pencil, MapPin, Mountain, Calendar, Scale } from "lucide-react"
+import { ArrowLeft, Pencil, MapPin, Mountain, Calendar, Star, Package } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -14,6 +15,14 @@ const roastLevelLabels: Record<string, string> = {
   medium: "Medio",
   "medium-dark": "Medio-Oscuro",
   dark: "Oscuro",
+}
+
+const roastLevelGradients: Record<string, string> = {
+  light: "from-amber-200/30 to-yellow-300/30",
+  "medium-light": "from-amber-300/30 to-orange-300/30",
+  medium: "from-amber-400/30 to-orange-400/30",
+  "medium-dark": "from-amber-600/30 to-orange-600/30",
+  dark: "from-amber-800/30 to-stone-700/30",
 }
 
 const statusLabels: Record<string, string> = {
@@ -47,178 +56,244 @@ export default async function BeanDetailPage({
     return Math.floor((now.getTime() - new Date(bean.roast_date).getTime()) / (1000 * 60 * 60 * 24))
   })()
 
+  const gradient = bean.roast_level
+    ? roastLevelGradients[bean.roast_level] || "from-amber-400/30 to-orange-400/30"
+    : "from-amber-400/30 to-orange-400/30"
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <Link
-            href="/beans"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-2"
-          >
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Volver a cafes
-          </Link>
-          <h1 className="text-3xl font-bold">{bean.name}</h1>
-          <p className="text-muted-foreground">
-            {bean.roasters?.name || "Sin tostador"}
-          </p>
+    <div className="space-y-8 max-w-4xl mx-auto">
+      {/* Hero Section */}
+      <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${gradient}`}>
+        {bean.photo_url ? (
+          <div className="relative aspect-[21/9] sm:aspect-[3/1]">
+            <img
+              src={bean.photo_url}
+              alt={bean.name}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          </div>
+        ) : (
+          <div className="relative aspect-[21/9] sm:aspect-[3/1] flex items-center justify-center">
+            <div className="text-8xl opacity-20">☕</div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          </div>
+        )}
+
+        {/* Overlay content */}
+        <div className="absolute inset-0 flex flex-col justify-between p-6">
+          <div className="flex items-start justify-between">
+            <Link
+              href="/beans"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-sm font-medium hover:bg-white dark:hover:bg-black/80 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver
+            </Link>
+            <Link href={`/beans/${id}/edit`}>
+              <Button variant="secondary" size="sm" className="rounded-full backdrop-blur-sm">
+                <Pencil className="mr-1.5 h-4 w-4" />
+                Editar
+              </Button>
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-sm font-medium">
+                {statusLabels[bean.status]}
+              </span>
+              {bean.roast_level && (
+                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-sm font-medium">
+                  {roastLevelLabels[bean.roast_level] || bean.roast_level}
+                </span>
+              )}
+              {bean.personal_rating && (
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                  <Star className="h-4 w-4 fill-current" />
+                  {bean.personal_rating}/5
+                </span>
+              )}
+            </div>
+
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
+                {bean.name}
+              </h1>
+              <p className="text-white/80 drop-shadow">
+                {bean.roasters?.name || "Sin tostador"}
+              </p>
+            </div>
+          </div>
         </div>
-        <Link href={`/beans/${id}/edit`}>
-          <Button variant="outline">
-            <Pencil className="mr-2 h-4 w-4" />
-            Editar
-          </Button>
-        </Link>
       </div>
 
-      {/* Photo */}
-      {bean.photo_url && (
-        <div className="w-full max-w-md aspect-video rounded-lg overflow-hidden">
-          <img
-            src={bean.photo_url}
-            alt={bean.name}
-            className="w-full h-full object-cover"
-          />
+      {/* Stock Section */}
+      {stockPercentage !== null && (
+        <div className="flex items-center justify-center gap-6 py-6">
+          <div className="text-center">
+            <p className="text-4xl sm:text-5xl font-bold">{bean.current_weight_grams}g</p>
+            <p className="text-sm text-muted-foreground mt-1">Restante</p>
+          </div>
+          <div className="text-2xl text-muted-foreground">/</div>
+          <div className="text-center">
+            <p className="text-4xl sm:text-5xl font-bold">{bean.weight_grams}g</p>
+            <p className="text-sm text-muted-foreground mt-1">Total</p>
+          </div>
         </div>
       )}
 
-      {/* Status and rating */}
-      <div className="flex flex-wrap gap-3">
-        <Badge variant="secondary">{statusLabels[bean.status]}</Badge>
-        {bean.roast_level && (
-          <Badge variant="outline">
-            {roastLevelLabels[bean.roast_level] || bean.roast_level}
-          </Badge>
+      {/* Stock Bar */}
+      {stockPercentage !== null && (
+        <div className="space-y-2">
+          <div className="h-3 rounded-full bg-muted overflow-hidden">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                stockPercentage > 50 && "bg-green-500",
+                stockPercentage <= 50 && stockPercentage > 20 && "bg-amber-500",
+                stockPercentage <= 20 && "bg-red-500"
+              )}
+              style={{ width: `${stockPercentage}%` }}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            {stockPercentage}% restante
+          </p>
+        </div>
+      )}
+
+      {/* Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {bean.origin_country && (
+          <MetricCard
+            icon={MapPin}
+            label="Origen"
+            value={bean.origin_country}
+            subvalue={bean.origin_region || undefined}
+          />
         )}
-        {bean.personal_rating && (
-          <Badge variant="outline" className="text-amber-500">
-            {"★".repeat(bean.personal_rating)}
-            {"☆".repeat(5 - bean.personal_rating)}
-          </Badge>
+        {bean.altitude && (
+          <MetricCard
+            icon={Mountain}
+            label="Altitud"
+            value={`${bean.altitude}`}
+            subvalue="msnm"
+          />
+        )}
+        {daysFromRoast !== null && (
+          <MetricCard
+            icon={Calendar}
+            label="Tueste"
+            value={daysFromRoast === 0 ? "Hoy" : `${daysFromRoast}`}
+            subvalue={daysFromRoast === 0 ? "" : daysFromRoast === 1 ? "dia" : "dias"}
+          />
         )}
         {bean.sca_score && (
-          <Badge variant="outline">SCA: {bean.sca_score}</Badge>
+          <MetricCard
+            icon={Star}
+            label="SCA Score"
+            value={bean.sca_score.toString()}
+            subvalue="/100"
+          />
         )}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Origin */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Origen</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {bean.origin_country && (
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span>
-                  {bean.origin_country}
-                  {bean.origin_region && `, ${bean.origin_region}`}
-                </span>
-              </div>
-            )}
-            {bean.farm && (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Finca:</span>
-                <span>{bean.farm}</span>
-              </div>
-            )}
-            {bean.altitude && (
-              <div className="flex items-center gap-2">
-                <Mountain className="h-4 w-4 text-muted-foreground" />
-                <span>{bean.altitude} msnm</span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
+      <div className="grid gap-6 sm:grid-cols-2">
         {/* Characteristics */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Caracteristicas</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {bean.variety && (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Variedad:</span>
-                <span>{bean.variety}</span>
-              </div>
-            )}
-            {bean.process && (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Proceso:</span>
-                <span>{bean.process}</span>
-              </div>
-            )}
-            {bean.roast_date && (
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>
-                  Tostado el {new Date(bean.roast_date).toLocaleDateString("es-ES")}
-                  {daysFromRoast !== null && ` (hace ${daysFromRoast} dias)`}
-                </span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Inventory */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Inventario</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {bean.weight_grams && (
-              <div className="flex items-center gap-2">
-                <Scale className="h-4 w-4 text-muted-foreground" />
-                <span>
-                  {bean.current_weight_grams || 0}g de {bean.weight_grams}g
-                </span>
-              </div>
-            )}
-            {stockPercentage !== null && (
-              <div className="space-y-1">
-                <div className="h-3 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-green-500 transition-all"
-                    style={{ width: `${stockPercentage}%` }}
-                  />
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {stockPercentage}% restante
-                </p>
-              </div>
-            )}
-            {bean.price && (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Precio:</span>
-                <span>
-                  {bean.price} {bean.currency || "EUR"}
-                </span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Flavor notes */}
-        {bean.flavor_notes && bean.flavor_notes.length > 0 && (
-          <Card>
+        {(bean.variety || bean.process) && (
+          <Card className="rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Notas de sabor</CardTitle>
+              <CardTitle className="text-lg">Caracteristicas</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {bean.variety && (
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Variedad</span>
+                  <span className="font-medium">{bean.variety}</span>
+                </div>
+              )}
+              {bean.process && (
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Proceso</span>
+                  <span className="font-medium">{bean.process}</span>
+                </div>
+              )}
+              {bean.farm && (
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Finca</span>
+                  <span className="font-medium">{bean.farm}</span>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Price Info */}
+        {bean.price && (
+          <Card className="rounded-2xl">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                Precio
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {bean.flavor_notes.map((note: string) => (
-                  <Badge key={note} variant="secondary">
-                    {note}
-                  </Badge>
-                ))}
-              </div>
+              <p className="text-3xl font-bold">
+                {bean.price} {bean.currency || "EUR"}
+              </p>
+              {bean.weight_grams && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  {((bean.price / bean.weight_grams) * 100).toFixed(2)} {bean.currency || "EUR"}/100g
+                </p>
+              )}
             </CardContent>
           </Card>
         )}
       </div>
+
+      {/* Flavor notes */}
+      {bean.flavor_notes && bean.flavor_notes.length > 0 && (
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <CardTitle className="text-lg">Notas de sabor</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {bean.flavor_notes.map((note: string) => (
+                <Badge key={note} variant="secondary" className="rounded-full px-4 py-1.5">
+                  {note}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  )
+}
+
+function MetricCard({
+  icon: Icon,
+  label,
+  value,
+  subvalue,
+}: {
+  icon: React.ElementType
+  label: string
+  value: string
+  subvalue?: string
+}) {
+  return (
+    <div className="rounded-2xl bg-card border p-5">
+      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+        <Icon className="h-4 w-4" />
+        <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
+      </div>
+      <p className="text-2xl font-bold">
+        {value}
+        {subvalue && <span className="text-sm text-muted-foreground ml-1">{subvalue}</span>}
+      </p>
     </div>
   )
 }

@@ -37,6 +37,7 @@ export const brewSchema = z.object({
     z.coerce.number().int().min(1).max(5).optional().nullable()
   ),
   brewed_at: z.string().optional(),
+  image_url: z.string().url().optional().nullable(),
 })
 
 export type BrewInput = z.infer<typeof brewSchema>

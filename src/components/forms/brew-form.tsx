@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ImageUpload } from "@/components/forms/image-upload"
 
 import {
   brewMethods,
@@ -42,6 +43,7 @@ interface BrewFormData {
   filter_type?: string | null
   notes?: string | null
   rating?: number | null
+  image_url?: string | null
 }
 
 interface BrewFormProps {
@@ -64,7 +66,6 @@ export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
   } = useForm<BrewFormData>({
     defaultValues: {
       bean_id: brew?.bean_id || "",
@@ -82,6 +83,7 @@ export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
       filter_type: brew?.filter_type || undefined,
       notes: brew?.notes || "",
       rating: brew?.rating || undefined,
+      image_url: brew?.image_url || null,
     },
   })
 
@@ -127,6 +129,16 @@ export function BrewForm({ brew, beans, equipment, onSuccess }: BrewFormProps) {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      {/* Foto de la preparacion */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Foto de la preparacion</h3>
+        <ImageUpload
+          value={watch("image_url")}
+          onChange={(url) => setValue("image_url", url)}
+          disabled={isLoading}
+        />
+      </div>
 
       {/* Cafe y metodo */}
       <div className="space-y-4">

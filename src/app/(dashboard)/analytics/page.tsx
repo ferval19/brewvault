@@ -7,10 +7,12 @@ import {
   TrendingUp,
   Star,
   Calendar,
+  ArrowRight,
 } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { AlertsPanel } from "@/components/alerts/alerts-panel"
 
 import { getDashboardStats } from "./actions"
@@ -55,85 +57,96 @@ export default async function AnalyticsPage() {
       )}
 
       {/* Main stats grid */}
-      <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
-        <Link href="/beans">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Cafes
-              </CardTitle>
-              <Coffee className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.beans.total}</div>
-              <p className="text-xs text-muted-foreground">
-                {stats.beans.active} activos
-              </p>
-            </CardContent>
-          </Card>
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+        <Link href="/beans" className="group">
+          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Cafes
+                </p>
+                <p className="text-3xl font-bold mt-1">{stats.beans.total}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {stats.beans.active} activos
+                </p>
+              </div>
+              <div className="p-2 rounded-xl bg-amber-500/10">
+                <Coffee className="h-5 w-5 text-amber-500" />
+              </div>
+            </div>
+          </div>
         </Link>
 
-        <Link href="/brews">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Preparaciones
-              </CardTitle>
-              <Flame className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.brews.total}</div>
-              <p className="text-xs text-muted-foreground">
-                {stats.brews.thisMonth} este mes
-              </p>
-            </CardContent>
-          </Card>
+        <Link href="/brews" className="group">
+          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Preparaciones
+                </p>
+                <p className="text-3xl font-bold mt-1">{stats.brews.total}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {stats.brews.thisMonth} este mes
+                </p>
+              </div>
+              <div className="p-2 rounded-xl bg-orange-500/10">
+                <Flame className="h-5 w-5 text-orange-500" />
+              </div>
+            </div>
+          </div>
         </Link>
 
-        <Link href="/roasters">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Tostadores
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.roasters.total}</div>
-            </CardContent>
-          </Card>
+        <Link href="/roasters" className="group">
+          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Tostadores
+                </p>
+                <p className="text-3xl font-bold mt-1">{stats.roasters.total}</p>
+              </div>
+              <div className="p-2 rounded-xl bg-stone-500/10">
+                <Users className="h-5 w-5 text-stone-500" />
+              </div>
+            </div>
+          </div>
         </Link>
 
-        <Link href="/equipment">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Equipos
-              </CardTitle>
-              <Cog className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.equipment.total}</div>
-            </CardContent>
-          </Card>
+        <Link href="/equipment" className="group">
+          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                  Equipos
+                </p>
+                <p className="text-3xl font-bold mt-1">{stats.equipment.total}</p>
+              </div>
+              <div className="p-2 rounded-xl bg-gray-500/10">
+                <Cog className="h-5 w-5 text-gray-500" />
+              </div>
+            </div>
+          </div>
         </Link>
       </div>
 
       {/* Secondary stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Rating promedio */}
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Rating promedio</CardTitle>
-            <Star className="h-4 w-4 text-amber-500" />
+            <div className="p-2 rounded-xl bg-amber-500/10">
+              <Star className="h-4 w-4 text-amber-500" />
+            </div>
           </CardHeader>
           <CardContent>
             {stats.brews.averageRating ? (
               <>
-                <div className="text-2xl font-bold">
+                <div className="text-3xl font-bold">
                   {stats.brews.averageRating.toFixed(1)}
+                  <span className="text-lg text-muted-foreground">/5</span>
                 </div>
-                <div className="text-amber-500">
+                <div className="text-amber-500 mt-1">
                   {"★".repeat(Math.round(stats.brews.averageRating))}
                   {"☆".repeat(5 - Math.round(stats.brews.averageRating))}
                 </div>
@@ -145,33 +158,36 @@ export default async function AnalyticsPage() {
         </Card>
 
         {/* Cafes por estado */}
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Estado de cafes</CardTitle>
-            <Coffee className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Activos</span>
-              <Badge variant="default">{stats.beans.active}</Badge>
+            <div className="p-2 rounded-xl bg-amber-500/10">
+              <Coffee className="h-4 w-4 text-amber-500" />
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Terminados</span>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Activos</span>
+              <Badge className="bg-green-500/10 text-green-600 hover:bg-green-500/10">
+                {stats.beans.active}
+              </Badge>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Terminados</span>
               <Badge variant="secondary">{stats.beans.finished}</Badge>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Wishlist</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Wishlist</span>
               <Badge variant="outline">{stats.beans.wishlist}</Badge>
             </div>
           </CardContent>
         </Card>
-
       </div>
 
       {/* Metodos mas usados y preparaciones recientes */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Top metodos */}
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
@@ -184,8 +200,8 @@ export default async function AnalyticsPage() {
                 Sin preparaciones registradas
               </p>
             ) : (
-              <div className="space-y-3">
-                {stats.topMethods.map((method, index) => {
+              <div className="space-y-4">
+                {stats.topMethods.map((method) => {
                   const methodLabel =
                     brewMethods.find((m) => m.value === method.method)?.label ||
                     method.method
@@ -193,14 +209,14 @@ export default async function AnalyticsPage() {
                   const percentage = (method.count / maxCount) * 100
 
                   return (
-                    <div key={method.method} className="space-y-1">
+                    <div key={method.method} className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>{methodLabel}</span>
+                        <span className="font-medium">{methodLabel}</span>
                         <span className="text-muted-foreground">
                           {method.count} {method.count === 1 ? "prep" : "preps"}
                         </span>
                       </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-2.5 bg-muted rounded-full overflow-hidden">
                         <div
                           className="h-full bg-primary rounded-full transition-all"
                           style={{ width: `${percentage}%` }}
@@ -215,12 +231,18 @@ export default async function AnalyticsPage() {
         </Card>
 
         {/* Preparaciones recientes */}
-        <Card>
-          <CardHeader>
+        <Card className="rounded-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
               <Calendar className="h-5 w-5" />
               Preparaciones recientes
             </CardTitle>
+            <Link href="/brews">
+              <Button variant="ghost" size="sm" className="rounded-full">
+                Ver todas
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {stats.recentBrews.length === 0 ? (
@@ -238,7 +260,7 @@ export default async function AnalyticsPage() {
                     <Link
                       key={brew.id}
                       href={`/brews/${brew.id}`}
-                      className="flex items-center justify-between p-2 -mx-2 rounded-lg hover:bg-muted transition-colors"
+                      className="flex items-center justify-between p-3 -mx-3 rounded-xl hover:bg-muted transition-colors"
                     >
                       <div className="min-w-0">
                         <p className="font-medium truncate">
@@ -253,7 +275,7 @@ export default async function AnalyticsPage() {
                         </p>
                       </div>
                       {brew.rating && (
-                        <Badge variant="outline" className="text-amber-500 ml-2">
+                        <Badge variant="outline" className="text-amber-500 ml-2 rounded-full">
                           {"★".repeat(brew.rating)}
                         </Badge>
                       )}

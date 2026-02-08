@@ -1,75 +1,134 @@
 "use client"
 
 import Link from "next/link"
-import { Cog, Pencil, Calendar } from "lucide-react"
+import { Cog, Pencil, Calendar, MoreHorizontal, Eye, Trash2 } from "lucide-react"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import type { Equipment } from "./actions"
 import { DeleteEquipmentDialog } from "./delete-equipment-dialog"
 import { equipmentTypes } from "@/lib/validations/equipment"
+import { useState } from "react"
 
 interface EquipmentCardProps {
   equipment: Equipment
 }
 
+const typeGradients: Record<string, string> = {
+  grinder: "from-gray-500/20 to-slate-600/20",
+  brewer: "from-amber-500/20 to-orange-500/20",
+  espresso_machine: "from-stone-600/20 to-amber-700/20",
+  kettle: "from-blue-500/20 to-cyan-500/20",
+  scale: "from-emerald-500/20 to-teal-500/20",
+  accessory: "from-purple-500/20 to-pink-500/20",
+}
+
 export function EquipmentCard({ equipment }: EquipmentCardProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const typeLabel = equipmentTypes.find((t) => t.value === equipment.type)?.label || equipment.type
+  const gradient = typeGradients[equipment.type] || "from-gray-500/20 to-slate-600/20"
+  const fullName = equipment.brand ? `${equipment.brand} ${equipment.model}` : equipment.model
 
   return (
-    <Card className="group hover:shadow-md transition-shadow">
-      <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
-            <Cog className="h-5 w-5 text-muted-foreground" />
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <Link
-                  href={`/equipment/${equipment.id}`}
-                  className="font-medium hover:underline block truncate"
-                >
-                  {equipment.brand ? `${equipment.brand} ${equipment.model}` : equipment.model}
-                </Link>
-                <Badge variant="secondary" className="mt-1 text-xs">
-                  {typeLabel}
-                </Badge>
-              </div>
-
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Link href={`/equipment/${equipment.id}/edit`}>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <DeleteEquipmentDialog
-                  equipmentId={equipment.id}
-                  equipmentName={equipment.brand ? `${equipment.brand} ${equipment.model}` : equipment.model}
-                />
-              </div>
+    <>
+      <Link href={`/equipment/${equipment.id}`} className="group block">
+        <div className="relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          {/* Header gradient */}
+          <div className={`relative aspect-[16/8] bg-gradient-to-br ${gradient}`}>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Cog className="h-16 w-16 text-gray-600 opacity-30" />
             </div>
 
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+            {/* Top bar */}
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                {typeLabel}
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={`/equipment/${equipment.id}`}>
+                      <Eye className="mr-2 h-4 w-4" />
+                      Ver detalle
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/equipment/${equipment.id}/edit`}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Editar
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setShowDeleteDialog(true)
+                    }}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Eliminar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Bottom overlay */}
             {equipment.purchase_date && (
-              <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground">
-                <Calendar className="h-3 w-3" />
-                <span>
-                  Comprado: {new Date(equipment.purchase_date).toLocaleDateString("es-ES")}
+              <div className="absolute bottom-3 left-3 right-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                  <Calendar className="h-3 w-3" />
+                  {new Date(equipment.purchase_date).toLocaleDateString("es-ES", {
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
             )}
+          </div>
+
+          {/* Content */}
+          <div className="p-5 space-y-3">
+            <div>
+              <h3 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
+                {fullName}
+              </h3>
+            </div>
 
             {equipment.notes && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+              <p className="text-sm text-muted-foreground line-clamp-2">
                 {equipment.notes}
               </p>
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </Link>
+
+      <DeleteEquipmentDialog
+        equipmentId={equipment.id}
+        equipmentName={fullName}
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+      />
+    </>
   )
 }
