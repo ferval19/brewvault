@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
   Home,
+  Package,
   Coffee,
-  Flame,
   Gauge,
   Settings,
 } from "lucide-react"
@@ -23,8 +23,8 @@ interface MobileNavClientProps {
 
 const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
-  { name: "Cafes", href: "/beans", icon: Coffee },
-  { name: "Brews", href: "/brews", icon: Flame },
+  { name: "Cafes", href: "/beans", icon: Package },
+  { name: "Brews", href: "/brews", icon: Coffee },
   { name: "Equipo", href: "/equipment", icon: Gauge },
   { name: "Ajustes", href: "/settings", icon: Settings, showBadge: true },
 ]

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import {
+  Package,
   Coffee,
-  Flame,
   Gauge,
   ClipboardList,
   TrendingUp,
@@ -73,7 +73,7 @@ export default async function DashboardPage() {
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-5 text-white hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:-translate-y-0.5">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
-                <Flame className="h-5 w-5" />
+                <Coffee className="h-5 w-5" />
               </div>
               <div>
                 <p className="font-semibold">Nueva brew</p>
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-5 text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 hover:-translate-y-0.5">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
-                <Coffee className="h-5 w-5" />
+                <Package className="h-5 w-5" />
               </div>
               <div>
                 <p className="font-semibold">Nuevo cafe</p>
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <div className="p-2 rounded-xl bg-amber-500/10">
-                <Coffee className="h-5 w-5 text-amber-500" />
+                <Package className="h-5 w-5 text-amber-500" />
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <div className="p-2 rounded-xl bg-orange-500/10">
-                <Flame className="h-5 w-5 text-orange-500" />
+                <Coffee className="h-5 w-5 text-orange-500" />
               </div>
             </div>
           </div>
@@ -203,7 +203,7 @@ export default async function DashboardPage() {
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Estado de cafes</CardTitle>
             <div className="p-2 rounded-xl bg-amber-500/10">
-              <Coffee className="h-4 w-4 text-amber-500" />
+              <Package className="h-4 w-4 text-amber-500" />
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
