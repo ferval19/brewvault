@@ -85,6 +85,7 @@ export function BeanFormWithCatalog({ roasters }: BeanFormWithCatalogProps) {
     setValue("flavor_notes", coffee.flavor_notes)
     setValue("altitude", coffee.altitude || null)
     setValue("sca_score", coffee.sca_score || null)
+    setValue("photo_url", coffee.image_url || null)
 
     // Buscar si el tostador existe en la lista
     const matchingRoaster = roasters.find(
