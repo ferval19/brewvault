@@ -9,10 +9,9 @@ import {
   Home,
   Coffee,
   Flame,
-  Wrench,
+  Gauge,
   Settings,
   LogOut,
-  ClipboardList,
   User,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
@@ -31,10 +30,9 @@ interface SidebarClientProps {
 const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Cafes", href: "/beans", icon: Coffee },
-  { name: "Preparaciones", href: "/brews", icon: Flame },
-  { name: "Equipamiento", href: "/equipment", icon: Wrench },
-  { name: "Notas de Cata", href: "/cupping", icon: ClipboardList },
-  { name: "Configuracion", href: "/settings", icon: Settings, showBadge: true },
+  { name: "Brews", href: "/brews", icon: Flame },
+  { name: "Equipo", href: "/equipment", icon: Gauge },
+  { name: "Ajustes", href: "/settings", icon: Settings, showBadge: true },
 ]
 
 export function SidebarClient({ alertCount, user }: SidebarClientProps) {

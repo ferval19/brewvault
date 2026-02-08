@@ -7,7 +7,7 @@ import {
   Home,
   Coffee,
   Flame,
-  Wrench,
+  Gauge,
   Settings,
 } from "lucide-react"
 import { AlertBadge } from "@/components/alerts/alert-badge"
@@ -25,7 +25,7 @@ const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Cafes", href: "/beans", icon: Coffee },
   { name: "Brews", href: "/brews", icon: Flame },
-  { name: "Equipo", href: "/equipment", icon: Wrench },
+  { name: "Equipo", href: "/equipment", icon: Gauge },
   { name: "Ajustes", href: "/settings", icon: Settings, showBadge: true },
 ]
 
