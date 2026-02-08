@@ -78,7 +78,7 @@ export default async function RoastersPage() {
       {/* Mobile FAB */}
       <Link
         href="/roasters/new"
-        className="fixed bottom-6 right-6 sm:hidden z-50"
+        className="fixed bottom-24 right-6 sm:hidden z-50"
       >
         <Button size="lg" className="h-14 w-14 rounded-full shadow-lg">
           <Plus className="h-6 w-6" />
