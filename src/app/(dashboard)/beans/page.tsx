@@ -43,7 +43,7 @@ export default async function BeansPage({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Mis Cafes</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Mis Cafes</h1>
           <p className="text-muted-foreground">
             {activeCount} activos · {finishedCount} agotados
           </p>

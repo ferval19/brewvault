@@ -17,53 +17,53 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-neutral-950">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Coffee className="h-6 w-6" />
-            <span className="font-semibold text-lg">BrewVault</span>
+            <Coffee className="h-5 w-5 sm:h-6 sm:w-6" />
+            <span className="font-semibold text-base sm:text-lg">BrewVault</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <ThemeToggle />
-            <Link href="/login">
+            <Link href="/login" className="hidden sm:block">
               <Button variant="ghost" size="sm">
                 Iniciar sesion
               </Button>
             </Link>
             <Link href="/signup">
-              <Button size="sm">Comenzar gratis</Button>
+              <Button size="sm">Comenzar</Button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-sm text-neutral-600 dark:text-neutral-400 mb-8">
-            <Star className="h-4 w-4 text-amber-500" />
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8">
+            <Star className="h-3 w-3 sm:h-4 sm:w-4 text-amber-500" />
             Tu diario digital de cafe de especialidad
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4 sm:mb-6">
             Cada taza cuenta
             <br />
             <span className="text-neutral-400 dark:text-neutral-500">una historia</span>
           </h1>
 
-          <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base sm:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
             Registra tus cafes, perfecciona tus preparaciones y descubre patrones
-            en tu viaje cafetero. Todo en un solo lugar, accesible desde cualquier dispositivo.
+            en tu viaje cafetero.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/signup">
-              <Button size="lg" className="h-12 px-8 text-base">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <Link href="/signup" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base">
                 Empezar ahora
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="#features">
-              <Button variant="outline" size="lg" className="h-12 px-8 text-base">
+            <Link href="#features" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base">
                 Conocer mas
               </Button>
             </Link>
@@ -72,24 +72,24 @@ export default function Home() {
       </section>
 
       {/* Visual Break - Coffee Illustration */}
-      <section className="py-16 px-6">
+      <section className="py-10 sm:py-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="relative bg-gradient-to-br from-amber-50 to-orange-50 dark:from-neutral-900 dark:to-neutral-800 rounded-3xl p-12 overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-200/30 to-orange-200/30 dark:from-amber-900/20 dark:to-orange-900/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-amber-200/30 to-yellow-200/30 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-full blur-3xl" />
+          <div className="relative bg-gradient-to-br from-amber-50 to-orange-50 dark:from-neutral-900 dark:to-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-12 overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-amber-200/30 to-orange-200/30 dark:from-amber-900/20 dark:to-orange-900/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-amber-200/30 to-yellow-200/30 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-full blur-3xl" />
 
-            <div className="relative grid md:grid-cols-3 gap-8 text-center">
-              <div className="space-y-3">
-                <div className="text-5xl font-bold text-neutral-900 dark:text-white">20+</div>
-                <div className="text-neutral-600 dark:text-neutral-400">Parametros por preparacion</div>
+            <div className="relative grid grid-cols-3 gap-4 sm:gap-8 text-center">
+              <div className="space-y-1 sm:space-y-3">
+                <div className="text-2xl sm:text-5xl font-bold text-neutral-900 dark:text-white">20+</div>
+                <div className="text-xs sm:text-base text-neutral-600 dark:text-neutral-400">Parametros</div>
               </div>
-              <div className="space-y-3">
-                <div className="text-5xl font-bold text-neutral-900 dark:text-white">7</div>
-                <div className="text-neutral-600 dark:text-neutral-400">Tipos de datos conectados</div>
+              <div className="space-y-1 sm:space-y-3">
+                <div className="text-2xl sm:text-5xl font-bold text-neutral-900 dark:text-white">7</div>
+                <div className="text-xs sm:text-base text-neutral-600 dark:text-neutral-400">Tipos de datos</div>
               </div>
-              <div className="space-y-3">
-                <div className="text-5xl font-bold text-neutral-900 dark:text-white">100%</div>
-                <div className="text-neutral-600 dark:text-neutral-400">Gratis para empezar</div>
+              <div className="space-y-1 sm:space-y-3">
+                <div className="text-2xl sm:text-5xl font-bold text-neutral-900 dark:text-white">100%</div>
+                <div className="text-xs sm:text-base text-neutral-600 dark:text-neutral-400">Gratis</div>
               </div>
             </div>
           </div>
@@ -97,19 +97,19 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 px-6">
+      <section id="features" className="py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-3 sm:mb-4">
               Todo lo que necesitas
             </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto">
+            <p className="text-sm sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto px-2">
               Herramientas disenadas para entusiastas del cafe que quieren llevar
               su experiencia al siguiente nivel.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
             <FeatureCard
               icon={<Coffee className="h-6 w-6" />}
               title="Biblioteca de Cafes"
@@ -145,18 +145,18 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="py-20 px-6 bg-neutral-50 dark:bg-neutral-900/50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/50">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-3 sm:mb-4">
               Simple y poderoso
             </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-400">
+            <p className="text-sm sm:text-lg text-neutral-600 dark:text-neutral-400">
               Tres pasos para transformar tu rutina de cafe
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid sm:grid-cols-3 gap-8 sm:gap-12">
             <StepCard
               number="01"
               title="Registra tus cafes"
@@ -177,11 +177,11 @@ export default function Home() {
       </section>
 
       {/* Benefits */}
-      <section className="py-20 px-6">
+      <section className="py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-4 sm:mb-6">
                 Por que BrewVault
               </h2>
               <div className="space-y-4">
@@ -205,16 +205,16 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6">
+      <section className="py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-3 sm:mb-4">
             Empieza tu diario hoy
           </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8">
+          <p className="text-sm sm:text-lg text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8 px-2">
             Unete a la comunidad de entusiastas que estan mejorando su cafe cada dia.
           </p>
           <Link href="/signup">
-            <Button size="lg" className="h-12 px-8 text-base">
+            <Button size="lg" className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base">
               Crear cuenta gratis
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -223,14 +223,14 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-neutral-200 dark:border-neutral-800">
+      <footer className="py-8 sm:py-12 px-4 sm:px-6 border-t border-neutral-200 dark:border-neutral-800">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:gap-6">
             <div className="flex items-center gap-2">
               <Coffee className="h-5 w-5" />
               <span className="font-semibold">BrewVault</span>
             </div>
-            <div className="flex items-center gap-8 text-sm text-neutral-600 dark:text-neutral-400">
+            <div className="flex items-center gap-6 sm:gap-8 text-sm text-neutral-600 dark:text-neutral-400">
               <Link href="/login" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
                 Iniciar sesion
               </Link>
@@ -238,8 +238,8 @@ export default function Home() {
                 Registrarse
               </Link>
             </div>
-            <div className="text-sm text-neutral-500 dark:text-neutral-500">
-              2026 BrewVault. Hecho con cafe.
+            <div className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-500">
+              2026 BrewVault
             </div>
           </div>
         </div>
@@ -258,14 +258,14 @@ function FeatureCard({
   description: string
 }) {
   return (
-    <div className="p-6 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors">
-      <div className="w-12 h-12 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center mb-4">
+    <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors">
+      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center mb-3 sm:mb-4">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+      <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-1 sm:mb-2">
         {title}
       </h3>
-      <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+      <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
         {description}
       </p>
     </div>
@@ -283,13 +283,13 @@ function StepCard({
 }) {
   return (
     <div className="text-center">
-      <div className="text-6xl font-bold text-neutral-200 dark:text-neutral-800 mb-4">
+      <div className="text-4xl sm:text-6xl font-bold text-neutral-200 dark:text-neutral-800 mb-2 sm:mb-4">
         {number}
       </div>
-      <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+      <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 sm:mb-2">
         {title}
       </h3>
-      <p className="text-neutral-600 dark:text-neutral-400">
+      <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
         {description}
       </p>
     </div>

@@ -92,7 +92,7 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
           Elegir del catalogo
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+      <DialogContent className="w-full max-w-2xl h-[90vh] sm:h-auto sm:max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Catalogo de Cafes</DialogTitle>
           <DialogDescription>
@@ -111,10 +111,10 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
               className="pl-9"
             />
           </div>
-          <Tabs value={category} onValueChange={setCategory}>
-            <TabsList>
+          <Tabs value={category} onValueChange={setCategory} className="w-full sm:w-auto">
+            <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:flex">
               {catalogCategories.map((cat) => (
-                <TabsTrigger key={cat.value} value={cat.value}>
+                <TabsTrigger key={cat.value} value={cat.value} className="text-xs sm:text-sm">
                   {cat.label}
                 </TabsTrigger>
               ))}

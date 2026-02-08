@@ -11,9 +11,9 @@ export default async function NewBeanPage() {
   const roasters = roastersResult.success ? roastersResult.data : []
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Nuevo Cafe</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Nuevo Cafe</h1>
         <p className="text-muted-foreground">
           Agrega un nuevo cafe a tu boveda
         </p>
