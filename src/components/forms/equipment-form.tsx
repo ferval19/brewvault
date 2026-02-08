@@ -21,6 +21,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { createEquipment, updateEquipment } from "@/app/(dashboard)/equipment/actions"
 import type { Equipment } from "@/app/(dashboard)/equipment/actions"
 import { equipmentTypes, maintenanceIntervals } from "@/lib/validations/equipment"
+import { EquipmentCatalogPicker } from "@/components/forms/equipment-catalog-picker"
+import type { CatalogEquipment } from "@/lib/data/equipment-catalog"
 
 interface EquipmentFormData {
   type: string
@@ -41,6 +43,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [fromCatalog, setFromCatalog] = useState(false)
 
   const {
     register,
@@ -59,6 +62,14 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       maintenance_interval_days: equipment?.maintenance_interval_days || undefined,
     },
   })
+
+  function handleCatalogSelect(catalogEquipment: CatalogEquipment) {
+    setValue("type", catalogEquipment.type)
+    setValue("brand", catalogEquipment.brand)
+    setValue("model", catalogEquipment.model)
+    setValue("notes", catalogEquipment.description || "")
+    setFromCatalog(true)
+  }
 
   async function onSubmit(data: EquipmentFormData) {
     if (!data.model) {
@@ -103,6 +114,20 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
+      )}
+
+      {/* Catalog Picker */}
+      {!equipment && (
+        <div className="space-y-4">
+          <EquipmentCatalogPicker onSelect={handleCatalogSelect} />
+          {fromCatalog && (
+            <Alert>
+              <AlertDescription>
+                Datos precargados del catalogo. Puedes modificarlos si lo necesitas.
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
       )}
 
       {/* Informacion basica */}
