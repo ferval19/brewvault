@@ -20,12 +20,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 import { createEquipment, updateEquipment } from "@/app/(dashboard)/equipment/actions"
 import type { Equipment } from "@/app/(dashboard)/equipment/actions"
-import { equipmentTypes, maintenanceIntervals } from "@/lib/validations/equipment"
+import { equipmentTypes, maintenanceIntervals, espressoMachineSubtypes, grinderSubtypes } from "@/lib/validations/equipment"
 import { EquipmentCatalogPicker } from "@/components/forms/equipment-catalog-picker"
 import type { CatalogEquipment } from "@/lib/data/equipment-catalog"
 
 interface EquipmentFormData {
   type: string
+  subtype?: string | null
   brand?: string | null
   model: string
   notes?: string | null
@@ -54,6 +55,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
   } = useForm<EquipmentFormData>({
     defaultValues: {
       type: equipment?.type || "grinder",
+      subtype: equipment?.subtype || undefined,
       brand: equipment?.brand || "",
       model: equipment?.model || "",
       notes: equipment?.notes || "",
@@ -63,8 +65,11 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
     },
   })
 
+  const watchType = watch("type")
+
   function handleCatalogSelect(catalogEquipment: CatalogEquipment) {
     setValue("type", catalogEquipment.type)
+    setValue("subtype", catalogEquipment.subtype || null)
     setValue("brand", catalogEquipment.brand)
     setValue("model", catalogEquipment.model)
     setValue("notes", catalogEquipment.description || "")
@@ -82,6 +87,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
 
     const input = {
       type: data.type as "grinder" | "brewer" | "espresso_machine" | "kettle" | "scale" | "other",
+      subtype: data.subtype as "super_automatic" | "semi_automatic" | "manual" | "electric" | null,
       brand: data.brand || null,
       model: data.model,
       notes: data.notes || null,
@@ -134,23 +140,49 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Informacion basica</h3>
 
-        <div className="space-y-2">
-          <Label htmlFor="type">Tipo *</Label>
-          <Select
-            value={watch("type")}
-            onValueChange={(value) => setValue("type", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Seleccionar tipo" />
-            </SelectTrigger>
-            <SelectContent>
-              {equipmentTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="type">Tipo *</Label>
+            <Select
+              value={watch("type")}
+              onValueChange={(value) => {
+                setValue("type", value)
+                setValue("subtype", null)
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccionar tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                {equipmentTypes.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {(watchType === "espresso_machine" || watchType === "grinder") && (
+            <div className="space-y-2">
+              <Label htmlFor="subtype">Subtipo</Label>
+              <Select
+                value={watch("subtype") || ""}
+                onValueChange={(value) => setValue("subtype", value || null)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar subtipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(watchType === "espresso_machine" ? espressoMachineSubtypes : grinderSubtypes).map((subtype) => (
+                    <SelectItem key={subtype.value} value={subtype.value}>
+                      {subtype.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

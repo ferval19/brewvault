@@ -5,6 +5,7 @@ import { ArrowLeft, Pencil, Clock, Thermometer, ClipboardList, ArrowRight, Star 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SaveAsFavoriteButton } from "@/components/buttons/save-as-favorite-button"
 
 import { getBrew } from "../actions"
 import { getCuppingNoteByBrewId } from "../../cupping/actions"
@@ -68,12 +69,15 @@ export default async function BrewDetailPage({
               <ArrowLeft className="h-4 w-4" />
               Volver
             </Link>
-            <Link href={`/brews/${id}/edit`}>
-              <Button variant="secondary" size="sm" className="rounded-full backdrop-blur-sm">
-                <Pencil className="mr-1.5 h-4 w-4" />
-                Editar
-              </Button>
-            </Link>
+            <div className="flex items-center gap-2">
+              <SaveAsFavoriteButton brew={brew} />
+              <Link href={`/brews/${id}/edit`}>
+                <Button variant="secondary" size="sm" className="rounded-full backdrop-blur-sm">
+                  <Pencil className="mr-1.5 h-4 w-4" />
+                  Editar
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="space-y-3">

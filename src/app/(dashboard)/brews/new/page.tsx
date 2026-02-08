@@ -1,21 +1,23 @@
 import { Suspense } from "react"
 import { BrewForm } from "@/components/forms/brew-form"
-import { getActiveBeans, getEquipment, getLastBrew } from "../actions"
+import { getActiveBeans, getEquipment, getLastBrew, getFavoriteBrews } from "../actions"
 
 export const metadata = {
   title: "Nueva Preparacion",
 }
 
 export default async function NewBrewPage() {
-  const [beansResult, equipmentResult, lastBrewResult] = await Promise.all([
+  const [beansResult, equipmentResult, lastBrewResult, favoritesResult] = await Promise.all([
     getActiveBeans(),
     getEquipment(),
     getLastBrew(),
+    getFavoriteBrews(),
   ])
 
   const beans = beansResult.success ? beansResult.data : []
   const equipment = equipmentResult.success ? equipmentResult.data : []
   const lastBrew = lastBrewResult.success ? lastBrewResult.data : null
+  const favorites = favoritesResult.success ? favoritesResult.data : []
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -27,7 +29,12 @@ export default async function NewBrewPage() {
       </div>
 
       <Suspense fallback={<div>Cargando...</div>}>
-        <BrewForm beans={beans} equipment={equipment} defaultBrew={lastBrew} />
+        <BrewForm
+          beans={beans}
+          equipment={equipment}
+          defaultBrew={lastBrew}
+          favorites={favorites}
+        />
       </Suspense>
     </div>
   )

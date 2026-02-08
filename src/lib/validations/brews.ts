@@ -73,3 +73,14 @@ export const filterTypes = [
   { value: "cloth", label: "Tela" },
   { value: "none", label: "Sin filtro" },
 ] as const
+
+// Tipos de bebida para cafeteras superautomáticas
+export const automaticDrinkTypes = [
+  { value: "espresso", label: "Espresso", dose: 7, water: 40 },
+  { value: "doppio", label: "Doppio", dose: 14, water: 60 },
+  { value: "lungo", label: "Lungo", dose: 7, water: 110 },
+  { value: "americano", label: "Americano", dose: 7, water: 150 },
+  { value: "ristretto", label: "Ristretto", dose: 7, water: 25 },
+] as const
+
+export type AutomaticDrinkType = (typeof automaticDrinkTypes)[number]["value"]

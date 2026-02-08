@@ -17,8 +17,20 @@ export const maintenanceIntervals = [
   { value: 90, label: "90 dias" },
 ] as const
 
+export const espressoMachineSubtypes = [
+  { value: "super_automatic", label: "Superautomatica" },
+  { value: "semi_automatic", label: "Semiautomatica" },
+  { value: "manual", label: "Manual" },
+] as const
+
+export const grinderSubtypes = [
+  { value: "electric", label: "Electrico" },
+  { value: "manual", label: "Manual" },
+] as const
+
 export const equipmentSchema = z.object({
   type: z.enum(["grinder", "brewer", "espresso_machine", "kettle", "scale", "other"]),
+  subtype: z.enum(["super_automatic", "semi_automatic", "manual", "electric"]).nullable().optional(),
   brand: z.string().nullable().optional(),
   model: z.string().min(1, "El modelo es requerido"),
   notes: z.string().nullable().optional(),

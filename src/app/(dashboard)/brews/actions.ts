@@ -55,6 +55,25 @@ export type EquipmentOption = {
   model: string
   brand: string | null
   type: string
+  subtype: string | null
+}
+
+export type FavoriteBrew = {
+  id: string
+  user_id: string
+  name: string
+  brew_method: string
+  dose_grams: number | null
+  water_grams: number | null
+  water_temperature: number | null
+  grind_size: string | null
+  total_time_seconds: number | null
+  bloom_time_seconds: number | null
+  bloom_water_grams: number | null
+  filter_type: string | null
+  equipment_id: string | null
+  grinder_id: string | null
+  created_at: string
 }
 
 export async function getBrews(): Promise<ActionResult<Brew[]>> {
@@ -291,7 +310,7 @@ export async function getEquipment(): Promise<ActionResult<EquipmentOption[]>> {
 
   const { data, error } = await supabase
     .from("equipment")
-    .select("id, model, brand, type")
+    .select("id, model, brand, type, subtype")
     .order("model")
 
   if (error) {
@@ -333,4 +352,87 @@ export async function getLastBrew(): Promise<ActionResult<Brew | null>> {
   }
 
   return { success: true, data: data as Brew | null }
+}
+
+// === FAVORITE BREWS ===
+
+export async function getFavoriteBrews(): Promise<ActionResult<FavoriteBrew[]>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("favorite_brews")
+    .select("*")
+    .eq("user_id", userData.user.id)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true, data: data as FavoriteBrew[] }
+}
+
+export async function createFavoriteBrew(input: {
+  name: string
+  brew_method: string
+  dose_grams?: number | null
+  water_grams?: number | null
+  water_temperature?: number | null
+  grind_size?: string | null
+  total_time_seconds?: number | null
+  bloom_time_seconds?: number | null
+  bloom_water_grams?: number | null
+  filter_type?: string | null
+  equipment_id?: string | null
+  grinder_id?: string | null
+}): Promise<ActionResult<FavoriteBrew>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("favorite_brews")
+    .insert({
+      ...input,
+      user_id: userData.user.id,
+    })
+    .select()
+    .single()
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath("/brews/new")
+  return { success: true, data: data as FavoriteBrew }
+}
+
+export async function deleteFavoriteBrew(id: string): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { error } = await supabase
+    .from("favorite_brews")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath("/brews/new")
+  return { success: true, data: undefined }
 }

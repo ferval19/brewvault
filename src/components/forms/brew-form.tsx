@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2 } from "lucide-react"
+import { Loader2, Info, Star, Trash2, Coffee } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,16 +17,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
 import { ImageUpload } from "@/components/forms/image-upload"
-import { Info } from "lucide-react"
 
 import {
   brewMethods,
   grindSizes,
   filterTypes,
+  automaticDrinkTypes,
 } from "@/lib/validations/brews"
-import { createBrew, updateBrew } from "@/app/(dashboard)/brews/actions"
-import type { BeanOption, EquipmentOption, Brew } from "@/app/(dashboard)/brews/actions"
+import { createBrew, updateBrew, deleteFavoriteBrew } from "@/app/(dashboard)/brews/actions"
+import type { BeanOption, EquipmentOption, Brew, FavoriteBrew } from "@/app/(dashboard)/brews/actions"
 
 interface BrewFormData {
   bean_id: string
@@ -52,13 +53,15 @@ interface BrewFormProps {
   defaultBrew?: Brew | null
   beans: BeanOption[]
   equipment: EquipmentOption[]
+  favorites?: FavoriteBrew[]
   onSuccess?: () => void
 }
 
-export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: BrewFormProps) {
+export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], onSuccess }: BrewFormProps) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedDrinkType, setSelectedDrinkType] = useState<string | null>(null)
 
   const brewers = equipment.filter((e) => e.type === "brewer" || e.type === "espresso_machine")
   const grinders = equipment.filter((e) => e.type === "grinder")
@@ -95,6 +98,41 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
   const doseGrams = watch("dose_grams")
   const waterGrams = watch("water_grams")
   const ratio = doseGrams && waterGrams ? (waterGrams / doseGrams).toFixed(1) : "-"
+
+  const selectedEquipmentId = watch("equipment_id")
+  const selectedEquipment = selectedEquipmentId
+    ? equipment.find(e => e.id === selectedEquipmentId)
+    : null
+  const isAutomatic = selectedEquipment?.subtype === "super_automatic"
+
+  function handleFavoriteSelect(favorite: FavoriteBrew) {
+    setValue("brew_method", favorite.brew_method)
+    if (favorite.dose_grams) setValue("dose_grams", favorite.dose_grams)
+    if (favorite.water_grams) setValue("water_grams", favorite.water_grams)
+    if (favorite.water_temperature) setValue("water_temperature", favorite.water_temperature)
+    if (favorite.grind_size) setValue("grind_size", favorite.grind_size)
+    if (favorite.total_time_seconds) setValue("total_time_seconds", favorite.total_time_seconds)
+    if (favorite.bloom_time_seconds) setValue("bloom_time_seconds", favorite.bloom_time_seconds)
+    if (favorite.bloom_water_grams) setValue("bloom_water_grams", favorite.bloom_water_grams)
+    if (favorite.filter_type) setValue("filter_type", favorite.filter_type)
+    if (favorite.equipment_id) setValue("equipment_id", favorite.equipment_id)
+    if (favorite.grinder_id) setValue("grinder_id", favorite.grinder_id)
+  }
+
+  function handleDrinkTypeSelect(drinkType: string) {
+    setSelectedDrinkType(drinkType)
+    const drink = automaticDrinkTypes.find(d => d.value === drinkType)
+    if (drink) {
+      setValue("dose_grams", drink.dose)
+      setValue("water_grams", drink.water)
+      setValue("brew_method", "espresso")
+    }
+  }
+
+  async function handleDeleteFavorite(id: string) {
+    await deleteFavoriteBrew(id)
+    router.refresh()
+  }
 
   async function onSubmit(data: BrewFormData) {
     if (!data.bean_id) {
@@ -144,6 +182,42 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
         </Alert>
       )}
 
+      {/* Favorites Section */}
+      {!brew && favorites.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4 text-amber-500" />
+            <h3 className="text-sm font-medium">Mis favoritas</h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {favorites.map((fav) => (
+              <div key={fav.id} className="group relative">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full pr-8"
+                  onClick={() => handleFavoriteSelect(fav)}
+                >
+                  <Coffee className="h-3 w-3 mr-1.5" />
+                  {fav.name}
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    {fav.dose_grams}g/{fav.water_grams}g
+                  </Badge>
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteFavorite(fav.id)}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-opacity"
+                >
+                  <Trash2 className="h-3 w-3 text-destructive" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Foto de la preparacion */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Foto de la preparacion</h3>
@@ -154,9 +228,9 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
         />
       </div>
 
-      {/* Cafe y metodo */}
+      {/* Cafe y equipo */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Cafe y metodo</h3>
+        <h3 className="text-lg font-medium">Cafe y equipo</h3>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -179,6 +253,59 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
             </Select>
           </div>
 
+          {brewers.length > 0 && (
+            <div className="space-y-2">
+              <Label htmlFor="equipment_id">Cafetera</Label>
+              <Select
+                value={watch("equipment_id") || ""}
+                onValueChange={(value) => {
+                  setValue("equipment_id", value || null)
+                  setSelectedDrinkType(null)
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brewers.map((b) => (
+                    <SelectItem key={b.id} value={b.id}>
+                      {b.brand ? `${b.brand} ${b.model}` : b.model}
+                      {b.subtype === "super_automatic" && (
+                        <span className="text-muted-foreground ml-1">(Auto)</span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </div>
+
+        {/* Automatic machine drink selector */}
+        {isAutomatic && (
+          <div className="p-4 rounded-lg bg-muted/50 border space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Cafetera superautomatica detectada. Selecciona el tipo de bebida:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {automaticDrinkTypes.map((drink) => (
+                <Button
+                  key={drink.value}
+                  type="button"
+                  variant={selectedDrinkType === drink.value ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleDrinkTypeSelect(drink.value)}
+                >
+                  {drink.label}
+                  <span className="text-xs ml-1 opacity-70">({drink.dose}g/{drink.water}ml)</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Method selector - only for non-automatic */}
+        {!isAutomatic && (
           <div className="space-y-2">
             <Label htmlFor="brew_method">Metodo *</Label>
             <Select
@@ -197,7 +324,7 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
               </SelectContent>
             </Select>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Dosis y agua */}
@@ -212,6 +339,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
               type="number"
               step="0.1"
               placeholder="18"
+              disabled={isAutomatic}
+              className={isAutomatic ? "bg-muted" : ""}
               {...register("dose_grams", { valueAsNumber: true })}
             />
           </div>
@@ -223,6 +352,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
               type="number"
               step="1"
               placeholder="300"
+              disabled={isAutomatic}
+              className={isAutomatic ? "bg-muted" : ""}
               {...register("water_grams", { valueAsNumber: true })}
             />
           </div>
@@ -234,154 +365,139 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, onSuccess }: Bre
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="water_temperature">Temp (°C)</Label>
-            <Input
-              id="water_temperature"
-              type="number"
-              step="1"
-              placeholder="93"
-              {...register("water_temperature", { valueAsNumber: true })}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Tiempos */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Tiempos</h3>
-
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="total_time_seconds">Total (seg)</Label>
-            <Input
-              id="total_time_seconds"
-              type="number"
-              placeholder="180"
-              {...register("total_time_seconds", { valueAsNumber: true })}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="bloom_time_seconds">Bloom (seg)</Label>
-            <Input
-              id="bloom_time_seconds"
-              type="number"
-              placeholder="30"
-              {...register("bloom_time_seconds", { valueAsNumber: true })}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="bloom_water_grams">Agua bloom (g)</Label>
-            <Input
-              id="bloom_water_grams"
-              type="number"
-              step="1"
-              placeholder="40"
-              {...register("bloom_water_grams", { valueAsNumber: true })}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="yield_grams">Yield (g)</Label>
-            <Input
-              id="yield_grams"
-              type="number"
-              step="1"
-              placeholder="250"
-              {...register("yield_grams", { valueAsNumber: true })}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Molienda y equipo */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Molienda y equipo</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="grind_size">Tamano de molienda</Label>
-            <Select
-              value={watch("grind_size") || ""}
-              onValueChange={(value) => setValue("grind_size", value || null)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccionar" />
-              </SelectTrigger>
-              <SelectContent>
-                {grindSizes.map((size) => (
-                  <SelectItem key={size.value} value={size.value}>
-                    {size.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="filter_type">Tipo de filtro</Label>
-            <Select
-              value={watch("filter_type") || ""}
-              onValueChange={(value) => setValue("filter_type", value || null)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Seleccionar" />
-              </SelectTrigger>
-              <SelectContent>
-                {filterTypes.map((filter) => (
-                  <SelectItem key={filter.value} value={filter.value}>
-                    {filter.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {grinders.length > 0 && (
+          {!isAutomatic && (
             <div className="space-y-2">
-              <Label htmlFor="grinder_id">Molino</Label>
+              <Label htmlFor="water_temperature">Temp (°C)</Label>
+              <Input
+                id="water_temperature"
+                type="number"
+                step="1"
+                placeholder="93"
+                {...register("water_temperature", { valueAsNumber: true })}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Tiempos - only for non-automatic */}
+      {!isAutomatic && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Tiempos</h3>
+
+          <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+            <div className="space-y-2">
+              <Label htmlFor="total_time_seconds">Total (seg)</Label>
+              <Input
+                id="total_time_seconds"
+                type="number"
+                placeholder="180"
+                {...register("total_time_seconds", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bloom_time_seconds">Bloom (seg)</Label>
+              <Input
+                id="bloom_time_seconds"
+                type="number"
+                placeholder="30"
+                {...register("bloom_time_seconds", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bloom_water_grams">Agua bloom (g)</Label>
+              <Input
+                id="bloom_water_grams"
+                type="number"
+                step="1"
+                placeholder="40"
+                {...register("bloom_water_grams", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="yield_grams">Yield (g)</Label>
+              <Input
+                id="yield_grams"
+                type="number"
+                step="1"
+                placeholder="250"
+                {...register("yield_grams", { valueAsNumber: true })}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Molienda y equipo - only for non-automatic */}
+      {!isAutomatic && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Molienda y filtro</h3>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="grind_size">Tamano de molienda</Label>
               <Select
-                value={watch("grinder_id") || ""}
-                onValueChange={(value) => setValue("grinder_id", value || null)}
+                value={watch("grind_size") || ""}
+                onValueChange={(value) => setValue("grind_size", value || null)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
                 <SelectContent>
-                  {grinders.map((g) => (
-                    <SelectItem key={g.id} value={g.id}>
-                      {g.brand ? `${g.brand} ${g.model}` : g.model}
+                  {grindSizes.map((size) => (
+                    <SelectItem key={size.value} value={size.value}>
+                      {size.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-          )}
 
-          {brewers.length > 0 && (
             <div className="space-y-2">
-              <Label htmlFor="equipment_id">Cafetera</Label>
+              <Label htmlFor="filter_type">Tipo de filtro</Label>
               <Select
-                value={watch("equipment_id") || ""}
-                onValueChange={(value) => setValue("equipment_id", value || null)}
+                value={watch("filter_type") || ""}
+                onValueChange={(value) => setValue("filter_type", value || null)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
                 <SelectContent>
-                  {brewers.map((b) => (
-                    <SelectItem key={b.id} value={b.id}>
-                      {b.brand ? `${b.brand} ${b.model}` : b.model}
+                  {filterTypes.map((filter) => (
+                    <SelectItem key={filter.value} value={filter.value}>
+                      {filter.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-          )}
+
+            {grinders.length > 0 && (
+              <div className="space-y-2">
+                <Label htmlFor="grinder_id">Molino</Label>
+                <Select
+                  value={watch("grinder_id") || ""}
+                  onValueChange={(value) => setValue("grinder_id", value || null)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {grinders.map((g) => (
+                      <SelectItem key={g.id} value={g.id}>
+                        {g.brand ? `${g.brand} ${g.model}` : g.model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Valoracion y notas */}
       <div className="space-y-4">

@@ -12,6 +12,7 @@ export type Equipment = {
   id: string
   user_id: string
   type: string
+  subtype: string | null
   brand: string | null
   model: string
   notes: string | null
