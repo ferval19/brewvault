@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
+  Home,
   Coffee,
   Flame,
   Wrench,
-  Factory,
-  BarChart3,
   Settings,
   LogOut,
   ClipboardList,
@@ -24,12 +23,11 @@ interface SidebarClientProps {
 }
 
 const navigation = [
+  { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Cafes", href: "/beans", icon: Coffee },
   { name: "Preparaciones", href: "/brews", icon: Flame },
   { name: "Equipamiento", href: "/equipment", icon: Wrench },
-  { name: "Tostadores", href: "/roasters", icon: Factory },
   { name: "Notas de Cata", href: "/cupping", icon: ClipboardList },
-  { name: "Dashboard", href: "/analytics", icon: BarChart3 },
   { name: "Alertas", href: "/alerts", icon: Bell, showBadge: true },
   { name: "Configuracion", href: "/settings", icon: Settings },
 ]
