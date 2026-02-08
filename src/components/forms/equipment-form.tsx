@@ -98,7 +98,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>

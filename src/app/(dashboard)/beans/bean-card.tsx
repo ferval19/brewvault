@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -57,11 +57,12 @@ export function BeanCard({ bean }: BeanCardProps) {
       ? Math.round((bean.current_weight_grams / bean.weight_grams) * 100)
       : null
 
-  const daysFromRoast = bean.roast_date
-    ? Math.floor(
-        (Date.now() - new Date(bean.roast_date).getTime()) / (1000 * 60 * 60 * 24)
-      )
-    : null
+  const daysFromRoast = useMemo(() => {
+    if (!bean.roast_date) return null
+    const now = new Date()
+    const roastDate = new Date(bean.roast_date)
+    return Math.floor((now.getTime() - roastDate.getTime()) / (1000 * 60 * 60 * 24))
+  }, [bean.roast_date])
 
   return (
     <>
@@ -77,18 +78,18 @@ export function BeanCard({ bean }: BeanCardProps) {
           </div>
         )}
 
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
+        <CardHeader className="pb-2 pt-4">
+          <div className="flex items-start justify-between gap-2">
+            <div className="space-y-1.5 min-w-0">
               <CardTitle className="text-lg leading-tight">
                 <Link
                   href={`/beans/${bean.id}`}
-                  className="hover:underline"
+                  className="hover:underline line-clamp-2"
                 >
                   {bean.name}
                 </Link>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="line-clamp-1">
                 {bean.roasters?.name || "Sin tostador"}
                 {bean.origin_country && ` · ${bean.origin_country}`}
               </CardDescription>
@@ -129,7 +130,7 @@ export function BeanCard({ bean }: BeanCardProps) {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4 pt-2 pb-4">
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary" className={statusColors[bean.status]}>
@@ -144,7 +145,7 @@ export function BeanCard({ bean }: BeanCardProps) {
 
           {/* Stock bar */}
           {stockPercentage !== null && bean.status === "active" && (
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   Stock
@@ -171,23 +172,25 @@ export function BeanCard({ bean }: BeanCardProps) {
           )}
 
           {/* Footer info */}
-          <div className="flex items-center justify-between text-sm text-muted-foreground pt-2">
-            {daysFromRoast !== null && (
+          {(daysFromRoast !== null || bean.personal_rating) && (
+            <div className="flex items-center justify-between text-sm text-muted-foreground pt-1 border-t">
               <span>
-                {daysFromRoast === 0
-                  ? "Tostado hoy"
-                  : daysFromRoast === 1
-                  ? "Hace 1 dia"
-                  : `Hace ${daysFromRoast} dias`}
+                {daysFromRoast !== null
+                  ? daysFromRoast === 0
+                    ? "Tostado hoy"
+                    : daysFromRoast === 1
+                    ? "Hace 1 dia"
+                    : `Hace ${daysFromRoast} dias`
+                  : ""}
               </span>
-            )}
-            {bean.personal_rating && (
-              <span className="text-amber-500">
-                {"★".repeat(bean.personal_rating)}
-                {"☆".repeat(5 - bean.personal_rating)}
-              </span>
-            )}
-          </div>
+              {bean.personal_rating && (
+                <span className="text-amber-500">
+                  {"★".repeat(bean.personal_rating)}
+                  {"☆".repeat(5 - bean.personal_rating)}
+                </span>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 

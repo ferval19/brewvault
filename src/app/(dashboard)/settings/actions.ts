@@ -117,3 +117,108 @@ export async function getStats(): Promise<ActionResult<{
     },
   }
 }
+
+const defaultPreferences: NotificationPreferences = {
+  push_enabled: false,
+  low_stock_alerts: true,
+  maintenance_alerts: true,
+  reorder_suggestions: false,
+}
+
+export async function getNotificationPreferences(): Promise<ActionResult<NotificationPreferences>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("notification_preferences")
+    .eq("id", userData.user.id)
+    .single()
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return {
+    success: true,
+    data: (data.notification_preferences as NotificationPreferences) || defaultPreferences
+  }
+}
+
+export async function updateNotificationPreferences(
+  preferences: NotificationPreferences
+): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      notification_preferences: preferences as unknown as Record<string, unknown>,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath("/settings")
+  return { success: true, data: undefined }
+}
+
+export async function savePushSubscription(
+  subscription: PushSubscriptionJSON
+): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { error } = await supabase
+    .from("push_subscriptions")
+    .upsert({
+      user_id: userData.user.id,
+      endpoint: subscription.endpoint,
+      p256dh: subscription.keys?.p256dh || "",
+      auth: subscription.keys?.auth || "",
+    }, {
+      onConflict: "user_id,endpoint"
+    })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true, data: undefined }
+}
+
+export async function removePushSubscription(): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { error } = await supabase
+    .from("push_subscriptions")
+    .delete()
+    .eq("user_id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true, data: undefined }
+}

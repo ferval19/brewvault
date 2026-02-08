@@ -32,11 +32,11 @@ export async function subscribeToPush(
     }
 
     // Subscribe to push
+    const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+    const applicationServerKey = vapidKey ? urlBase64ToUint8Array(vapidKey) : undefined
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
-      )
+      ...(applicationServerKey && { applicationServerKey })
     })
 
     console.log('Push subscription:', subscription)
@@ -86,19 +86,20 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   return Notification.requestPermission()
 }
 
-// Helper function to convert VAPID key
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
+// Helper function to convert VAPID key to BufferSource
+function urlBase64ToUint8Array(base64String: string): BufferSource {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
   const base64 = (base64String + padding)
     .replace(/-/g, '+')
     .replace(/_/g, '/')
 
   const rawData = window.atob(base64)
-  const outputArray = new Uint8Array(rawData.length)
+  const buffer = new ArrayBuffer(rawData.length)
+  const view = new Uint8Array(buffer)
 
   for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i)
+    view[i] = rawData.charCodeAt(i)
   }
 
-  return outputArray
+  return buffer
 }

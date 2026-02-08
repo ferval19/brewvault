@@ -6,6 +6,13 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface NotificationPreferences {
+  push_enabled: boolean
+  low_stock_alerts: boolean
+  maintenance_alerts: boolean
+  reorder_suggestions: boolean
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -17,6 +24,7 @@ export interface Database {
           avatar_url: string | null
           preferred_unit: "metric" | "imperial"
           preferred_temperature_unit: "celsius" | "fahrenheit"
+          notification_preferences: NotificationPreferences | null
           created_at: string
           updated_at: string
         }
@@ -27,6 +35,7 @@ export interface Database {
           avatar_url?: string | null
           preferred_unit?: "metric" | "imperial"
           preferred_temperature_unit?: "celsius" | "fahrenheit"
+          notification_preferences?: NotificationPreferences | null
           created_at?: string
           updated_at?: string
         }
@@ -37,6 +46,7 @@ export interface Database {
           avatar_url?: string | null
           preferred_unit?: "metric" | "imperial"
           preferred_temperature_unit?: "celsius" | "fahrenheit"
+          notification_preferences?: NotificationPreferences | null
           created_at?: string
           updated_at?: string
         }
@@ -97,6 +107,7 @@ export interface Database {
           sca_score: number | null
           weight_grams: number | null
           current_weight_grams: number | null
+          low_stock_threshold_grams: number | null
           price: number | null
           currency: string | null
           photo_url: string | null
@@ -124,6 +135,7 @@ export interface Database {
           sca_score?: number | null
           weight_grams?: number | null
           current_weight_grams?: number | null
+          low_stock_threshold_grams?: number | null
           price?: number | null
           currency?: string | null
           photo_url?: string | null
@@ -151,6 +163,7 @@ export interface Database {
           sca_score?: number | null
           weight_grams?: number | null
           current_weight_grams?: number | null
+          low_stock_threshold_grams?: number | null
           price?: number | null
           currency?: string | null
           photo_url?: string | null
@@ -172,6 +185,8 @@ export interface Database {
           notes: string | null
           purchase_date: string | null
           last_maintenance: string | null
+          maintenance_interval_days: number | null
+          maintenance_last_notified: string | null
           created_at: string
           updated_at: string
         }
@@ -184,6 +199,8 @@ export interface Database {
           notes?: string | null
           purchase_date?: string | null
           last_maintenance?: string | null
+          maintenance_interval_days?: number | null
+          maintenance_last_notified?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -196,6 +213,8 @@ export interface Database {
           notes?: string | null
           purchase_date?: string | null
           last_maintenance?: string | null
+          maintenance_interval_days?: number | null
+          maintenance_last_notified?: string | null
           created_at?: string
           updated_at?: string
         }

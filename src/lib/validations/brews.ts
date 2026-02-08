@@ -1,25 +1,41 @@
 import { z } from "zod"
 
+// Helper for optional numeric fields that handles empty strings and NaN
+const optionalNumber = z.preprocess(
+  (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? undefined : val),
+  z.coerce.number().positive().optional().nullable()
+)
+
+const optionalInt = z.preprocess(
+  (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? undefined : val),
+  z.coerce.number().int().positive().optional().nullable()
+)
+
 export const brewSchema = z.object({
   bean_id: z.string().uuid("Debes seleccionar un cafe"),
-  equipment_id: z.string().uuid().optional().nullable(),
-  grinder_id: z.string().uuid().optional().nullable(),
-  water_recipe_id: z.string().uuid().optional().nullable(),
+  equipment_id: z.string().uuid().optional().nullable().or(z.literal("")),
+  grinder_id: z.string().uuid().optional().nullable().or(z.literal("")),
   brew_method: z.string().min(1, "El metodo es requerido"),
   grind_size: z.string().optional().nullable(),
   dose_grams: z.coerce.number().positive("La dosis debe ser mayor a 0"),
   water_grams: z.coerce.number().positive("El agua debe ser mayor a 0"),
-  water_temperature: z.coerce.number().min(0).max(100).optional().nullable(),
-  total_time_seconds: z.coerce.number().int().positive().optional().nullable(),
-  bloom_time_seconds: z.coerce.number().int().positive().optional().nullable(),
-  bloom_water_grams: z.coerce.number().positive().optional().nullable(),
-  pressure_bar: z.coerce.number().positive().optional().nullable(),
-  yield_grams: z.coerce.number().positive().optional().nullable(),
-  tds: z.coerce.number().positive().optional().nullable(),
-  extraction_percentage: z.coerce.number().min(0).max(30).optional().nullable(),
+  water_temperature: optionalNumber,
+  total_time_seconds: optionalInt,
+  bloom_time_seconds: optionalInt,
+  bloom_water_grams: optionalNumber,
+  pressure_bar: optionalNumber,
+  yield_grams: optionalNumber,
+  tds: optionalNumber,
+  extraction_percentage: z.preprocess(
+    (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? undefined : val),
+    z.coerce.number().min(0).max(30).optional().nullable()
+  ),
   filter_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  rating: z.coerce.number().int().min(1).max(5).optional().nullable(),
+  rating: z.preprocess(
+    (val) => (val === "" || val === null || val === undefined || Number.isNaN(val) ? undefined : val),
+    z.coerce.number().int().min(1).max(5).optional().nullable()
+  ),
   brewed_at: z.string().optional(),
 })
 

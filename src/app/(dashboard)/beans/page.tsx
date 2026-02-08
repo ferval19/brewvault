@@ -39,12 +39,12 @@ export default async function BeansPage({
   const finishedCount = beans.filter((b) => b.status === "finished").length
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold">Mis Cafes</h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mt-1">
             {activeCount} activos · {finishedCount} agotados
           </p>
         </div>
@@ -63,7 +63,7 @@ export default async function BeansPage({
       {filteredBeans.length === 0 ? (
         <EmptyState hasAnyBeans={beans.length > 0} />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filteredBeans.map((bean) => (
             <BeanCard key={bean.id} bean={bean} />
           ))}

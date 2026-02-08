@@ -25,6 +25,7 @@ export type Bean = {
   sca_score: number | null
   weight_grams: number | null
   current_weight_grams: number | null
+  low_stock_threshold_grams: number | null
   price: number | null
   currency: string | null
   photo_url: string | null

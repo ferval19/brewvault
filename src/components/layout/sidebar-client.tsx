@@ -13,9 +13,15 @@ import {
   Settings,
   LogOut,
   ClipboardList,
+  Bell,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { AlertBadge } from "@/components/alerts/alert-badge"
+
+interface SidebarClientProps {
+  alertCount: number
+}
 
 const navigation = [
   { name: "Cafes", href: "/beans", icon: Coffee },
@@ -24,23 +30,24 @@ const navigation = [
   { name: "Tostadores", href: "/roasters", icon: Factory },
   { name: "Notas de Cata", href: "/cupping", icon: ClipboardList },
   { name: "Dashboard", href: "/analytics", icon: BarChart3 },
+  { name: "Alertas", href: "/alerts", icon: Bell, showBadge: true },
   { name: "Configuracion", href: "/settings", icon: Settings },
 ]
 
-export function Sidebar() {
+export function SidebarClient({ alertCount }: SidebarClientProps) {
   const pathname = usePathname()
 
   return (
     <aside className="h-full w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
-      <div className="p-6">
+      <div className="p-6 pb-4">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
           BrewVault
         </h1>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
           Tu diario de cafe
         </p>
       </div>
-      <nav className="px-3 flex-1">
+      <nav className="px-4 flex-1 space-y-1">
         {navigation.map((item) => {
           const isActive = pathname.startsWith(item.href)
           return (
@@ -48,13 +55,16 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                 isActive
                   ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
                   : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <div className="relative">
+                <item.icon className="h-5 w-5" />
+                {item.showBadge && <AlertBadge count={alertCount} />}
+              </div>
               {item.name}
             </Link>
           )

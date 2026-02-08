@@ -17,6 +17,8 @@ export const beanSchema = z.object({
   flavor_notes: z.array(z.string()).optional().nullable(),
   sca_score: z.coerce.number().min(0).max(100).optional().nullable(),
   weight_grams: z.coerce.number().positive().optional().nullable(),
+  current_weight_grams: z.coerce.number().min(0).optional().nullable(),
+  low_stock_threshold_grams: z.coerce.number().int().min(0).optional().nullable().default(100),
   price: z.coerce.number().positive().optional().nullable(),
   currency: z.string().optional().default("EUR"),
   barcode: z.string().optional().nullable(),

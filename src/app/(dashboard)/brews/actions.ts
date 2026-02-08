@@ -14,7 +14,6 @@ export type Brew = {
   bean_id: string
   equipment_id: string | null
   grinder_id: string | null
-  water_recipe_id: string | null
   brew_method: string
   grind_size: string | null
   dose_grams: number
@@ -138,7 +137,8 @@ export async function createBrew(
 
   const validatedFields = brewSchema.safeParse(input)
   if (!validatedFields.success) {
-    return { success: false, error: "Datos invalidos" }
+    const firstError = validatedFields.error.issues[0]
+    return { success: false, error: firstError?.message || "Datos invalidos" }
   }
 
   // Get the bean to check stock
@@ -215,7 +215,8 @@ export async function updateBrew(
 
   const validatedFields = brewSchema.safeParse(input)
   if (!validatedFields.success) {
-    return { success: false, error: "Datos invalidos" }
+    const firstError = validatedFields.error.issues[0]
+    return { success: false, error: firstError?.message || "Datos invalidos" }
   }
 
   const { error } = await supabase

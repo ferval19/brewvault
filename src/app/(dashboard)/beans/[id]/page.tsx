@@ -41,11 +41,11 @@ export default async function BeanDetailPage({
       ? Math.round((bean.current_weight_grams / bean.weight_grams) * 100)
       : null
 
-  const daysFromRoast = bean.roast_date
-    ? Math.floor(
-        (Date.now() - new Date(bean.roast_date).getTime()) / (1000 * 60 * 60 * 24)
-      )
-    : null
+  const daysFromRoast = (() => {
+    if (!bean.roast_date) return null
+    const now = new Date()
+    return Math.floor((now.getTime() - new Date(bean.roast_date).getTime()) / (1000 * 60 * 60 * 24))
+  })()
 
   return (
     <div className="space-y-6">

@@ -4,7 +4,6 @@ import {
   Flame,
   Users,
   Cog,
-  Droplets,
   TrendingUp,
   Star,
   Calendar,
@@ -42,10 +41,10 @@ export default async function AnalyticsPage() {
   const alertCount = alertCountResult.success ? alertCountResult.data : 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           Resumen de tu coleccion de cafe
         </p>
       </div>
@@ -56,7 +55,7 @@ export default async function AnalyticsPage() {
       )}
 
       {/* Main stats grid */}
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
         <Link href="/beans">
           <Card className="hover:shadow-md transition-shadow cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -167,21 +166,6 @@ export default async function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        {/* Recetas de agua */}
-        <Link href="/water">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Recetas de agua</CardTitle>
-              <Droplets className="h-4 w-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.waterRecipes.total}</div>
-              <p className="text-xs text-muted-foreground">
-                recetas guardadas
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
       </div>
 
       {/* Metodos mas usados y preparaciones recientes */}

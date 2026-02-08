@@ -24,9 +24,6 @@ export type DashboardStats = {
   equipment: {
     total: number
   }
-  waterRecipes: {
-    total: number
-  }
   topMethods: { method: string; count: number }[]
   recentBrews: {
     id: string
@@ -51,14 +48,12 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
     brewsResult,
     roastersResult,
     equipmentResult,
-    waterRecipesResult,
     recentBrewsResult,
   ] = await Promise.all([
     supabase.from("beans").select("status"),
     supabase.from("brews").select("rating, brewed_at, brew_method"),
     supabase.from("roasters").select("id", { count: "exact", head: true }),
     supabase.from("equipment").select("id", { count: "exact", head: true }),
-    supabase.from("water_recipes").select("id", { count: "exact", head: true }),
     supabase
       .from("brews")
       .select("id, brewed_at, brew_method, rating, beans(name)")
@@ -111,7 +106,6 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
       },
       roasters: { total: roastersResult.count || 0 },
       equipment: { total: equipmentResult.count || 0 },
-      waterRecipes: { total: waterRecipesResult.count || 0 },
       topMethods,
       recentBrews: (recentBrewsResult.data || []).map((brew) => ({
         id: brew.id as string,

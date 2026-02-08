@@ -36,6 +36,8 @@ interface BeanFormData {
   flavor_notes?: string[] | null
   sca_score?: number | null
   weight_grams?: number | null
+  current_weight_grams?: number | null
+  low_stock_threshold_grams?: number | null
   price?: number | null
   currency?: string
   barcode?: string | null
@@ -61,6 +63,8 @@ interface BeanFormProps {
     flavor_notes: string[] | null
     sca_score: number | null
     weight_grams: number | null
+    current_weight_grams: number | null
+    low_stock_threshold_grams: number | null
     price: number | null
     currency: string | null
     barcode: string | null
@@ -99,6 +103,8 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
       flavor_notes: bean?.flavor_notes || [],
       sca_score: bean?.sca_score || undefined,
       weight_grams: bean?.weight_grams || undefined,
+      current_weight_grams: bean?.current_weight_grams || undefined,
+      low_stock_threshold_grams: bean?.low_stock_threshold_grams || 100,
       price: bean?.price || undefined,
       currency: bean?.currency || "EUR",
       barcode: bean?.barcode || "",
@@ -139,7 +145,7 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
@@ -318,7 +324,7 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-2">
-            <Label htmlFor="weight_grams">Peso (g)</Label>
+            <Label htmlFor="weight_grams">Peso inicial (g)</Label>
             <Input
               id="weight_grams"
               type="number"
@@ -328,6 +334,55 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="current_weight_grams">Peso actual (g)</Label>
+            <Input
+              id="current_weight_grams"
+              type="number"
+              step="0.01"
+              placeholder="Ej: 180"
+              {...register("current_weight_grams", { valueAsNumber: true })}
+            />
+            <p className="text-xs text-muted-foreground">
+              Se descuenta automaticamente al preparar
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="low_stock_threshold_grams">Alerta stock bajo (g)</Label>
+            <Input
+              id="low_stock_threshold_grams"
+              type="number"
+              step="1"
+              placeholder="Ej: 100"
+              {...register("low_stock_threshold_grams", { valueAsNumber: true })}
+            />
+            <p className="text-xs text-muted-foreground">
+              Recibiras una alerta cuando quede menos
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="status">Estado</Label>
+            <Select
+              value={watchStatus || "active"}
+              onValueChange={(value) => setValue("status", value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {beanStatuses.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label htmlFor="price">Precio</Label>
             <Input
@@ -357,22 +412,12 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="status">Estado</Label>
-            <Select
-              value={watchStatus || "active"}
-              onValueChange={(value) => setValue("status", value)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {beanStatuses.map((status) => (
-                  <SelectItem key={status.value} value={status.value}>
-                    {status.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label htmlFor="barcode">Codigo de barras</Label>
+            <Input
+              id="barcode"
+              placeholder="Ej: 8437000000001"
+              {...register("barcode")}
+            />
           </div>
         </div>
       </div>

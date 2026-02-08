@@ -1,6 +1,5 @@
-import { Sidebar } from "@/components/layout/sidebar"
-import { MobileNav } from "@/components/layout/mobile-nav"
 import { MobileHeader } from "@/components/layout/mobile-header"
+import { MobileNavWithAlerts, SidebarWithAlerts } from "@/components/layout/nav-with-alerts"
 
 export default function DashboardLayout({
   children,
@@ -14,16 +13,18 @@ export default function DashboardLayout({
 
       {/* Desktop Sidebar - hidden on mobile */}
       <div className="hidden md:block md:fixed md:inset-y-0 md:w-64">
-        <Sidebar />
+        <SidebarWithAlerts />
       </div>
 
       {/* Main content */}
-      <main className="pt-14 pb-20 px-4 md:pt-0 md:pb-0 md:pl-64 md:p-6">
-        {children}
+      <main className="pt-16 pb-24 px-4 md:pt-8 md:pb-8 md:pl-72 md:pr-8">
+        <div className="max-w-6xl mx-auto">
+          {children}
+        </div>
       </main>
 
       {/* Mobile Bottom Nav */}
-      <MobileNav />
+      <MobileNavWithAlerts />
     </div>
   )
 }
