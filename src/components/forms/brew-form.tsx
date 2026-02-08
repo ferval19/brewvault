@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2, Info, Star, Trash2, Coffee } from "lucide-react"
+import { Loader2, Info, Star, Trash2, Coffee, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,6 +26,7 @@ import {
   filterTypes,
   automaticDrinkTypes,
 } from "@/lib/validations/brews"
+import { getBrewMethodIcon } from "@/components/icons/brew-method-icons"
 import { createBrew, updateBrew, deleteFavoriteBrew } from "@/app/(dashboard)/brews/actions"
 import type { BeanOption, EquipmentOption, Brew, FavoriteBrew } from "@/app/(dashboard)/brews/actions"
 
@@ -185,36 +186,62 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
 
       {/* Favorites Section */}
       {!brew && favorites.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Star className="h-4 w-4 text-amber-500" />
-            <h3 className="text-sm font-medium">Mis favoritas</h3>
+            <div className="p-1.5 rounded-lg bg-amber-500/10">
+              <Star className="h-4 w-4 text-amber-500" />
+            </div>
+            <h3 className="font-medium">Mis favoritas</h3>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {favorites.map((fav) => (
-              <div key={fav.id} className="group relative">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full pr-8"
-                  onClick={() => handleFavoriteSelect(fav)}
-                >
-                  <Coffee className="h-3 w-3 mr-1.5" />
-                  {fav.name}
-                  <Badge variant="secondary" className="ml-2 text-xs">
-                    {fav.dose_grams}g/{fav.water_grams}g
-                  </Badge>
-                </Button>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {favorites.map((fav) => {
+              const methodConfig = getBrewMethodIcon(fav.brew_method)
+              const MethodIcon = methodConfig.icon
+              const methodLabel = brewMethods.find(m => m.value === fav.brew_method)?.label || fav.brew_method
+
+              return (
                 <button
+                  key={fav.id}
                   type="button"
-                  onClick={() => handleDeleteFavorite(fav.id)}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-opacity"
+                  onClick={() => handleFavoriteSelect(fav)}
+                  className="group relative flex flex-col items-center p-4 rounded-2xl border bg-card hover:bg-muted/50 hover:border-primary/50 hover:shadow-md transition-all duration-200 text-left"
                 >
-                  <Trash2 className="h-3 w-3 text-destructive" />
+                  {/* Delete button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteFavorite(fav.id)
+                    }}
+                    className="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-opacity"
+                  >
+                    <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
+                  </button>
+
+                  {/* Method Icon */}
+                  <div className={`p-3 rounded-xl ${methodConfig.bgColor} mb-3`}>
+                    <MethodIcon className={`h-6 w-6 ${methodConfig.color}`} />
+                  </div>
+
+                  {/* Favorite Name */}
+                  <span className="font-medium text-sm text-center line-clamp-1 w-full">
+                    {fav.name}
+                  </span>
+
+                  {/* Method Label */}
+                  <span className="text-xs text-muted-foreground mt-0.5">
+                    {methodLabel}
+                  </span>
+
+                  {/* Dose Info */}
+                  <div className="flex items-center gap-1 mt-2">
+                    <Badge variant="secondary" className="text-xs font-normal rounded-full px-2">
+                      {fav.dose_grams}g / {fav.water_grams}ml
+                    </Badge>
+                  </div>
                 </button>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
