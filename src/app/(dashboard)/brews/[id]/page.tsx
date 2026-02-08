@@ -179,22 +179,6 @@ export default async function BrewDetailPage({
                 <span className="font-medium">{filterLabel}</span>
               </div>
             )}
-            {brew.grinder && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Molino</span>
-                <span className="font-medium">
-                  {brew.grinder.brand ? `${brew.grinder.brand} ${brew.grinder.model}` : brew.grinder.model}
-                </span>
-              </div>
-            )}
-            {brew.equipment && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Cafetera</span>
-                <span className="font-medium">
-                  {brew.equipment.brand ? `${brew.equipment.brand} ${brew.equipment.model}` : brew.equipment.model}
-                </span>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>

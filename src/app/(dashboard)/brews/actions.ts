@@ -40,8 +40,6 @@ export type Brew = {
     roaster_id: string | null
     roasters: { id: string; name: string } | null
   } | null
-  equipment: { id: string; model: string; brand: string | null } | null
-  grinder: { id: string; model: string; brand: string | null } | null
 }
 
 export type BeanOption = {
@@ -85,16 +83,6 @@ export async function getBrews(): Promise<ActionResult<Brew[]>> {
           id,
           name
         )
-      ),
-      equipment (
-        id,
-        model,
-        brand
-      ),
-      grinder:equipment!brews_grinder_id_fkey (
-        id,
-        model,
-        brand
       )
     `)
     .order("brewed_at", { ascending: false })
@@ -126,16 +114,6 @@ export async function getBrew(id: string): Promise<ActionResult<Brew>> {
           id,
           name
         )
-      ),
-      equipment (
-        id,
-        model,
-        brand
-      ),
-      grinder:equipment!brews_grinder_id_fkey (
-        id,
-        model,
-        brand
       )
     `)
     .eq("id", id)
