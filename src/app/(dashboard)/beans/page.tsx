@@ -8,7 +8,7 @@ import { BeanCard } from "./bean-card"
 import { BeanFilters } from "./bean-filters"
 
 export const metadata = {
-  title: "Mis Granos",
+  title: "Mis Cafes",
 }
 
 export default async function BeansPage({
@@ -22,7 +22,7 @@ export default async function BeansPage({
   if (!result.success) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <p className="text-muted-foreground">Error al cargar los granos</p>
+        <p className="text-muted-foreground">Error al cargar los cafes</p>
       </div>
     )
   }
@@ -43,7 +43,7 @@ export default async function BeansPage({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Mis Granos</h1>
+          <h1 className="text-3xl font-bold">Mis Cafes</h1>
           <p className="text-muted-foreground">
             {activeCount} activos · {finishedCount} agotados
           </p>
@@ -51,7 +51,7 @@ export default async function BeansPage({
         <Link href="/beans/new">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Nuevo grano
+            Nuevo cafe
           </Button>
         </Link>
       </div>
@@ -79,7 +79,7 @@ function EmptyState({ hasAnyBeans }: { hasAnyBeans: boolean }) {
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Coffee className="h-12 w-12 text-muted-foreground/50 mb-4" />
         <h3 className="text-lg font-medium mb-2">
-          No hay granos con este filtro
+          No hay cafes con este filtro
         </h3>
         <p className="text-muted-foreground mb-4">
           Prueba cambiando el filtro de estado
@@ -95,12 +95,12 @@ function EmptyState({ hasAnyBeans }: { hasAnyBeans: boolean }) {
         Tu boveda esta vacia
       </h3>
       <p className="text-muted-foreground mb-4">
-        Empieza agregando tu primer grano de cafe
+        Empieza agregando tu primer cafe
       </p>
       <Link href="/beans/new">
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Agregar primer grano
+          Agregar primer cafe
         </Button>
       </Link>
     </div>

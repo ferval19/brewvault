@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 const siteConfig = {
   name: "BrewVault",
   description:
-    "Tu diario digital de cafe de especialidad. Registra granos, perfecciona preparaciones y descubre patrones en tu viaje cafetero.",
+    "Tu diario digital de cafe de especialidad. Registra tus cafes, perfecciona preparaciones y descubre patrones en tu viaje cafetero.",
   url: "https://brewvault.app",
   ogImage: "https://brewvault.app/og.png",
   creator: "@brewvault",

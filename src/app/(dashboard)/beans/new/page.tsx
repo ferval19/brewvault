@@ -3,7 +3,7 @@ import { BeanFormWithCatalog } from "./bean-form-with-catalog"
 import { getRoasters } from "../actions"
 
 export const metadata = {
-  title: "Nuevo Grano",
+  title: "Nuevo Cafe",
 }
 
 export default async function NewBeanPage() {
@@ -13,7 +13,7 @@ export default async function NewBeanPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Nuevo Grano</h1>
+        <h1 className="text-3xl font-bold">Nuevo Cafe</h1>
         <p className="text-muted-foreground">
           Agrega un nuevo cafe a tu boveda
         </p>

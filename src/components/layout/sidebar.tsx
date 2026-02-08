@@ -17,7 +17,7 @@ import {
 import { signOut } from "@/app/(auth)/actions"
 
 const navigation = [
-  { name: "Granos", href: "/beans", icon: Coffee },
+  { name: "Cafes", href: "/beans", icon: Coffee },
   { name: "Preparaciones", href: "/brews", icon: Flame },
   { name: "Equipamiento", href: "/equipment", icon: Wrench },
   { name: "Tostadores", href: "/roasters", icon: Factory },

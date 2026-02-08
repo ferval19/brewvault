@@ -6,7 +6,7 @@ import { BeanForm } from "@/components/forms/bean-form"
 import { getBean, getRoasters } from "../../actions"
 
 export const metadata = {
-  title: "Editar Grano",
+  title: "Editar Cafe",
 }
 
 export default async function EditBeanPage({
@@ -38,7 +38,7 @@ export default async function EditBeanPage({
           <ArrowLeft className="mr-1 h-4 w-4" />
           Volver al detalle
         </Link>
-        <h1 className="text-3xl font-bold">Editar Grano</h1>
+        <h1 className="text-3xl font-bold">Editar Cafe</h1>
         <p className="text-muted-foreground">{bean.name}</p>
       </div>
 

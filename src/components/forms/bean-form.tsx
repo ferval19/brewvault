@@ -408,7 +408,7 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
       <div className="flex gap-4 pt-4">
         <Button type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {bean ? "Guardar cambios" : "Crear grano"}
+          {bean ? "Guardar cambios" : "Crear cafe"}
         </Button>
         <Button
           type="button"

@@ -49,7 +49,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Registra tus granos, perfecciona tus preparaciones y descubre patrones
+            Registra tus cafes, perfecciona tus preparaciones y descubre patrones
             en tu viaje cafetero. Todo en un solo lugar, accesible desde cualquier dispositivo.
           </p>
 
@@ -110,7 +110,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard
               icon={<Coffee className="h-6 w-6" />}
-              title="Biblioteca de Granos"
+              title="Biblioteca de Cafes"
               description="Registra origen, variedad, proceso, notas de sabor y mas. Nunca olvides un cafe que te encanto."
             />
             <FeatureCard
@@ -131,7 +131,7 @@ export default function Home() {
             <FeatureCard
               icon={<Timer className="h-6 w-6" />}
               title="Control de Inventario"
-              description="Sigue el stock de tus granos con alertas de frescura y agotamiento automaticas."
+              description="Sigue el stock de tus cafes con alertas de frescura y agotamiento automaticas."
             />
             <FeatureCard
               icon={<Star className="h-6 w-6" />}
@@ -157,7 +157,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-12">
             <StepCard
               number="01"
-              title="Registra tus granos"
+              title="Registra tus cafes"
               description="Anade cada bolsa de cafe con todos sus detalles: origen, tostador, notas de sabor."
             />
             <StepCard

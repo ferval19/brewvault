@@ -57,7 +57,7 @@ export default async function BeanDetailPage({
             className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-2"
           >
             <ArrowLeft className="mr-1 h-4 w-4" />
-            Volver a granos
+            Volver a cafes
           </Link>
           <h1 className="text-3xl font-bold">{bean.name}</h1>
           <p className="text-muted-foreground">

@@ -48,7 +48,7 @@ export function DeleteBeanDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Eliminar grano</DialogTitle>
+          <DialogTitle>Eliminar cafe</DialogTitle>
           <DialogDescription>
             ¿Estas seguro de que quieres eliminar &quot;{beanName}&quot;? Esta
             accion no se puede deshacer y tambien eliminara todas las

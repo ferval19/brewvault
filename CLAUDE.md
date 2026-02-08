@@ -18,7 +18,7 @@ src/
 ├── app/
 │   ├── (auth)/           # Rutas de autenticacion (login, signup, etc.)
 │   ├── (dashboard)/      # Rutas protegidas del dashboard
-│   │   ├── beans/        # CRUD de granos de cafe
+│   │   ├── beans/        # CRUD de cafes
 │   │   ├── roasters/     # CRUD de tostadores
 │   │   ├── brews/        # CRUD de preparaciones
 │   │   └── equipment/    # CRUD de equipamiento
@@ -116,7 +116,7 @@ type ActionResult<T> =
 |-------|-------------|
 | profiles | Perfiles de usuario |
 | roasters | Tostadores de cafe |
-| beans | Granos de cafe |
+| beans | Cafes |
 | equipment | Equipamiento (molinos, cafeteras) |
 | water_recipes | Recetas de agua |
 | brews | Preparaciones/extracciones |
