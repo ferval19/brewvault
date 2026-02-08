@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm cache clean:*)",
+      "Bash(command -v:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "WebFetch(domain:www.notion.so)",
+      "WebFetch(domain:incapto.com)",
+      "WebSearch",
+      "WebFetch(domain:dfrnt.coffee)",
+      "Bash(npx tsc:*)",
+      "Bash(git init:*)",
+      "Bash(gh auth status:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
