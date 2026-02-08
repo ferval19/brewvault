@@ -15,6 +15,7 @@ import {
   LogOut,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
   { name: "Cafes", href: "/beans", icon: Coffee },
@@ -59,7 +60,11 @@ export function Sidebar() {
           )
         })}
       </nav>
-      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800 space-y-1">
+        <div className="flex items-center justify-between px-3 py-2">
+          <span className="text-sm text-neutral-600 dark:text-neutral-400">Tema</span>
+          <ThemeToggle />
+        </div>
         <form action={signOut}>
           <Button
             variant="ghost"

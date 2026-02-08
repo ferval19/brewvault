@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Home() {
   return (
@@ -21,7 +22,8 @@ export default function Home() {
             <Coffee className="h-6 w-6" />
             <span className="font-semibold text-lg">BrewVault</span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link href="/login">
               <Button variant="ghost" size="sm">
                 Iniciar sesion
