@@ -1,9 +1,12 @@
-import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar, ChevronRight } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 import { getUserProfile, getStats } from "./actions"
+import { getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions"
 import { ProfileForm } from "./profile-form"
 import { SignOutButton } from "./sign-out-button"
 import { NotificationSettings } from "./notification-settings"
@@ -13,9 +16,10 @@ export const metadata = {
 }
 
 export default async function SettingsPage() {
-  const [profileResult, statsResult] = await Promise.all([
+  const [profileResult, statsResult, alertsResult] = await Promise.all([
     getUserProfile(),
     getStats(),
+    getUnreadAlertCount(),
   ])
 
   if (!profileResult.success) {
@@ -28,6 +32,7 @@ export default async function SettingsPage() {
 
   const profile = profileResult.data
   const stats = statsResult.success ? statsResult.data : null
+  const alertCount = alertsResult.success ? alertsResult.data : 0
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto">
@@ -86,20 +91,59 @@ export default async function SettingsPage() {
       {/* Profile */}
       <Card className="rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <div className="space-y-1">
-            <CardTitle className="text-lg">Perfil</CardTitle>
-            <CardDescription>
-              Tu informacion de cuenta
-            </CardDescription>
-          </div>
-          <div className="p-2 rounded-xl bg-blue-500/10">
-            <User className="h-5 w-5 text-blue-500" />
+          <div className="flex items-center gap-4">
+            {profile.avatar_url ? (
+              <Image
+                src={profile.avatar_url}
+                alt={profile.full_name || "Avatar"}
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <User className="h-6 w-6 text-blue-500" />
+              </div>
+            )}
+            <div className="space-y-1">
+              <CardTitle className="text-lg">Perfil</CardTitle>
+              <CardDescription>
+                Tu informacion de cuenta
+              </CardDescription>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
           <ProfileForm profile={profile} />
         </CardContent>
       </Card>
+
+      {/* Alerts */}
+      <Link href="/alerts">
+        <Card className="rounded-2xl hover:bg-muted/50 transition-colors cursor-pointer">
+          <CardHeader className="flex flex-row items-center justify-between py-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 rounded-xl bg-amber-500/10 relative">
+                <Bell className="h-5 w-5 text-amber-500" />
+                {alertCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs font-bold rounded-full flex items-center justify-center">
+                    {alertCount > 9 ? "9+" : alertCount}
+                  </span>
+                )}
+              </div>
+              <div>
+                <CardTitle className="text-lg">Alertas</CardTitle>
+                <CardDescription>
+                  {alertCount > 0
+                    ? `Tienes ${alertCount} alerta${alertCount > 1 ? "s" : ""} pendiente${alertCount > 1 ? "s" : ""}`
+                    : "Sin alertas pendientes"}
+                </CardDescription>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+        </Card>
+      </Link>
 
       {/* Notifications */}
       <Card className="rounded-2xl">

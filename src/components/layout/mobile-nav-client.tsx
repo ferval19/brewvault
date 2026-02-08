@@ -4,24 +4,29 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
+  Home,
   Coffee,
   Flame,
   Wrench,
-  BarChart3,
   Menu,
 } from "lucide-react"
 import { AlertBadge } from "@/components/alerts/alert-badge"
 
 interface MobileNavClientProps {
   alertCount: number
+  user: {
+    email: string
+    full_name: string | null
+    avatar_url: string | null
+  } | null
 }
 
 const navigation = [
+  { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Cafes", href: "/beans", icon: Coffee },
   { name: "Brews", href: "/brews", icon: Flame },
   { name: "Equipo", href: "/equipment", icon: Wrench },
-  { name: "Stats", href: "/analytics", icon: BarChart3, showBadge: true },
-  { name: "Mas", href: "/settings", icon: Menu },
+  { name: "Mas", href: "/settings", icon: Menu, showBadge: true },
 ]
 
 export function MobileNavClient({ alertCount }: MobileNavClientProps) {
@@ -45,7 +50,7 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
             >
               <div className="relative">
                 <item.icon className={cn("h-6 w-6", isActive && "text-primary")} />
-                {item.showBadge && <AlertBadge count={alertCount} />}
+                {item.showBadge && alertCount > 0 && <AlertBadge count={alertCount} />}
               </div>
               <span>{item.name}</span>
             </Link>
