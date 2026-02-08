@@ -3,7 +3,6 @@ import {
   Coffee,
   BookOpen,
   BarChart3,
-  Droplets,
   Timer,
   Star,
   ArrowRight,
@@ -17,7 +16,6 @@ import {
   V60Illustration,
   ChemexIllustration,
   GrinderIllustration,
-  KettleIllustration,
   ScaleIllustration,
 } from "@/lib/placeholder-illustrations"
 import { createClient } from "@/lib/supabase/server"
@@ -180,12 +178,6 @@ export default async function Home() {
               illustration={<BarChart3 className="w-14 h-14 text-amber-600/40" />}
               title="Dashboard Analitico"
               description="Visualiza tu consumo, gasto, origenes favoritos y metodos preferidos en graficos claros."
-            />
-            <FeatureCard
-              icon={<Droplets className="h-6 w-6" />}
-              illustration={<KettleIllustration className="w-16 h-16 text-blue-500/60" />}
-              title="Recetas de Agua"
-              description="Guarda tus formulas de agua mineral con GH, KH, calcio, magnesio y TDS."
             />
             <FeatureCard
               icon={<Timer className="h-6 w-6" />}
