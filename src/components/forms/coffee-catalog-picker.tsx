@@ -177,7 +177,16 @@ function CoffeeCard({
           : "border-border hover:border-primary/50 hover:bg-muted/50"
       }`}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start gap-4">
+        {/* Coffee Image */}
+        <div className="flex-shrink-0">
+          <img
+            src={coffee.image_url}
+            alt={coffee.name}
+            className="w-20 h-20 object-cover rounded-lg"
+          />
+        </div>
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <h4 className="font-medium truncate">{coffee.name}</h4>
