@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -145,15 +146,25 @@ export function BeanCard({ bean }: BeanCardProps) {
           {stockPercentage !== null && bean.status === "active" && (
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Stock</span>
+                <span className="flex items-center gap-1">
+                  Stock
+                  {stockPercentage <= 20 && (
+                    <AlertTriangle className="h-3 w-3 text-amber-500" />
+                  )}
+                </span>
                 <span>
                   {bean.current_weight_grams}g / {bean.weight_grams}g
                 </span>
               </div>
               <div className="h-2 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-green-500 transition-all"
-                  style={{ width: `${stockPercentage}%` }}
+                  className={cn(
+                    "h-full rounded-full transition-all",
+                    stockPercentage > 50 && "bg-green-500",
+                    stockPercentage <= 50 && stockPercentage > 20 && "bg-amber-500",
+                    stockPercentage <= 20 && "bg-red-500"
+                  )}
+                  style={{ width: `${Math.max(stockPercentage, 5)}%` }}
                 />
               </div>
             </div>
