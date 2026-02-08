@@ -39,8 +39,8 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
       </CardHeader>
       <CardContent>
         {hasData ? (
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-48 w-full">
+            <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={150}>
               <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis
                   dataKey="week"
@@ -144,8 +144,8 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
       </CardHeader>
       <CardContent>
         {hasData ? (
-          <div className="h-32">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-32 w-full">
+            <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={100}>
               <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorGrams" x1="0" y1="0" x2="0" y2="1">
@@ -208,8 +208,8 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
       </CardHeader>
       <CardContent>
         {hasData ? (
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-48 w-full">
+            <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={150}>
               <BarChart
                 data={dataWithLabels}
                 layout="vertical"
