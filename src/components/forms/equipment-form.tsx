@@ -46,6 +46,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [fromCatalog, setFromCatalog] = useState(false)
+  const [catalogImage, setCatalogImage] = useState<string | null>(equipment?.image_url || null)
 
   const {
     register,
@@ -76,6 +77,7 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
     setValue("model", catalogEquipment.model)
     setValue("notes", catalogEquipment.description || "")
     setValue("image_url", catalogEquipment.image_url || null)
+    setCatalogImage(catalogEquipment.image_url || null)
     setFromCatalog(true)
   }
 
@@ -141,11 +143,11 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       )}
 
       {/* Image Preview */}
-      {watch("image_url") && (
+      {catalogImage && (
         <div className="flex justify-center">
           <div className="relative w-48 h-48 rounded-2xl overflow-hidden bg-muted/30 border">
             <img
-              src={watch("image_url") || ""}
+              src={catalogImage}
               alt={watch("model") || "Equipo"}
               className="w-full h-full object-contain p-4"
             />
