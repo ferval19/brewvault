@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2 } from "lucide-react"
+import { Loader2, Store, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { FormSection, FormGrid, FormField } from "@/components/ui/form-section"
 import {
   Select,
   SelectContent,
@@ -93,11 +93,8 @@ export function RoasterForm({ roaster, onSuccess }: RoasterFormProps) {
       )}
 
       {/* Informacion basica */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Informacion basica</h3>
-
-        <div className="space-y-2">
-          <Label htmlFor="name">Nombre *</Label>
+      <FormSection title="Informacion basica" icon={Store}>
+        <FormField label="Nombre" htmlFor="name" required>
           <Input
             id="name"
             placeholder="Ej: Nomad Coffee"
@@ -106,45 +103,39 @@ export function RoasterForm({ roaster, onSuccess }: RoasterFormProps) {
           {errors.name && (
             <p className="text-sm text-destructive">El nombre es requerido</p>
           )}
-        </div>
+        </FormField>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="country">Pais</Label>
+        <FormGrid>
+          <FormField label="Pais" htmlFor="country">
             <Input
               id="country"
               placeholder="Ej: Espana"
               {...register("country")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="city">Ciudad</Label>
+          <FormField label="Ciudad" htmlFor="city">
             <Input
               id="city"
               placeholder="Ej: Barcelona"
               {...register("city")}
             />
-          </div>
-        </div>
+          </FormField>
+        </FormGrid>
 
-        <div className="space-y-2">
-          <Label htmlFor="website">Sitio web</Label>
+        <FormField label="Sitio web" htmlFor="website">
           <Input
             id="website"
             type="url"
             placeholder="https://ejemplo.com"
             {...register("website")}
           />
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
       {/* Valoracion */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Valoracion</h3>
-
-        <div className="space-y-2">
-          <Label htmlFor="rating">Puntuacion</Label>
+      <FormSection title="Valoracion" icon={Star}>
+        <FormField label="Puntuacion" htmlFor="rating">
           <Select
             value={watch("rating")?.toString() || ""}
             onValueChange={(value) =>
@@ -162,18 +153,17 @@ export function RoasterForm({ roaster, onSuccess }: RoasterFormProps) {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </FormField>
 
-        <div className="space-y-2">
-          <Label htmlFor="notes">Notas</Label>
+        <FormField label="Notas" htmlFor="notes">
           <Textarea
             id="notes"
             placeholder="Notas sobre el tostador..."
             {...register("notes")}
             rows={3}
           />
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
       {/* Botones */}
       <div className="flex gap-4 pt-4">

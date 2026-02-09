@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2 } from "lucide-react"
+import { Loader2, Package, MapPin, Leaf, Archive, Star, Camera } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { FormSection, FormGrid, FormField } from "@/components/ui/form-section"
 import {
   Select,
   SelectContent,
@@ -153,12 +153,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
       )}
 
       {/* Información básica */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Informacion basica</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nombre *</Label>
+      <FormSection title="Informacion basica" icon={Package}>
+        <FormGrid>
+          <FormField label="Nombre" htmlFor="name" required>
             <Input
               id="name"
               placeholder="Ej: Ethiopia Yirgacheffe"
@@ -167,10 +164,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
             {errors.name && (
               <p className="text-sm text-destructive">El nombre es requerido</p>
             )}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="roaster_id">Tostador</Label>
+          <FormField label="Tostador" htmlFor="roaster_id">
             <Select
               value={watch("roaster_id") || ""}
               onValueChange={(value) =>
@@ -188,89 +184,77 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
-        </div>
+          </FormField>
+        </FormGrid>
 
         {/* Photo Upload */}
-        <div className="space-y-2">
-          <Label>Foto del cafe</Label>
+        <FormField label="Foto del cafe">
           <ImageUpload
             value={watch("photo_url")}
             onChange={(url) => setValue("photo_url", url)}
             disabled={isLoading}
           />
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
       {/* Origen */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Origen</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="origin_country">Pais</Label>
+      <FormSection title="Origen" icon={MapPin}>
+        <FormGrid columns={4}>
+          <FormField label="Pais" htmlFor="origin_country">
             <Input
               id="origin_country"
               placeholder="Ej: Etiopia"
               {...register("origin_country")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="origin_region">Region</Label>
+          <FormField label="Region" htmlFor="origin_region">
             <Input
               id="origin_region"
               placeholder="Ej: Yirgacheffe"
               {...register("origin_region")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="farm">Finca</Label>
+          <FormField label="Finca" htmlFor="farm">
             <Input
               id="farm"
               placeholder="Ej: Konga"
               {...register("farm")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="altitude">Altitud (msnm)</Label>
+          <FormField label="Altitud (msnm)" htmlFor="altitude">
             <Input
               id="altitude"
               type="number"
               placeholder="Ej: 1900"
               {...register("altitude", { valueAsNumber: true })}
             />
-          </div>
-        </div>
-      </div>
+          </FormField>
+        </FormGrid>
+      </FormSection>
 
       {/* Características */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Caracteristicas</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="variety">Variedad</Label>
+      <FormSection title="Caracteristicas" icon={Leaf}>
+        <FormGrid columns={4}>
+          <FormField label="Variedad" htmlFor="variety">
             <Input
               id="variety"
               placeholder="Ej: Heirloom"
               {...register("variety")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="process">Proceso</Label>
+          <FormField label="Proceso" htmlFor="process">
             <Input
               id="process"
               placeholder="Ej: Lavado"
               {...register("process")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="roast_level">Nivel de tueste</Label>
+          <FormField label="Nivel de tueste" htmlFor="roast_level">
             <Select
               value={watchRoastLevel || ""}
               onValueChange={(value) => setValue("roast_level", value)}
@@ -286,20 +270,18 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="roast_date">Fecha de tueste</Label>
+          <FormField label="Fecha de tueste" htmlFor="roast_date">
             <Input
               id="roast_date"
               type="date"
               {...register("roast_date")}
             />
-          </div>
-        </div>
+          </FormField>
+        </FormGrid>
 
-        <div className="space-y-2">
-          <Label htmlFor="flavor_notes">Notas de sabor</Label>
+        <FormField label="Notas de sabor" htmlFor="flavor_notes" hint="Separa las notas con comas">
           <Textarea
             id="flavor_notes"
             placeholder="Ej: Citrico, floral, te negro (separadas por coma)"
@@ -312,19 +294,13 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
             }}
             defaultValue={bean?.flavor_notes?.join(", ") || ""}
           />
-          <p className="text-xs text-muted-foreground">
-            Separa las notas con comas
-          </p>
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
       {/* Inventario y precio */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Inventario</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="weight_grams">Peso inicial (g)</Label>
+      <FormSection title="Inventario" icon={Archive}>
+        <FormGrid columns={4}>
+          <FormField label="Peso inicial (g)" htmlFor="weight_grams">
             <Input
               id="weight_grams"
               type="number"
@@ -332,10 +308,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               placeholder="Ej: 250"
               {...register("weight_grams", { valueAsNumber: true })}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="current_weight_grams">Peso actual (g)</Label>
+          <FormField label="Peso actual (g)" htmlFor="current_weight_grams" hint="Se descuenta automaticamente al preparar">
             <Input
               id="current_weight_grams"
               type="number"
@@ -343,13 +318,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               placeholder="Ej: 180"
               {...register("current_weight_grams", { valueAsNumber: true })}
             />
-            <p className="text-xs text-muted-foreground">
-              Se descuenta automaticamente al preparar
-            </p>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="low_stock_threshold_grams">Alerta stock bajo (g)</Label>
+          <FormField label="Alerta stock bajo (g)" htmlFor="low_stock_threshold_grams" hint="Recibiras una alerta cuando quede menos">
             <Input
               id="low_stock_threshold_grams"
               type="number"
@@ -357,13 +328,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               placeholder="Ej: 100"
               {...register("low_stock_threshold_grams", { valueAsNumber: true })}
             />
-            <p className="text-xs text-muted-foreground">
-              Recibiras una alerta cuando quede menos
-            </p>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Estado</Label>
+          <FormField label="Estado" htmlFor="status">
             <Select
               value={watchStatus || "active"}
               onValueChange={(value) => setValue("status", value)}
@@ -379,12 +346,11 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
-        </div>
+          </FormField>
+        </FormGrid>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="space-y-2">
-            <Label htmlFor="price">Precio</Label>
+        <FormGrid columns={3}>
+          <FormField label="Precio" htmlFor="price">
             <Input
               id="price"
               type="number"
@@ -392,10 +358,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               placeholder="Ej: 15.00"
               {...register("price", { valueAsNumber: true })}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="currency">Moneda</Label>
+          <FormField label="Moneda" htmlFor="currency">
             <Select
               value={watch("currency") || "EUR"}
               onValueChange={(value) => setValue("currency", value)}
@@ -409,26 +374,22 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
                 <SelectItem value="GBP">GBP</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="barcode">Codigo de barras</Label>
+          <FormField label="Codigo de barras" htmlFor="barcode">
             <Input
               id="barcode"
               placeholder="Ej: 8437000000001"
               {...register("barcode")}
             />
-          </div>
-        </div>
-      </div>
+          </FormField>
+        </FormGrid>
+      </FormSection>
 
       {/* Puntuación */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Puntuacion</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="sca_score">Puntuacion SCA (0-100)</Label>
+      <FormSection title="Puntuacion" icon={Star}>
+        <FormGrid>
+          <FormField label="Puntuacion SCA (0-100)" htmlFor="sca_score">
             <Input
               id="sca_score"
               type="number"
@@ -438,10 +399,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
               placeholder="Ej: 86.5"
               {...register("sca_score", { valueAsNumber: true })}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="personal_rating">Tu puntuacion (1-5)</Label>
+          <FormField label="Tu puntuacion (1-5)" htmlFor="personal_rating">
             <Select
               value={watch("personal_rating")?.toString() || ""}
               onValueChange={(value) =>
@@ -459,9 +419,9 @@ export function BeanForm({ bean, roasters, onSuccess }: BeanFormProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
-        </div>
-      </div>
+          </FormField>
+        </FormGrid>
+      </FormSection>
 
       {/* Botones */}
       <div className="flex gap-4 pt-4">

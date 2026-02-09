@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2 } from "lucide-react"
+import { Loader2, Gauge, Wrench, MessageSquare } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { FormSection, FormGrid, FormField } from "@/components/ui/form-section"
 import {
   Select,
   SelectContent,
@@ -156,12 +156,9 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
       )}
 
       {/* Informacion basica */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Informacion basica</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="type">Tipo *</Label>
+      <FormSection title="Informacion basica" icon={Gauge}>
+        <FormGrid>
+          <FormField label="Tipo" htmlFor="type" required>
             <Select
               value={watch("type")}
               onValueChange={(value) => {
@@ -180,11 +177,10 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
 
           {(watchType === "espresso_machine" || watchType === "grinder") && (
-            <div className="space-y-2">
-              <Label htmlFor="subtype">Subtipo</Label>
+            <FormField label="Subtipo" htmlFor="subtype">
               <Select
                 value={watch("subtype") || ""}
                 onValueChange={(value) => setValue("subtype", value || null)}
@@ -200,22 +196,20 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </FormField>
           )}
-        </div>
+        </FormGrid>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="brand">Marca</Label>
+        <FormGrid>
+          <FormField label="Marca" htmlFor="brand">
             <Input
               id="brand"
               placeholder="Ej: Baratza"
               {...register("brand")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="model">Modelo *</Label>
+          <FormField label="Modelo" htmlFor="model" required>
             <Input
               id="model"
               placeholder="Ej: Encore ESP"
@@ -224,36 +218,35 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
             {errors.model && (
               <p className="text-sm text-destructive">El modelo es requerido</p>
             )}
-          </div>
-        </div>
-      </div>
+          </FormField>
+        </FormGrid>
+      </FormSection>
 
       {/* Fechas y mantenimiento */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Mantenimiento</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="purchase_date">Fecha de compra</Label>
+      <FormSection title="Mantenimiento" icon={Wrench}>
+        <FormGrid>
+          <FormField label="Fecha de compra" htmlFor="purchase_date">
             <Input
               id="purchase_date"
               type="date"
               {...register("purchase_date")}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="last_maintenance">Ultimo mantenimiento</Label>
+          <FormField label="Ultimo mantenimiento" htmlFor="last_maintenance">
             <Input
               id="last_maintenance"
               type="date"
               {...register("last_maintenance")}
             />
-          </div>
-        </div>
+          </FormField>
+        </FormGrid>
 
-        <div className="space-y-2">
-          <Label htmlFor="maintenance_interval_days">Recordar mantenimiento cada</Label>
+        <FormField
+          label="Recordar mantenimiento cada"
+          htmlFor="maintenance_interval_days"
+          hint="Recibiras una alerta cuando sea hora de limpiar o mantener este equipo"
+        >
           <Select
             value={watch("maintenance_interval_days")?.toString() || ""}
             onValueChange={(value) =>
@@ -271,25 +264,18 @@ export function EquipmentForm({ equipment, onSuccess }: EquipmentFormProps) {
               ))}
             </SelectContent>
           </Select>
-          <p className="text-xs text-muted-foreground">
-            Recibiras una alerta cuando sea hora de limpiar o mantener este equipo
-          </p>
-        </div>
-      </div>
+        </FormField>
+      </FormSection>
 
       {/* Notas */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Notas</h3>
-
-        <div className="space-y-2">
-          <Textarea
-            id="notes"
-            placeholder="Notas sobre el equipo..."
-            {...register("notes")}
-            rows={3}
-          />
-        </div>
-      </div>
+      <FormSection title="Notas" icon={MessageSquare}>
+        <Textarea
+          id="notes"
+          placeholder="Notas sobre el equipo..."
+          {...register("notes")}
+          rows={3}
+        />
+      </FormSection>
 
       {/* Botones */}
       <div className="flex gap-4 pt-4">
