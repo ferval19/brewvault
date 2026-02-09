@@ -47,15 +47,11 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
     <aside className="h-full w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
       {/* Logo */}
       <div className="p-6 pb-4">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-            <Coffee className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-neutral-900 dark:text-white">
-              BrewVault
-            </h1>
-          </div>
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <Coffee className="h-6 w-6 text-amber-600" />
+          <h1 className="text-lg font-bold text-neutral-900 dark:text-white">
+            BrewVault
+          </h1>
         </Link>
       </div>
 

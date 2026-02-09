@@ -18,6 +18,16 @@ import {
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { ImageUpload } from "@/components/forms/image-upload"
 
 import {
@@ -64,6 +74,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedDrinkType, setSelectedDrinkType] = useState<string | null>(null)
+  const [pendingFavorite, setPendingFavorite] = useState<FavoriteBrew | null>(null)
+  const [showFavoriteConfirm, setShowFavoriteConfirm] = useState(false)
 
   const brewers = equipment.filter((e) => e.type === "brewer" || e.type === "espresso_machine")
   const grinders = equipment.filter((e) => e.type === "grinder")
@@ -108,17 +120,65 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
   const isAutomatic = selectedEquipment?.subtype === "super_automatic"
 
   function handleFavoriteSelect(favorite: FavoriteBrew) {
-    setValue("brew_method", favorite.brew_method)
-    if (favorite.dose_grams) setValue("dose_grams", favorite.dose_grams)
-    if (favorite.water_grams) setValue("water_grams", favorite.water_grams)
-    if (favorite.water_temperature) setValue("water_temperature", favorite.water_temperature)
-    if (favorite.grind_size) setValue("grind_size", favorite.grind_size)
-    if (favorite.total_time_seconds) setValue("total_time_seconds", favorite.total_time_seconds)
-    if (favorite.bloom_time_seconds) setValue("bloom_time_seconds", favorite.bloom_time_seconds)
-    if (favorite.bloom_water_grams) setValue("bloom_water_grams", favorite.bloom_water_grams)
-    if (favorite.filter_type) setValue("filter_type", favorite.filter_type)
-    if (favorite.equipment_id) setValue("equipment_id", favorite.equipment_id)
-    if (favorite.grinder_id) setValue("grinder_id", favorite.grinder_id)
+    // Si no hay cafe seleccionado, mostrar error
+    const currentBeanId = watch("bean_id")
+    if (!currentBeanId) {
+      setError("Primero selecciona un cafe para usar tu receta favorita")
+      return
+    }
+
+    // Mostrar confirmacion
+    setPendingFavorite(favorite)
+    setShowFavoriteConfirm(true)
+  }
+
+  async function handleQuickCreateFromFavorite() {
+    if (!pendingFavorite) return
+
+    const currentBeanId = watch("bean_id")
+    if (!currentBeanId) {
+      setError("Debes seleccionar un cafe")
+      setShowFavoriteConfirm(false)
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+    setShowFavoriteConfirm(false)
+
+    const brewData = {
+      bean_id: currentBeanId,
+      brew_method: pendingFavorite.brew_method,
+      dose_grams: pendingFavorite.dose_grams || 18,
+      water_grams: pendingFavorite.water_grams || 300,
+      water_temperature: pendingFavorite.water_temperature || null,
+      grind_size: pendingFavorite.grind_size || null,
+      total_time_seconds: pendingFavorite.total_time_seconds || null,
+      bloom_time_seconds: pendingFavorite.bloom_time_seconds || null,
+      bloom_water_grams: pendingFavorite.bloom_water_grams || null,
+      filter_type: pendingFavorite.filter_type || null,
+      equipment_id: pendingFavorite.equipment_id || null,
+      grinder_id: pendingFavorite.grinder_id || null,
+      notes: null,
+      rating: null,
+      yield_grams: null,
+      image_url: null,
+    }
+
+    const result = await createBrew(brewData)
+
+    if (!result.success) {
+      setError(result.error || "Error al crear la preparacion")
+      setIsLoading(false)
+      return
+    }
+
+    if (onSuccess) {
+      onSuccess()
+    } else {
+      router.push("/brews")
+      router.refresh()
+    }
   }
 
   function handleDrinkTypeSelect(drinkType: string) {
@@ -552,6 +612,29 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
           Cancelar
         </Button>
       </div>
+
+      {/* Confirmacion para crear desde favorito */}
+      <AlertDialog open={showFavoriteConfirm} onOpenChange={setShowFavoriteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Crear preparacion rapida</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingFavorite && (
+                <>
+                  Se creara una preparacion usando la receta <strong>{pendingFavorite.name}</strong> con{" "}
+                  {pendingFavorite.dose_grams}g de cafe y {pendingFavorite.water_grams}ml de agua.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleQuickCreateFromFavorite}>
+              Crear preparacion
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   )
 }

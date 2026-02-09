@@ -51,8 +51,8 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 md:hidden safe-area-pb">
-        <div className="flex items-center justify-around h-16 px-2">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 md:hidden safe-area-pb overflow-visible">
+        <div className="flex items-center justify-around h-16 px-2 relative">
           {/* Home */}
           <NavItem
             href="/dashboard"
@@ -70,10 +70,10 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
           />
 
           {/* FAB - Nueva Brew */}
-          <div className="relative flex items-center justify-center flex-1">
+          <div className="relative flex items-center justify-center flex-1 h-full">
             <Link
               href="/brews/new"
-              className="absolute -top-5 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-105 transition-all"
+              className="absolute -top-7 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-105 transition-all z-10"
             >
               <Plus className="h-7 w-7" />
             </Link>
