@@ -120,10 +120,12 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
   const isAutomatic = selectedEquipment?.subtype === "super_automatic"
 
   function handleFavoriteSelect(favorite: FavoriteBrew) {
-    // Si no hay cafe seleccionado, mostrar error
+    // Verificar si el favorito tiene bean guardado o si hay uno seleccionado
     const currentBeanId = watch("bean_id")
-    if (!currentBeanId) {
-      setError("Primero selecciona un cafe para usar tu receta favorita")
+    const beanToUse = favorite.bean_id || currentBeanId
+
+    if (!beanToUse) {
+      setError("Esta receta no tiene cafe asociado. Selecciona uno primero.")
       return
     }
 
@@ -135,8 +137,11 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
   async function handleQuickCreateFromFavorite() {
     if (!pendingFavorite) return
 
+    // Usar el bean del favorito o el seleccionado actualmente
     const currentBeanId = watch("bean_id")
-    if (!currentBeanId) {
+    const beanToUse = pendingFavorite.bean_id || currentBeanId
+
+    if (!beanToUse) {
       setError("Debes seleccionar un cafe")
       setShowFavoriteConfirm(false)
       return
@@ -147,7 +152,7 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
     setShowFavoriteConfirm(false)
 
     const brewData = {
-      bean_id: currentBeanId,
+      bean_id: beanToUse,
       brew_method: pendingFavorite.brew_method,
       dose_grams: pendingFavorite.dose_grams || 18,
       water_grams: pendingFavorite.water_grams || 300,
@@ -292,6 +297,13 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                   <span className="text-xs text-muted-foreground mt-0.5">
                     {methodLabel}
                   </span>
+
+                  {/* Bean Name */}
+                  {fav.beans && (
+                    <span className="text-xs text-primary/80 mt-1 line-clamp-1 w-full text-center">
+                      {fav.beans.name}
+                    </span>
+                  )}
 
                   {/* Dose Info */}
                   <div className="flex items-center gap-1 mt-2">
@@ -618,13 +630,25 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Crear preparacion rapida</AlertDialogTitle>
-            <AlertDialogDescription>
-              {pendingFavorite && (
-                <>
-                  Se creara una preparacion usando la receta <strong>{pendingFavorite.name}</strong> con{" "}
-                  {pendingFavorite.dose_grams}g de cafe y {pendingFavorite.water_grams}ml de agua.
-                </>
-              )}
+            <AlertDialogDescription asChild>
+              <div className="space-y-2">
+                {pendingFavorite && (
+                  <>
+                    <p>
+                      Se creara una preparacion usando la receta <strong>{pendingFavorite.name}</strong> con{" "}
+                      {pendingFavorite.dose_grams}g de cafe y {pendingFavorite.water_grams}ml de agua.
+                    </p>
+                    <p className="text-sm">
+                      <span className="text-muted-foreground">Cafe: </span>
+                      <strong>
+                        {pendingFavorite.beans?.name ||
+                          beans.find(b => b.id === watch("bean_id"))?.name ||
+                          "No seleccionado"}
+                      </strong>
+                    </p>
+                  </>
+                )}
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

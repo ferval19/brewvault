@@ -20,6 +20,7 @@ import { createFavoriteBrew } from "@/app/(dashboard)/brews/actions"
 
 interface SaveAsFavoriteButtonProps {
   brew: {
+    bean_id: string
     brew_method: string
     dose_grams: number
     water_grams: number
@@ -70,6 +71,7 @@ export function SaveAsFavoriteButton({ brew }: SaveAsFavoriteButtonProps) {
       filter_type: brew.filter_type,
       equipment_id: brew.equipment_id,
       grinder_id: brew.grinder_id,
+      bean_id: brew.bean_id,
     })
 
     if (!result.success) {

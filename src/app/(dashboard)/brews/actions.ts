@@ -76,7 +76,13 @@ export type FavoriteBrew = {
   filter_type: string | null
   equipment_id: string | null
   grinder_id: string | null
+  bean_id: string | null
   created_at: string
+  beans: {
+    id: string
+    name: string
+    roasters: { name: string } | null
+  } | null
 }
 
 export async function getBrews(): Promise<ActionResult<Brew[]>> {
@@ -375,7 +381,16 @@ export async function getFavoriteBrews(): Promise<ActionResult<FavoriteBrew[]>> 
 
   const { data, error } = await supabase
     .from("favorite_brews")
-    .select("*")
+    .select(`
+      *,
+      beans (
+        id,
+        name,
+        roasters (
+          name
+        )
+      )
+    `)
     .eq("user_id", userData.user.id)
     .order("created_at", { ascending: false })
 
@@ -399,6 +414,7 @@ export async function createFavoriteBrew(input: {
   filter_type?: string | null
   equipment_id?: string | null
   grinder_id?: string | null
+  bean_id?: string | null
 }): Promise<ActionResult<FavoriteBrew>> {
   const supabase = await createClient()
 
