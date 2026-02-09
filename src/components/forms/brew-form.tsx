@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Loader2, Info, Star, Trash2, Coffee, X } from "lucide-react"
+import { Loader2, Info, Star, X, Coffee, Droplets, Clock, Disc, MessageSquare, Camera } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { FormSection, FormGrid, FormField } from "@/components/ui/form-section"
 import {
   Select,
   SelectContent,
@@ -247,22 +247,18 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
       )}
 
       {/* Foto de la preparacion */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Foto de la preparacion</h3>
+      <FormSection title="Foto" icon={Camera}>
         <ImageUpload
           value={watch("image_url")}
           onChange={(url) => setValue("image_url", url)}
           disabled={isLoading}
         />
-      </div>
+      </FormSection>
 
       {/* Cafe y equipo */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Cafe y equipo</h3>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="bean_id">Cafe *</Label>
+      <FormSection title="Cafe y equipo" icon={Coffee}>
+        <FormGrid>
+          <FormField label="Cafe" htmlFor="bean_id" required>
             <Select
               value={watch("bean_id") || ""}
               onValueChange={(value) => setValue("bean_id", value)}
@@ -279,11 +275,10 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
 
           {brewers.length > 0 && (
-            <div className="space-y-2">
-              <Label htmlFor="equipment_id">Cafetera</Label>
+            <FormField label="Cafetera" htmlFor="equipment_id">
               <Select
                 value={watch("equipment_id") || ""}
                 onValueChange={(value) => {
@@ -305,9 +300,9 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </FormField>
           )}
-        </div>
+        </FormGrid>
 
         {/* Automatic machine drink selector */}
         {isAutomatic && (
@@ -334,8 +329,7 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
 
         {/* Method selector - only for non-automatic */}
         {!isAutomatic && (
-          <div className="space-y-2">
-            <Label htmlFor="brew_method">Metodo *</Label>
+          <FormField label="Metodo" htmlFor="brew_method" required>
             <Select
               value={watch("brew_method") || ""}
               onValueChange={(value) => setValue("brew_method", value)}
@@ -351,17 +345,14 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
         )}
-      </div>
+      </FormSection>
 
       {/* Dosis y agua */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Dosis y agua</h3>
-
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
-          <div className="space-y-2">
-            <Label htmlFor="dose_grams">Dosis (g) *</Label>
+      <FormSection title="Dosis y agua" icon={Droplets}>
+        <FormGrid columns={4}>
+          <FormField label="Dosis (g)" htmlFor="dose_grams" required>
             <Input
               id="dose_grams"
               type="number"
@@ -371,10 +362,9 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
               className={isAutomatic ? "bg-muted" : ""}
               {...register("dose_grams", { valueAsNumber: true })}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="water_grams">Agua (g) *</Label>
+          <FormField label="Agua (g)" htmlFor="water_grams" required>
             <Input
               id="water_grams"
               type="number"
@@ -384,18 +374,16 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
               className={isAutomatic ? "bg-muted" : ""}
               {...register("water_grams", { valueAsNumber: true })}
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label>Ratio</Label>
+          <FormField label="Ratio">
             <div className="h-10 px-3 py-2 rounded-md border bg-muted text-sm">
               1:{ratio}
             </div>
-          </div>
+          </FormField>
 
           {!isAutomatic && (
-            <div className="space-y-2">
-              <Label htmlFor="water_temperature">Temp (°C)</Label>
+            <FormField label="Temp (°C)" htmlFor="water_temperature">
               <Input
                 id="water_temperature"
                 type="number"
@@ -403,39 +391,34 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 placeholder="93"
                 {...register("water_temperature", { valueAsNumber: true })}
               />
-            </div>
+            </FormField>
           )}
-        </div>
-      </div>
+        </FormGrid>
+      </FormSection>
 
       {/* Tiempos - only for non-automatic */}
       {!isAutomatic && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium">Tiempos</h3>
-
-          <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
-            <div className="space-y-2">
-              <Label htmlFor="total_time_seconds">Total (seg)</Label>
+        <FormSection title="Tiempos" icon={Clock}>
+          <FormGrid columns={4}>
+            <FormField label="Total (seg)" htmlFor="total_time_seconds">
               <Input
                 id="total_time_seconds"
                 type="number"
                 placeholder="180"
                 {...register("total_time_seconds", { valueAsNumber: true })}
               />
-            </div>
+            </FormField>
 
-            <div className="space-y-2">
-              <Label htmlFor="bloom_time_seconds">Bloom (seg)</Label>
+            <FormField label="Bloom (seg)" htmlFor="bloom_time_seconds">
               <Input
                 id="bloom_time_seconds"
                 type="number"
                 placeholder="30"
                 {...register("bloom_time_seconds", { valueAsNumber: true })}
               />
-            </div>
+            </FormField>
 
-            <div className="space-y-2">
-              <Label htmlFor="bloom_water_grams">Agua bloom (g)</Label>
+            <FormField label="Agua bloom (g)" htmlFor="bloom_water_grams">
               <Input
                 id="bloom_water_grams"
                 type="number"
@@ -443,10 +426,9 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 placeholder="40"
                 {...register("bloom_water_grams", { valueAsNumber: true })}
               />
-            </div>
+            </FormField>
 
-            <div className="space-y-2">
-              <Label htmlFor="yield_grams">Yield (g)</Label>
+            <FormField label="Yield (g)" htmlFor="yield_grams">
               <Input
                 id="yield_grams"
                 type="number"
@@ -454,19 +436,16 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 placeholder="250"
                 {...register("yield_grams", { valueAsNumber: true })}
               />
-            </div>
-          </div>
-        </div>
+            </FormField>
+          </FormGrid>
+        </FormSection>
       )}
 
       {/* Molienda y equipo - only for non-automatic */}
       {!isAutomatic && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium">Molienda y filtro</h3>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="grind_size">Tamano de molienda</Label>
+        <FormSection title="Molienda y filtro" icon={Disc}>
+          <FormGrid>
+            <FormField label="Tamano de molienda" htmlFor="grind_size">
               <Select
                 value={watch("grind_size") || ""}
                 onValueChange={(value) => setValue("grind_size", value || null)}
@@ -482,10 +461,9 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </FormField>
 
-            <div className="space-y-2">
-              <Label htmlFor="filter_type">Tipo de filtro</Label>
+            <FormField label="Tipo de filtro" htmlFor="filter_type">
               <Select
                 value={watch("filter_type") || ""}
                 onValueChange={(value) => setValue("filter_type", value || null)}
@@ -501,11 +479,10 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </FormField>
 
             {grinders.length > 0 && (
-              <div className="space-y-2">
-                <Label htmlFor="grinder_id">Molino</Label>
+              <FormField label="Molino" htmlFor="grinder_id">
                 <Select
                   value={watch("grinder_id") || ""}
                   onValueChange={(value) => setValue("grinder_id", value || null)}
@@ -521,19 +498,16 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </FormField>
             )}
-          </div>
-        </div>
+          </FormGrid>
+        </FormSection>
       )}
 
       {/* Valoracion y notas */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium">Valoracion</h3>
-
+      <FormSection title="Valoracion" icon={MessageSquare}>
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="rating">Puntuacion</Label>
+          <FormField label="Puntuacion" htmlFor="rating">
             <Select
               value={watch("rating")?.toString() || ""}
               onValueChange={(value) =>
@@ -551,19 +525,18 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notas</Label>
+          <FormField label="Notas" htmlFor="notes">
             <Textarea
               id="notes"
               placeholder="Observaciones sobre la extraccion..."
               {...register("notes")}
               rows={3}
             />
-          </div>
+          </FormField>
         </div>
-      </div>
+      </FormSection>
 
       {/* Botones */}
       <div className="flex gap-4 pt-4">
