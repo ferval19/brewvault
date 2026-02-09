@@ -1,0 +1,149 @@
+/**
+ * Design Tokens - BrewVault
+ *
+ * Centralized design constants for consistent styling across the app.
+ * Use these tokens instead of hardcoding values in components.
+ */
+
+// Spacing tokens for consistent vertical rhythm
+export const spacing = {
+  /** Between major sections */
+  section: "space-y-8",
+  /** Between cards or content blocks */
+  card: "space-y-6",
+  /** Between related items */
+  group: "space-y-4",
+  /** Between small elements */
+  compact: "space-y-2",
+} as const
+
+// Border radius tokens
+export const radius = {
+  /** Cards, modals, large containers */
+  card: "rounded-2xl",
+  /** Buttons, inputs, smaller elements */
+  button: "rounded-xl",
+  /** Badges, pills, tags */
+  badge: "rounded-full",
+  /** Form inputs */
+  input: "rounded-lg",
+  /** Small elements like checkboxes */
+  small: "rounded-md",
+} as const
+
+// Shadow tokens
+export const shadows = {
+  /** Default card shadow */
+  card: "shadow-sm hover:shadow-lg",
+  /** Elevated elements (modals, dropdowns) */
+  elevated: "shadow-lg",
+  /** FAB and floating buttons */
+  fab: "shadow-lg shadow-amber-500/30",
+  /** No shadow */
+  none: "shadow-none",
+} as const
+
+// Animation tokens
+export const animations = {
+  /** Default transition for interactive elements */
+  default: "transition-all duration-200",
+  /** Fast micro-interactions */
+  fast: "transition-all duration-150",
+  /** Slower, more noticeable transitions */
+  slow: "transition-all duration-300",
+  /** Card hover lift effect */
+  lift: "hover:-translate-y-0.5",
+} as const
+
+// Color scheme tokens (using Tailwind color classes)
+export const colors = {
+  // Status colors
+  status: {
+    active: "bg-emerald-500/90 text-white",
+    finished: "bg-neutral-500/90 text-white",
+    archived: "bg-amber-500/90 text-white",
+    lowStock: "bg-red-500/90 text-white",
+    wishlist: "bg-purple-500/90 text-white",
+  },
+  // Stock indicator colors
+  stock: {
+    good: "bg-green-500",
+    warning: "bg-amber-500",
+    low: "bg-red-500",
+  },
+  // Score colors
+  score: {
+    excellent: "bg-green-500/90",
+    good: "bg-amber-500/90",
+    average: "bg-orange-500/90",
+    poor: "bg-gray-500/90",
+  },
+  // Accent/brand colors
+  brand: {
+    primary: "bg-amber-500",
+    primaryGradient: "bg-gradient-to-r from-amber-500 to-orange-500",
+    primaryHover: "hover:from-amber-600 hover:to-orange-600",
+  },
+} as const
+
+// Typography tokens
+export const typography = {
+  /** Page titles */
+  pageTitle: "text-2xl sm:text-3xl font-bold",
+  /** Section titles */
+  sectionTitle: "text-lg font-semibold",
+  /** Card titles */
+  cardTitle: "text-base font-semibold",
+  /** Body text */
+  body: "text-sm",
+  /** Small/caption text */
+  caption: "text-xs text-muted-foreground",
+  /** Metric values */
+  metric: "text-2xl font-bold",
+  /** Large metric values */
+  metricLarge: "text-4xl sm:text-5xl font-bold",
+} as const
+
+// Layout tokens
+export const layout = {
+  /** Max width for content pages */
+  maxWidth: "max-w-4xl mx-auto",
+  /** Standard page padding */
+  pagePadding: "px-4 sm:px-6 lg:px-8",
+  /** Card padding */
+  cardPadding: "p-5",
+  /** Compact card padding */
+  cardPaddingCompact: "p-4",
+} as const
+
+// Aspect ratios
+export const aspectRatios = {
+  /** Card headers */
+  cardHeader: "aspect-[16/10]",
+  /** Detail page heroes */
+  hero: "aspect-[21/9] sm:aspect-[3/1]",
+  /** Square images */
+  square: "aspect-square",
+} as const
+
+// Z-index layers
+export const zIndex = {
+  base: "z-0",
+  dropdown: "z-10",
+  sticky: "z-20",
+  fixed: "z-30",
+  modal: "z-40",
+  overlay: "z-50",
+} as const
+
+// Breakpoint-aware utilities
+export const responsive = {
+  /** Hide on mobile, show on desktop */
+  desktopOnly: "hidden md:block",
+  /** Show on mobile, hide on desktop */
+  mobileOnly: "md:hidden",
+  /** Grid columns for different screens */
+  grid2to4: "grid-cols-2 sm:grid-cols-4",
+  grid1to2: "grid-cols-1 sm:grid-cols-2",
+  grid2to3: "grid-cols-2 sm:grid-cols-3",
+} as const
