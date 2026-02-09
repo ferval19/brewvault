@@ -2,10 +2,11 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, MapPin, Globe } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, MapPin, Globe, Package } from "lucide-react"
 import { RoasterIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
+import { MetricPill } from "@/components/ui/metric-pill"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,9 +89,13 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
 
             {/* Bottom overlay with rating */}
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
-                {beanCount} {beanCount === 1 ? "cafe" : "cafes"}
-              </span>
+              <MetricPill
+                icon={Package}
+                value={beanCount}
+                label={beanCount === 1 ? "cafe" : "cafes"}
+                size="sm"
+                className="bg-white/90 dark:bg-black/60 backdrop-blur-sm"
+              />
               {roaster.rating && (
                 <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
                   {"★".repeat(roaster.rating)}

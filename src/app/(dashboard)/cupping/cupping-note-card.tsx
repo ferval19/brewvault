@@ -6,6 +6,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { MetricPill } from "@/components/ui/metric-pill"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,13 +36,13 @@ export function CuppingNoteCard({ note }: CuppingNoteCardProps) {
       })
     : null
 
-  const scoreColor = note.total_score
+  const scoreVariant = note.total_score
     ? note.total_score >= 85
-      ? "bg-green-500/90"
+      ? "success"
       : note.total_score >= 75
-      ? "bg-amber-500/90"
-      : "bg-orange-500/90"
-    : "bg-gray-500/90"
+      ? "warning"
+      : "default"
+    : "muted" as const
 
   return (
     <>
@@ -104,14 +105,20 @@ export function CuppingNoteCard({ note }: CuppingNoteCardProps) {
             {/* Bottom overlay with score */}
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
               {methodLabel && (
-                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
-                  {methodLabel}
-                </span>
+                <MetricPill
+                  value={methodLabel}
+                  size="sm"
+                  className="bg-white/90 dark:bg-black/60 backdrop-blur-sm"
+                />
               )}
               {note.total_score != null && (
-                <span className={`px-3 py-1.5 rounded-full ${scoreColor} backdrop-blur-sm text-white text-sm font-bold`}>
-                  {note.total_score}/100
-                </span>
+                <MetricPill
+                  value={note.total_score}
+                  label="/100"
+                  size="sm"
+                  variant={scoreVariant}
+                  className="backdrop-blur-sm font-bold"
+                />
               )}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { CoffeeBeansIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
+import { StatusBadge } from "@/components/ui/status-badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,17 +39,6 @@ const roastLevelGradients: Record<string, string> = {
   dark: "from-amber-800/30 to-stone-700/30",
 }
 
-const statusColors: Record<string, string> = {
-  active: "bg-green-500/90 text-white",
-  finished: "bg-neutral-500/90 text-white",
-  archived: "bg-amber-500/90 text-white",
-}
-
-const statusLabels: Record<string, string> = {
-  active: "Activo",
-  finished: "Agotado",
-  archived: "Archivado",
-}
 
 export function BeanCard({ bean }: BeanCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -94,9 +84,7 @@ export function BeanCard({ bean }: BeanCardProps) {
 
             {/* Top bar */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-              <span className={`px-3 py-1.5 rounded-full backdrop-blur-sm text-xs font-medium ${statusColors[bean.status]}`}>
-                {statusLabels[bean.status]}
-              </span>
+              <StatusBadge status={isLowStock && bean.status === "active" ? "low_stock" : bean.status as "active" | "finished" | "archived"} />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
                   <Button

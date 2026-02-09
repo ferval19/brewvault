@@ -5,6 +5,7 @@ import { Pencil, Calendar, MoreHorizontal, Eye, Trash2 } from "lucide-react"
 import { getEquipmentIllustration } from "@/lib/placeholder-illustrations"
 
 import { Button } from "@/components/ui/button"
+import { MetricPill } from "@/components/ui/metric-pill"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,13 +98,15 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
             {/* Bottom overlay */}
             {equipment.purchase_date && (
               <div className="absolute bottom-3 left-3 right-3">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
-                  <Calendar className="h-3 w-3" />
-                  {new Date(equipment.purchase_date).toLocaleDateString("es-ES", {
+                <MetricPill
+                  icon={Calendar}
+                  value={new Date(equipment.purchase_date).toLocaleDateString("es-ES", {
                     month: "short",
                     year: "numeric",
                   })}
-                </span>
+                  size="sm"
+                  className="bg-white/90 dark:bg-black/60 backdrop-blur-sm"
+                />
               </div>
             )}
           </div>

@@ -2,9 +2,10 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, Clock, ArrowRight, Euro } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, Clock, Thermometer, Euro } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { MetricPill, MetricRow } from "@/components/ui/metric-pill"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -162,31 +163,32 @@ export function BrewCard({ brew }: BrewCardProps) {
             </div>
 
             {/* Metrics row */}
-            <div className="flex items-center gap-3 text-sm">
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-muted/50">
-                <span className="font-medium">{brew.dose_grams}g</span>
-                <ArrowRight className="h-3 w-3 text-muted-foreground" />
-                <span className="font-medium">{brew.yield_grams || brew.water_grams}g</span>
-              </div>
-              <div className="px-2.5 py-1.5 rounded-lg bg-muted/50">
-                <span className="text-muted-foreground">1:</span>
-                <span className="font-medium">{ratio}</span>
-              </div>
+            <MetricRow>
+              <MetricPill
+                value={`${brew.dose_grams}g → ${brew.yield_grams || brew.water_grams}g`}
+                size="sm"
+              />
+              <MetricPill
+                value={`1:${ratio}`}
+                size="sm"
+                variant="muted"
+              />
               {brew.total_time_seconds && (
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-muted/50">
-                  <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="font-medium">{formatTime(brew.total_time_seconds)}</span>
-                </div>
+                <MetricPill
+                  icon={Clock}
+                  value={formatTime(brew.total_time_seconds)}
+                  size="sm"
+                  variant="muted"
+                />
               )}
-            </div>
-
-            {/* Temperature */}
-            {brew.water_temperature && (
-              <div className="flex items-center justify-between pt-3 border-t text-sm text-muted-foreground">
-                <span>Temperatura</span>
-                <span className="font-medium text-foreground">{brew.water_temperature}°C</span>
-              </div>
-            )}
+              {brew.water_temperature && (
+                <MetricPill
+                  icon={Thermometer}
+                  value={`${brew.water_temperature}°C`}
+                  size="sm"
+                  variant="muted"
+                />
+              )}</MetricRow>
           </div>
         </div>
       </Link>
