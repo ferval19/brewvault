@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, Clock, ArrowRight } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, Clock, ArrowRight, Euro } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -43,6 +43,15 @@ function formatDate(dateStr: string): string {
   })
 }
 
+function calculateBrewPrice(brew: Brew): number | null {
+  const { beans, dose_grams } = brew
+  if (!beans?.price || !beans?.weight_grams || beans.weight_grams === 0) {
+    return null
+  }
+  const pricePerGram = beans.price / beans.weight_grams
+  return pricePerGram * dose_grams
+}
+
 export function BrewCard({ brew }: BrewCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
@@ -50,6 +59,7 @@ export function BrewCard({ brew }: BrewCardProps) {
   const MethodIcon = methodConfig.icon
   const MethodIllustration = getBrewMethodIllustration(brew.brew_method)
   const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
+  const brewPrice = calculateBrewPrice(brew)
 
   return (
     <>
@@ -123,11 +133,19 @@ export function BrewCard({ brew }: BrewCardProps) {
                   {methodConfig.label}
                 </span>
               </div>
-              {brew.rating && (
-                <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
-                  {"★".repeat(brew.rating)}
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {brewPrice !== null && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                    <Euro className="h-3.5 w-3.5" />
+                    {brewPrice.toFixed(2)}
+                  </span>
+                )}
+                {brew.rating && (
+                  <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                    {"★".repeat(brew.rating)}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 

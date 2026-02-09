@@ -38,6 +38,9 @@ export type Brew = {
     id: string
     name: string
     roaster_id: string | null
+    price: number | null
+    weight_grams: number | null
+    currency: string | null
     roasters: { id: string; name: string } | null
   } | null
 }
@@ -92,6 +95,9 @@ export async function getBrews(): Promise<ActionResult<Brew[]>> {
         id,
         name,
         roaster_id,
+        price,
+        weight_grams,
+        currency,
         roasters (
           id,
           name
@@ -123,6 +129,9 @@ export async function getBrew(id: string): Promise<ActionResult<Brew>> {
         id,
         name,
         roaster_id,
+        price,
+        weight_grams,
+        currency,
         roasters (
           id,
           name
