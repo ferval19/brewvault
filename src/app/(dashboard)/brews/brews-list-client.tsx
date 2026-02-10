@@ -40,8 +40,16 @@ interface BrewsListClientProps {
   initialMethod?: string
 }
 
+// Get default view mode based on screen size
+function getDefaultViewMode(): ViewMode {
+  if (typeof window !== "undefined" && window.innerWidth < 768) {
+    return "list"
+  }
+  return "grid"
+}
+
 export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListClientProps) {
-  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:brews-view", "grid")
+  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:brews-view", getDefaultViewMode)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterMethod, setFilterMethod] = useState<string | null>(initialMethod || null)
   const [filterRating, setFilterRating] = useState<number | null>(null)

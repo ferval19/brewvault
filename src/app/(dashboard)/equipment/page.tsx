@@ -94,15 +94,6 @@ export default async function EquipmentPage() {
         </div>
       )}
 
-      {/* Mobile FAB */}
-      <Link
-        href="/equipment/new"
-        className="fixed bottom-24 right-6 sm:hidden z-50"
-      >
-        <Button size="lg" className="h-14 w-14 rounded-full shadow-lg">
-          <Plus className="h-6 w-6" />
-        </Button>
-      </Link>
     </div>
   )
 }

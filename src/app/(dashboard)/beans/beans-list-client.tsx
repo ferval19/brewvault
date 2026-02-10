@@ -39,8 +39,16 @@ interface BeansListClientProps {
   initialStatus?: string
 }
 
+// Get default view mode based on screen size
+function getDefaultViewMode(): ViewMode {
+  if (typeof window !== "undefined" && window.innerWidth < 768) {
+    return "list"
+  }
+  return "grid"
+}
+
 export function BeansListClient({ beans: allBeans, initialStatus }: BeansListClientProps) {
-  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:beans-view", "grid")
+  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:beans-view", getDefaultViewMode)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterStatus, setFilterStatus] = useState<StatusFilter>((initialStatus as StatusFilter) || "all")
   const [filterOrigin, setFilterOrigin] = useState<string | null>(null)
