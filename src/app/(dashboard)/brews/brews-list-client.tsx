@@ -114,12 +114,12 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Mis Preparaciones</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl sm:text-3xl font-bold">Mis Preparaciones</h1>
+          <p className="text-sm text-muted-foreground">
             {filteredBrews.length} {filteredBrews.length === 1 ? "preparacion" : "preparaciones"}
             {hasActiveFilters && filteredBrews.length !== allBrews.length && ` de ${allBrews.length}`}
           </p>
@@ -132,156 +132,132 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
         </Link>
       </div>
 
-      {/* Search and View Controls */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* Search + Controls Row */}
+      <div className="flex gap-2">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar cafe, tostador..."
+            placeholder="Buscar..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 rounded-xl"
+            className="pl-9 pr-8 h-9 sm:h-10 rounded-xl text-sm"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        {/* View Switcher */}
-        <div className="flex items-center gap-1 p-1 bg-muted rounded-xl">
-          <ViewButton
-            active={viewMode === "grid"}
-            onClick={() => setViewMode("grid")}
-            icon={LayoutGrid}
-            label="Grid"
-          />
-          <ViewButton
-            active={viewMode === "list"}
-            onClick={() => setViewMode("list")}
-            icon={List}
-            label="Lista"
-          />
-          <ViewButton
-            active={viewMode === "timeline"}
-            onClick={() => setViewMode("timeline")}
-            icon={Calendar}
-            label="Timeline"
-          />
-          <ViewButton
-            active={viewMode === "grouped"}
-            onClick={() => setViewMode("grouped")}
-            icon={Layers}
-            label="Por cafe"
-          />
+        {/* View Switcher - compact */}
+        <div className="flex items-center p-1 bg-muted rounded-xl">
+          <ViewButton active={viewMode === "grid"} onClick={() => setViewMode("grid")} icon={LayoutGrid} />
+          <ViewButton active={viewMode === "list"} onClick={() => setViewMode("list")} icon={List} />
+          <ViewButton active={viewMode === "timeline"} onClick={() => setViewMode("timeline")} icon={Calendar} />
+          <ViewButton active={viewMode === "grouped"} onClick={() => setViewMode("grouped")} icon={Layers} />
         </div>
 
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="rounded-xl gap-2">
+            <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-auto sm:px-3 rounded-xl shrink-0">
               <SlidersHorizontal className="h-4 w-4" />
-              <span className="hidden sm:inline">Ordenar</span>
-              <ChevronDown className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">Ordenar</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => { setSortBy("date"); setSortDesc(true) }}>
-              Mas recientes
-              {sortBy === "date" && sortDesc && " ✓"}
+              Mas recientes {sortBy === "date" && sortDesc && "✓"}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => { setSortBy("date"); setSortDesc(false) }}>
-              Mas antiguas
-              {sortBy === "date" && !sortDesc && " ✓"}
+              Mas antiguas {sortBy === "date" && !sortDesc && "✓"}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => { setSortBy("rating"); setSortDesc(true) }}>
-              Mejor valoradas
-              {sortBy === "rating" && " ✓"}
+              Mejor valoradas {sortBy === "rating" && "✓"}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => { setSortBy("ratio"); setSortDesc(false) }}>
-              Ratio (menor a mayor)
-              {sortBy === "ratio" && !sortDesc && " ✓"}
+              Ratio (menor a mayor) {sortBy === "ratio" && !sortDesc && "✓"}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => { setSortBy("price"); setSortDesc(false) }}>
-              Precio por taza
-              {sortBy === "price" && " ✓"}
+              Precio por taza {sortBy === "price" && "✓"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Method Filter Pills */}
-      <div className="flex flex-wrap gap-2">
-        <Button
-          variant={!filterMethod ? "default" : "outline"}
-          size="sm"
-          className="rounded-full"
-          onClick={() => setFilterMethod(null)}
-        >
-          Todas
-        </Button>
-        {usedMethods.map((method) => {
-          const config = getBrewMethodConfig(method)
-          const MethodIcon = config.icon
-          return (
-            <Button
-              key={method}
-              variant={filterMethod === method ? "default" : "outline"}
-              size="sm"
-              className="rounded-full"
-              onClick={() => setFilterMethod(method === filterMethod ? null : method)}
-            >
-              <MethodIcon className="mr-1.5 h-4 w-4" />
-              {config.label}
-            </Button>
-          )
-        })}
-
-        {/* Rating filter */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={filterRating ? "default" : "outline"}
-              size="sm"
-              className="rounded-full"
-            >
-              {filterRating ? `${"★".repeat(filterRating)}+` : "★ Rating"}
-              <ChevronDown className="ml-1 h-3 w-3" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setFilterRating(null)}>
-              Todos los ratings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {[5, 4, 3, 2, 1].map((r) => (
-              <DropdownMenuItem key={r} onClick={() => setFilterRating(r)}>
-                {"★".repeat(r)}{"☆".repeat(5 - r)} y mas
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Clear filters */}
-        {hasActiveFilters && (
+      {/* Filter Pills - horizontal scroll on mobile */}
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap scrollbar-hide">
           <Button
-            variant="ghost"
+            variant={!filterMethod ? "default" : "outline"}
             size="sm"
-            className="rounded-full text-muted-foreground"
-            onClick={clearFilters}
+            className="rounded-full shrink-0 h-8 text-xs sm:text-sm"
+            onClick={() => setFilterMethod(null)}
           >
-            <X className="mr-1 h-3 w-3" />
-            Limpiar
+            Todas
           </Button>
-        )}
+          {usedMethods.map((method) => {
+            const config = getBrewMethodConfig(method)
+            const MethodIcon = config.icon
+            return (
+              <Button
+                key={method}
+                variant={filterMethod === method ? "default" : "outline"}
+                size="sm"
+                className="rounded-full shrink-0 h-8 text-xs sm:text-sm"
+                onClick={() => setFilterMethod(method === filterMethod ? null : method)}
+              >
+                <MethodIcon className="h-3.5 w-3.5 sm:mr-1.5" />
+                <span className="hidden sm:inline">{config.label}</span>
+              </Button>
+            )
+          })}
+
+          {/* Rating filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={filterRating ? "default" : "outline"}
+                size="sm"
+                className="rounded-full shrink-0 h-8 text-xs sm:text-sm"
+              >
+                {filterRating ? `${"★".repeat(filterRating)}+` : "★"}
+                <ChevronDown className="ml-1 h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => setFilterRating(null)}>
+                Todos los ratings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {[5, 4, 3, 2, 1].map((r) => (
+                <DropdownMenuItem key={r} onClick={() => setFilterRating(r)}>
+                  {"★".repeat(r)}{"☆".repeat(5 - r)} y mas
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Clear filters */}
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="rounded-full shrink-0 h-8 text-xs text-muted-foreground"
+              onClick={clearFilters}
+            >
+              <X className="h-3 w-3 sm:mr-1" />
+              <span className="hidden sm:inline">Limpiar</span>
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Content based on view mode */}
@@ -319,24 +295,21 @@ function ViewButton({
   active,
   onClick,
   icon: Icon,
-  label,
 }: {
   active: boolean
   onClick: () => void
   icon: React.ElementType
-  label: string
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+      className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
         active
           ? "bg-background text-foreground shadow-sm"
           : "text-muted-foreground hover:text-foreground"
       }`}
     >
       <Icon className="h-4 w-4" />
-      <span className="hidden sm:inline">{label}</span>
     </button>
   )
 }

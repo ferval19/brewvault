@@ -52,9 +52,9 @@ export default async function BrewsPage({
 
   return (
     <div className="space-y-8">
-      {/* Hero Stats */}
+      {/* Hero Stats - hidden on mobile */}
       {brews.length > 0 && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="hidden sm:grid grid-cols-3 gap-4">
           <StatCard
             icon={Coffee}
             label="Preparaciones"
