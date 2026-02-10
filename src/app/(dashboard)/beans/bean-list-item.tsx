@@ -76,7 +76,7 @@ export function BeanListItem({ beans }: BeanListItemProps) {
             </span>
             <div className="flex-1 h-px bg-border" />
             <span className="text-xs text-muted-foreground">
-              {roasterBeans.length} {roasterBeans.length === 1 ? "cafe" : "cafes"}
+              {roasterBeans.length} {roasterBeans.length === 1 ? "café" : "cafés"}
             </span>
           </div>
 

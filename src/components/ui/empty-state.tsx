@@ -51,14 +51,14 @@ export function BeansEmptyState({ hasAny }: { hasAny: boolean }) {
       <EmptyState
         variant="filtered"
         title="Sin resultados"
-        description="No hay cafes que coincidan con los filtros seleccionados."
+        description="No hay cafés que coincidan con los filtros seleccionados."
       />
     )
   }
 
   return (
     <EmptyState
-      title="Sin cafes"
+      title="Sin cafés"
       description="Anade tu primer cafe para empezar a registrar tus preparaciones."
       actionLabel="Anadir cafe"
       actionHref="/beans/new"
@@ -122,7 +122,7 @@ export function RoastersEmptyState({ hasAny }: { hasAny: boolean }) {
   return (
     <EmptyState
       title="Sin tostadores"
-      description="Anade tus tostadores favoritos para organizar tu coleccion de cafes."
+      description="Anade tus tostadores favoritos para organizar tu colección de cafés."
       actionLabel="Anadir tostador"
       actionHref="/roasters/new"
     />
@@ -143,7 +143,7 @@ export function CuppingEmptyState({ hasAny }: { hasAny: boolean }) {
   return (
     <EmptyState
       title="Sin notas de cata"
-      description="Registra tus primeras notas de cata SCA para evaluar tus cafes."
+      description="Registra tus primeras notas de cata SCA para evaluar tus cafés."
       actionLabel="Nueva cata"
       actionHref="/cupping/new"
     />

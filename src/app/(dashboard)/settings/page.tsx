@@ -59,7 +59,7 @@ export default async function SettingsPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                  Cafes
+                  Cafés
                 </p>
                 <p className="text-2xl sm:text-3xl font-bold mt-1">{stats.totalBeans}</p>
               </div>

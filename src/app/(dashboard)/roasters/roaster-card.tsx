@@ -92,7 +92,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
               <MetricPill
                 icon={Package}
                 value={beanCount}
-                label={beanCount === 1 ? "cafe" : "cafes"}
+                label={beanCount === 1 ? "café" : "cafés"}
                 size="sm"
                 className="bg-white/90 dark:bg-black/60 backdrop-blur-sm"
               />

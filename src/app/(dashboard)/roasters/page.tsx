@@ -37,7 +37,7 @@ export default async function RoastersPage() {
           />
           <StatCard
             icon={Coffee}
-            label="Cafes"
+            label="Cafés"
             value={totalBeans.toString()}
           />
           <StatCard

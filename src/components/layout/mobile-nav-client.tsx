@@ -30,7 +30,7 @@ const mainNavigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Brews", href: "/brews", icon: Coffee },
   // FAB goes here (index 2)
-  { name: "Cafes", href: "/beans", icon: Package },
+  { name: "Cafés", href: "/beans", icon: Package },
   // More button (index 4)
 ]
 
@@ -83,7 +83,7 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
           <NavItem
             href="/beans"
             icon={Package}
-            label="Cafes"
+            label="Cafés"
             active={pathname === "/beans" || pathname.startsWith("/beans/")}
           />
 

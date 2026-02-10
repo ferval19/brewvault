@@ -105,7 +105,7 @@ export default async function DashboardPage() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                  Cafes
+                  Cafés
                 </p>
                 <p className="text-3xl font-bold mt-1">{stats.beans.total}</p>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -199,10 +199,10 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Cafes por estado */}
+        {/* Cafés por estado */}
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Estado de cafes</CardTitle>
+            <CardTitle className="text-sm font-medium">Estado de cafés</CardTitle>
             <div className="p-2 rounded-xl bg-coffee-500/10">
               <Package className="h-4 w-4 text-coffee-500" />
             </div>

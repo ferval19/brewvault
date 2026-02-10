@@ -102,7 +102,7 @@ export default async function Home() {
           </h1>
 
           <p className="text-base sm:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
-            Registra tus cafes, perfecciona tus preparaciones y descubre patrones
+            Registra tus cafés, perfecciona tus preparaciones y descubre patrones
             en tu viaje cafetero.
           </p>
 
@@ -164,7 +164,7 @@ export default async function Home() {
             <FeatureCard
               icon={<Coffee className="h-6 w-6" />}
               illustration={<CoffeeBeansIllustration className="w-16 h-16 text-coffee-600/60" />}
-              title="Biblioteca de Cafes"
+              title="Biblioteca de Cafés"
               description="Registra origen, variedad, proceso, notas de sabor y mas. Nunca olvides un cafe que te encanto."
             />
             <FeatureCard
@@ -183,7 +183,7 @@ export default async function Home() {
               icon={<Timer className="h-6 w-6" />}
               illustration={<ScaleIllustration className="w-16 h-16 text-coffee-600/60" />}
               title="Control de Inventario"
-              description="Sigue el stock de tus cafes con alertas de frescura y agotamiento automaticas."
+              description="Sigue el stock de tus cafés con alertas de frescura y agotamiento automáticas."
             />
             <FeatureCard
               icon={<Star className="h-6 w-6" />}
@@ -210,7 +210,7 @@ export default async function Home() {
           <div className="grid sm:grid-cols-3 gap-8 sm:gap-12">
             <StepCard
               number="01"
-              title="Registra tus cafes"
+              title="Registra tus cafés"
               description="Anade cada bolsa de cafe con todos sus detalles: origen, tostador, notas de sabor."
             />
             <StepCard

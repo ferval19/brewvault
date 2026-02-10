@@ -4,7 +4,7 @@ import { getBeans, type Bean } from "./actions"
 import { BeansListClient } from "./beans-list-client"
 
 export const metadata = {
-  title: "Mis Cafes",
+  title: "Mis Cafés",
 }
 
 function calculateStats(beans: Bean[]) {
@@ -32,7 +32,7 @@ export default async function BeansPage({
   if (!result.success) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <p className="text-muted-foreground">Error al cargar los cafes</p>
+        <p className="text-muted-foreground">Error al cargar los cafés</p>
       </div>
     )
   }
@@ -47,7 +47,7 @@ export default async function BeansPage({
         <div className="hidden sm:grid grid-cols-2 sm:grid-cols-4 gap-4">
           <StatCard
             icon={Coffee}
-            label="Total cafes"
+            label="Total cafés"
             value={stats.totalBeans.toString()}
           />
           <StatCard

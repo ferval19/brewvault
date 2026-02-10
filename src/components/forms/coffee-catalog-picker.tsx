@@ -87,7 +87,7 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
       </DialogTrigger>
       <DialogContent className="w-full max-w-2xl h-[90vh] sm:h-auto sm:max-h-[80vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Catalogo de Cafes</DialogTitle>
+          <DialogTitle>Catálogo de Cafés</DialogTitle>
           <DialogDescription>
             Selecciona un cafe del catalogo para prellenar el formulario
           </DialogDescription>
@@ -119,7 +119,7 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
         <div className="flex-1 overflow-y-auto space-y-2 pr-2">
           {filteredCoffees.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              No se encontraron cafes
+              No se encontraron cafés
             </div>
           ) : (
             filteredCoffees.map((coffee) => (
@@ -137,7 +137,7 @@ export function CoffeeCatalogPicker({ onSelect }: CoffeeCatalogPickerProps) {
         <div className="pt-4 border-t space-y-3">
           <div className="flex justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              {filteredCoffees.length} cafes encontrados
+              {filteredCoffees.length} cafés encontrados
             </p>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setOpen(false)}>

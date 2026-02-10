@@ -32,7 +32,7 @@ interface SidebarClientProps {
 const mainNavigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
   { name: "Preparaciones", href: "/brews", icon: Coffee },
-  { name: "Cafes", href: "/beans", icon: Package },
+  { name: "Cafés", href: "/beans", icon: Package },
 ]
 
 const collectionNavigation = [

@@ -13,7 +13,7 @@ import { MobileMenuDrawer } from "./mobile-menu-drawer"
 
 const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
-  { name: "Cafes", href: "/beans", icon: Package },
+  { name: "Cafés", href: "/beans", icon: Package },
   { name: "Brews", href: "/brews", icon: Coffee },
   { name: "Equipo", href: "/equipment", icon: Gauge },
 ]

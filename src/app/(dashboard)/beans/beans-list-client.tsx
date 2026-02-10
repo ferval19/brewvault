@@ -145,9 +145,9 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl sm:text-3xl font-bold">Mis Cafes</h1>
+          <h1 className="text-xl sm:text-3xl font-bold">Mis Cafés</h1>
           <p className="text-sm text-muted-foreground">
-            {filteredBeans.length} {filteredBeans.length === 1 ? "cafe" : "cafes"}
+            {filteredBeans.length} {filteredBeans.length === 1 ? "café" : "cafés"}
             {hasActiveFilters && filteredBeans.length !== allBeans.length && ` de ${allBeans.length}`}
           </p>
         </div>
@@ -372,7 +372,7 @@ function EmptyState({
         <Search className="h-12 w-12 text-muted-foreground/50 mb-4" />
         <h3 className="text-lg font-medium mb-2">Sin resultados</h3>
         <p className="text-muted-foreground mb-4">
-          No hay cafes que coincidan con tu busqueda
+          No hay cafés que coincidan con tu búsqueda
         </p>
         <Button variant="outline" onClick={onClear}>
           Limpiar filtros

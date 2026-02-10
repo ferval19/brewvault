@@ -32,7 +32,9 @@
       "Bash(npx supabase db push:*)",
       "Bash(grep:*)",
       "Bash(vercel:*)",
-      "Bash(node scripts/generate-icons.mjs:*)"
+      "Bash(node scripts/generate-icons.mjs:*)",
+      "Bash(npm ls:*)",
+      "Bash(git rm:*)"
     ]
   }
 }

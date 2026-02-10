@@ -17,7 +17,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
   { name: "Inicio", href: "/dashboard", icon: Home },
-  { name: "Cafes", href: "/beans", icon: Package },
+  { name: "Cafés", href: "/beans", icon: Package },
   { name: "Brews", href: "/brews", icon: Coffee },
   { name: "Equipo", href: "/equipment", icon: Gauge },
   { name: "Ajustes", href: "/settings", icon: Settings },

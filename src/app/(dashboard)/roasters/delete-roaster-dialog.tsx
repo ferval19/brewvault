@@ -50,7 +50,7 @@ export function DeleteRoasterDialog({
         <DialogHeader>
           <DialogTitle>Eliminar tostador</DialogTitle>
           <DialogDescription>
-            Vas a eliminar <strong>{roasterName}</strong>. Los cafes asociados
+            Vas a eliminar <strong>{roasterName}</strong>. Los cafés asociados
             quedaran sin tostador asignado.
           </DialogDescription>
         </DialogHeader>
