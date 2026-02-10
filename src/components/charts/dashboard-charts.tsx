@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import {
   BarChart,
   Bar,
@@ -19,6 +20,15 @@ import { brewMethods } from "@/lib/validations/brews"
 
 const COLORS = ["#f59e0b", "#fb923c", "#fbbf24", "#d97706", "#b45309", "#92400e"]
 
+// Hook to ensure charts only render after mount (avoids SSR dimension issues)
+function useIsMounted() {
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  return isMounted
+}
+
 interface ChartProps {
   brewsPerWeek: { week: string; count: number }[]
   ratingDistribution: { rating: number; count: number }[]
@@ -27,6 +37,7 @@ interface ChartProps {
 }
 
 export function BrewsPerWeekChart({ data }: { data: { week: string; count: number }[] }) {
+  const isMounted = useIsMounted()
   const hasData = data.some(d => d.count > 0)
 
   return (
@@ -38,7 +49,7 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
         </div>
       </CardHeader>
       <CardContent>
-        {hasData ? (
+        {hasData && isMounted ? (
           <div className="h-48 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={150}>
               <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -77,7 +88,7 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
           </div>
         ) : (
           <div className="h-48 flex items-center justify-center text-muted-foreground text-sm">
-            Sin datos de preparaciones
+            {hasData ? "Cargando..." : "Sin datos de preparaciones"}
           </div>
         )}
       </CardContent>
@@ -131,6 +142,7 @@ export function RatingDistributionChart({ data }: { data: { rating: number; coun
 }
 
 export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: number }[] }) {
+  const isMounted = useIsMounted()
   const hasData = data.some(d => d.grams > 0)
   const totalGrams = data.reduce((sum, d) => sum + d.grams, 0)
 
@@ -147,7 +159,7 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
         </div>
       </CardHeader>
       <CardContent>
-        {hasData ? (
+        {hasData && isMounted ? (
           <div className="h-32 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={100}>
               <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -189,7 +201,7 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
           </div>
         ) : (
           <div className="h-32 flex items-center justify-center text-muted-foreground text-sm">
-            Sin datos de consumo
+            {hasData ? "Cargando..." : "Sin datos de consumo"}
           </div>
         )}
       </CardContent>
@@ -198,6 +210,7 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
 }
 
 export function RatingByMethodChart({ data }: { data: { method: string; avgRating: number; count: number }[] }) {
+  const isMounted = useIsMounted()
   const hasData = data.length > 0
 
   const dataWithLabels = data.map((item) => ({
@@ -214,7 +227,7 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
         </div>
       </CardHeader>
       <CardContent>
-        {hasData ? (
+        {hasData && isMounted ? (
           <div className="h-48 w-full">
             <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={150}>
               <BarChart
@@ -263,7 +276,7 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
           </div>
         ) : (
           <div className="h-48 flex items-center justify-center text-muted-foreground text-sm">
-            Sin datos de ratings por metodo
+            {hasData ? "Cargando..." : "Sin datos de ratings por metodo"}
           </div>
         )}
       </CardContent>
