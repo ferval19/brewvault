@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Background circle -->
-  <circle cx="256" cy="256" r="240" fill="#ffffff"/>
+  <!-- Solid white background for Apple icon requirement -->
+  <rect width="512" height="512" fill="#ffffff"/>
 
-  <!-- Coffee cup outline - matches lucide Coffee icon style -->
-  <g transform="translate(96, 96) scale(1.25)" stroke="#6f4726" stroke-width="20" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Coffee cup outline - centered -->
+  <g transform="translate(56, 72) scale(1.56)" stroke="#6f4726" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <!-- Cup body -->
     <path d="M32 112 L32 240 Q32 288 80 288 L176 288 Q224 288 224 240 L224 112 Z"/>
 

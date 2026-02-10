@@ -50,6 +50,7 @@ export type BeanOption = {
   name: string
   roasters: { name: string } | null
   status: string
+  current_weight_grams: number | null
 }
 
 
@@ -330,6 +331,7 @@ export async function getActiveBeans(): Promise<ActionResult<BeanOption[]>> {
       id,
       name,
       status,
+      current_weight_grams,
       roasters (
         name
       )
@@ -488,5 +490,78 @@ export async function deleteFavoriteBrew(id: string): Promise<ActionResult<undef
   }
 
   revalidatePath("/brews/new")
+  return { success: true, data: undefined }
+}
+
+// === BREW PHOTO UPLOAD ===
+
+export async function uploadBrewPhoto(
+  formData: FormData
+): Promise<ActionResult<string>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const file = formData.get("file") as File
+  if (!file) {
+    return { success: false, error: "No se recibio archivo" }
+  }
+
+  // Generate unique filename in brews subfolder
+  const fileExt = file.name.split(".").pop()
+  const fileName = `${userData.user.id}/brews/${Date.now()}.${fileExt}`
+
+  const { error: uploadError } = await supabase.storage
+    .from("coffee-photos")
+    .upload(fileName, file, {
+      cacheControl: "3600",
+      upsert: false,
+    })
+
+  if (uploadError) {
+    return { success: false, error: uploadError.message }
+  }
+
+  const { data: urlData } = supabase.storage
+    .from("coffee-photos")
+    .getPublicUrl(fileName)
+
+  return { success: true, data: urlData.publicUrl }
+}
+
+export async function deleteBrewPhoto(
+  photoUrl: string
+): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  // Extract file path from URL
+  const urlParts = photoUrl.split("/coffee-photos/")
+  if (urlParts.length !== 2) {
+    return { success: false, error: "URL invalida" }
+  }
+
+  const filePath = urlParts[1]
+
+  // Verify the file belongs to the user
+  if (!filePath.startsWith(userData.user.id)) {
+    return { success: false, error: "No autorizado" }
+  }
+
+  const { error } = await supabase.storage
+    .from("coffee-photos")
+    .remove([filePath])
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
   return { success: true, data: undefined }
 }

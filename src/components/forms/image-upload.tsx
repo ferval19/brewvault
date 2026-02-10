@@ -6,17 +6,26 @@ import { Camera, Upload, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { uploadCoffeePhoto, deleteCoffeePhoto } from "@/app/(dashboard)/beans/actions"
 
+type UploadResult = { success: true; data: string } | { success: false; error: string }
+type DeleteResult = { success: true; data: undefined } | { success: false; error: string }
+
 interface ImageUploadProps {
   value?: string | null
   onChange: (url: string | null) => void
   disabled?: boolean
+  uploadFn?: (formData: FormData) => Promise<UploadResult>
+  deleteFn?: (url: string) => Promise<DeleteResult>
 }
 
-export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, disabled, uploadFn, deleteFn }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
+
+  // Use custom functions or defaults
+  const upload = uploadFn || uploadCoffeePhoto
+  const deletePhoto = deleteFn || deleteCoffeePhoto
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -41,7 +50,7 @@ export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
       const formData = new FormData()
       formData.append("file", file)
 
-      const result = await uploadCoffeePhoto(formData)
+      const result = await upload(formData)
 
       if (result.success) {
         onChange(result.data)
@@ -65,7 +74,7 @@ export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
     setError(null)
 
     try {
-      const result = await deleteCoffeePhoto(value)
+      const result = await deletePhoto(value)
       if (result.success) {
         onChange(null)
       } else {

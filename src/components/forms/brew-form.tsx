@@ -25,7 +25,7 @@ import {
   filterTypes,
   automaticDrinkTypes,
 } from "@/lib/validations/brews"
-import { createBrew, updateBrew } from "@/app/(dashboard)/brews/actions"
+import { createBrew, updateBrew, uploadBrewPhoto, deleteBrewPhoto } from "@/app/(dashboard)/brews/actions"
 import type { BeanOption, EquipmentOption, Brew } from "@/app/(dashboard)/brews/actions"
 
 interface BrewFormData {
@@ -114,6 +114,12 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
     }
   }
 
+  // Check stock for selected bean
+  const selectedBeanId = watch("bean_id")
+  const selectedBean = selectedBeanId ? beans.find(b => b.id === selectedBeanId) : null
+  const hasNoStock = selectedBean && selectedBean.current_weight_grams !== null && selectedBean.current_weight_grams <= 0
+  const hasLowStock = selectedBean && selectedBean.current_weight_grams !== null && selectedBean.current_weight_grams > 0 && selectedBean.current_weight_grams < doseGrams
+
   async function onSubmit(data: BrewFormData) {
     if (!data.bean_id) {
       setError("Debes seleccionar un cafe")
@@ -121,6 +127,13 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
     }
     if (!data.brew_method) {
       setError("Debes seleccionar un metodo")
+      return
+    }
+
+    // Check stock
+    const bean = beans.find(b => b.id === data.bean_id)
+    if (bean && bean.current_weight_grams !== null && bean.current_weight_grams <= 0) {
+      setError("Este cafe no tiene stock disponible. Selecciona otro o actualiza el inventario.")
       return
     }
 
@@ -168,6 +181,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
           value={watch("image_url")}
           onChange={(url) => setValue("image_url", url)}
           disabled={isLoading}
+          uploadFn={uploadBrewPhoto}
+          deleteFn={deleteBrewPhoto}
         />
       </FormSection>
 
@@ -183,14 +198,35 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
                 <SelectValue placeholder="Seleccionar cafe" />
               </SelectTrigger>
               <SelectContent>
-                {beans.map((bean) => (
-                  <SelectItem key={bean.id} value={bean.id}>
-                    {bean.name}
-                    {bean.roasters?.name && ` - ${bean.roasters.name}`}
-                  </SelectItem>
-                ))}
+                {beans.map((bean) => {
+                  const noStock = bean.current_weight_grams !== null && bean.current_weight_grams <= 0
+                  return (
+                    <SelectItem
+                      key={bean.id}
+                      value={bean.id}
+                      className={noStock ? "text-muted-foreground" : ""}
+                    >
+                      {bean.name}
+                      {bean.roasters?.name && ` - ${bean.roasters.name}`}
+                      {noStock && " (Sin stock)"}
+                      {bean.current_weight_grams !== null && bean.current_weight_grams > 0 && (
+                        <span className="text-muted-foreground ml-1">({bean.current_weight_grams}g)</span>
+                      )}
+                    </SelectItem>
+                  )
+                })}
               </SelectContent>
             </Select>
+            {hasNoStock && (
+              <p className="text-sm text-destructive mt-1">
+                Este cafe no tiene stock. No podras crear la preparacion.
+              </p>
+            )}
+            {hasLowStock && !hasNoStock && (
+              <p className="text-sm text-amber-600 dark:text-amber-500 mt-1">
+                Stock bajo: solo quedan {selectedBean?.current_weight_grams}g (necesitas {doseGrams}g)
+              </p>
+            )}
           </FormField>
 
           {brewers.length > 0 && (

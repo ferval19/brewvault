@@ -280,24 +280,25 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
+              aria-label="Limpiar busqueda"
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           )}
         </div>
 
         {/* View Switcher - compact */}
-        <div className="flex items-center p-1 bg-muted rounded-xl">
-          <ViewButton active={viewMode === "grid"} onClick={() => setViewMode("grid")} icon={LayoutGrid} />
-          <ViewButton active={viewMode === "list"} onClick={() => setViewMode("list")} icon={List} />
+        <div className="flex items-center p-1 bg-muted rounded-xl" role="group" aria-label="Cambiar vista">
+          <ViewButton active={viewMode === "grid"} onClick={() => setViewMode("grid")} icon={LayoutGrid} label="Vista en cuadricula" />
+          <ViewButton active={viewMode === "list"} onClick={() => setViewMode("list")} icon={List} label="Vista en lista" />
         </div>
 
         {/* Sort Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-auto sm:px-3 rounded-xl shrink-0">
-              <SlidersHorizontal className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-auto sm:px-3 rounded-xl shrink-0" aria-label="Ordenar cafes">
+              <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline ml-2">Ordenar</span>
             </Button>
           </DropdownMenuTrigger>
@@ -532,21 +533,25 @@ function ViewButton({
   active,
   onClick,
   icon: Icon,
+  label,
 }: {
   active: boolean
   onClick: () => void
   icon: React.ElementType
+  label: string
 }) {
   return (
     <button
       onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
       className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
         active
           ? "bg-background text-foreground shadow-sm"
           : "text-muted-foreground hover:text-foreground"
       }`}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-4 w-4" aria-hidden="true" />
     </button>
   )
 }
