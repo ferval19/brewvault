@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import { BrewForm } from "@/components/forms/brew-form"
+import { FavoritesSection } from "../favorites-section"
 import { getActiveBeans, getEquipment, getLastBrew, getFavoriteBrews } from "../actions"
 
 export const metadata = {
@@ -26,20 +27,22 @@ export default async function NewBrewPage({
   const favorites = favoritesResult.success ? favoritesResult.data : []
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div>
         <h1 className="text-2xl sm:text-3xl font-bold">Nueva Preparacion</h1>
         <p className="text-muted-foreground">
           Registra los parametros de tu extraccion
         </p>
       </div>
 
+      {/* Favorites Management Section */}
+      <FavoritesSection favorites={favorites} beans={beans} />
+
       <Suspense fallback={<div>Cargando...</div>}>
         <BrewForm
           beans={beans}
           equipment={equipment}
           defaultBrew={lastBrew}
-          favorites={favorites}
           defaultEquipmentId={equipmentId}
         />
       </Suspense>
