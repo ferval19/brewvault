@@ -272,16 +272,23 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
                   className="group relative flex flex-col items-center p-4 rounded-2xl border bg-card hover:bg-muted/50 hover:border-primary/50 hover:shadow-md transition-all duration-200 text-left"
                 >
                   {/* Delete button */}
-                  <button
-                    type="button"
+                  <div
+                    role="button"
+                    tabIndex={0}
                     onClick={(e) => {
                       e.stopPropagation()
                       handleDeleteFavorite(fav.id)
                     }}
-                    className="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-opacity"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.stopPropagation()
+                        handleDeleteFavorite(fav.id)
+                      }
+                    }}
+                    className="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 hover:bg-destructive/10 transition-opacity cursor-pointer"
                   >
                     <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
-                  </button>
+                  </div>
 
                   {/* Method Icon */}
                   <div className={`p-3 rounded-xl ${methodConfig.bgColor} mb-3`}>
