@@ -583,10 +583,10 @@ export const coffeeCatalog: CatalogCoffee[] = [
     variety: "Caturra",
     process: "Lavado",
     roast_level: "medium",
-    flavor_notes: ["Chocolate", "Caramelo", "Nuez", "Cuerpo cremoso"],
-    description: "Cafe colombiano con perfil clasico para espresso. 250g - 36 tazas.",
+    flavor_notes: ["Chocolate", "Caramelo"],
+    description: "Cafe colombiano con notas de chocolate y caramelo. Perfil clasico para espresso. 250g.",
     category: "specialty",
-    image_url: coffeeImages.colombia,
+    image_url: "https://dfrnt.coffee/cdn/shop/files/colombiaespresso-notas-de-chocolate-y-caramelo-880362.png?v=1770376476",
   },
   {
     id: "dfrnt-colombia-decaf",
