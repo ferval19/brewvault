@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { usePersistedState } from "@/hooks/use-persisted-state"
 import Link from "next/link"
 import {
   Search,
@@ -40,7 +41,7 @@ interface BrewsListClientProps {
 }
 
 export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListClientProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid")
+  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:brews-view", "grid")
   const [searchQuery, setSearchQuery] = useState("")
   const [filterMethod, setFilterMethod] = useState<string | null>(initialMethod || null)
   const [filterRating, setFilterRating] = useState<number | null>(null)

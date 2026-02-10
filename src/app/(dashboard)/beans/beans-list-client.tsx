@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { usePersistedState } from "@/hooks/use-persisted-state"
 import Link from "next/link"
 import {
   Search,
@@ -39,7 +40,7 @@ interface BeansListClientProps {
 }
 
 export function BeansListClient({ beans: allBeans, initialStatus }: BeansListClientProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid")
+  const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:beans-view", "grid")
   const [searchQuery, setSearchQuery] = useState("")
   const [filterStatus, setFilterStatus] = useState<StatusFilter>((initialStatus as StatusFilter) || "all")
   const [filterOrigin, setFilterOrigin] = useState<string | null>(null)
