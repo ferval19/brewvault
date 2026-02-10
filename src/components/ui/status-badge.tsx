@@ -18,7 +18,7 @@ const statusConfig: Record<Status, { label: string; className: string }> = {
   },
   archived: {
     label: "Archivado",
-    className: "bg-amber-500/90 text-white",
+    className: "bg-coffee-500/90 text-white",
   },
   wishlist: {
     label: "Wishlist",

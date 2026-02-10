@@ -47,7 +47,7 @@ export default async function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
+            <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-coffee-600" />
             <span className="font-semibold text-base sm:text-lg">BrewVault</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2">
@@ -80,18 +80,18 @@ export default async function Home() {
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 relative overflow-hidden">
         {/* Decorative illustrations */}
         <div className="absolute top-20 left-0 opacity-20 dark:opacity-10 hidden lg:block">
-          <V60Illustration className="w-32 h-32 text-amber-600" />
+          <V60Illustration className="w-32 h-32 text-coffee-600" />
         </div>
         <div className="absolute top-40 right-0 opacity-20 dark:opacity-10 hidden lg:block">
-          <ChemexIllustration className="w-28 h-28 text-amber-500" />
+          <ChemexIllustration className="w-28 h-28 text-coffee-500" />
         </div>
         <div className="absolute bottom-10 left-10 opacity-15 dark:opacity-10 hidden lg:block">
-          <CoffeeBeansIllustration className="w-24 h-24 text-amber-700" />
+          <CoffeeBeansIllustration className="w-24 h-24 text-coffee-700" />
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8">
-            <Star className="h-3 w-3 sm:h-4 sm:w-4 text-amber-500" />
+            <Star className="h-3 w-3 sm:h-4 sm:w-4 text-coffee-500" />
             Tu diario digital de cafe de especialidad
           </div>
 
@@ -125,9 +125,9 @@ export default async function Home() {
       {/* Visual Break - Coffee Illustration */}
       <section className="py-10 sm:py-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="relative bg-gradient-to-br from-amber-50 to-orange-50 dark:from-neutral-900 dark:to-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-12 overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-amber-200/30 to-orange-200/30 dark:from-amber-900/20 dark:to-orange-900/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-amber-200/30 to-yellow-200/30 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-full blur-3xl" />
+          <div className="relative bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-neutral-900 dark:to-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-12 overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-coffee-200/30 to-coffee-300/30 dark:from-coffee-900/20 dark:to-coffee-800/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-coffee-200/30 to-yellow-200/30 dark:from-coffee-900/20 dark:to-yellow-900/20 rounded-full blur-3xl" />
 
             <div className="relative grid grid-cols-3 gap-4 sm:gap-8 text-center">
               <div className="space-y-1 sm:space-y-3">
@@ -163,19 +163,19 @@ export default async function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
             <FeatureCard
               icon={<Coffee className="h-6 w-6" />}
-              illustration={<CoffeeBeansIllustration className="w-16 h-16 text-amber-600/60" />}
+              illustration={<CoffeeBeansIllustration className="w-16 h-16 text-coffee-600/60" />}
               title="Biblioteca de Cafes"
               description="Registra origen, variedad, proceso, notas de sabor y mas. Nunca olvides un cafe que te encanto."
             />
             <FeatureCard
               icon={<BookOpen className="h-6 w-6" />}
-              illustration={<V60Illustration className="w-16 h-16 text-amber-600/60" />}
+              illustration={<V60Illustration className="w-16 h-16 text-coffee-600/60" />}
               title="Diario de Preparaciones"
               description="Documenta cada variable: dosis, temperatura, tiempo, molienda. Replica tus mejores tazas."
             />
             <FeatureCard
               icon={<BarChart3 className="h-6 w-6" />}
-              illustration={<BarChart3 className="w-14 h-14 text-amber-600/40" />}
+              illustration={<BarChart3 className="w-14 h-14 text-coffee-600/40" />}
               title="Dashboard Analitico"
               description="Visualiza tu consumo, gasto, origenes favoritos y metodos preferidos en graficos claros."
             />
@@ -244,14 +244,14 @@ export default async function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded-3xl flex items-center justify-center overflow-hidden">
-                <V60Illustration className="w-48 h-48 text-amber-600/70 dark:text-amber-400/50" />
+              <div className="aspect-square bg-gradient-to-br from-coffee-100 to-coffee-200 dark:from-coffee-900/30 dark:to-coffee-800/30 rounded-3xl flex items-center justify-center overflow-hidden">
+                <V60Illustration className="w-48 h-48 text-coffee-600/70 dark:text-coffee-400/50" />
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
                 <ScaleIllustration className="w-20 h-20 text-emerald-600/60" />
               </div>
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40 rounded-xl flex items-center justify-center shadow-md overflow-hidden">
-                <CoffeeBeansIllustration className="w-16 h-16 text-amber-700/60" />
+              <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-coffee-900/40 dark:to-coffee-800/40 rounded-xl flex items-center justify-center shadow-md overflow-hidden">
+                <CoffeeBeansIllustration className="w-16 h-16 text-coffee-700/60" />
               </div>
             </div>
           </div>
@@ -283,7 +283,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:gap-6">
             <div className="flex items-center gap-2">
-              <Coffee className="h-5 w-5 text-amber-600" />
+              <Coffee className="h-5 w-5 text-coffee-600" />
               <span className="font-semibold">BrewVault</span>
             </div>
             <div className="flex items-center gap-6 sm:gap-8 text-sm text-neutral-600 dark:text-neutral-400">

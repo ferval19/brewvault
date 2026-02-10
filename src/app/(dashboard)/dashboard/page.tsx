@@ -71,7 +71,7 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4">
         <Link href="/brews/new">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-5 text-white hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 text-white hover:shadow-lg hover:shadow-coffee-500/25 transition-all duration-300 hover:-translate-y-0.5">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Coffee className="h-5 w-5" />
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
           </div>
         </Link>
         <Link href="/beans/new">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-5 text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-coffee-500 to-coffee-600 p-5 text-white hover:shadow-lg hover:shadow-coffee-500/25 transition-all duration-300 hover:-translate-y-0.5">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Package className="h-5 w-5" />
@@ -112,8 +112,8 @@ export default async function DashboardPage() {
                   {stats.beans.active} activos
                 </p>
               </div>
-              <div className="p-2 rounded-xl bg-amber-500/10">
-                <Package className="h-5 w-5 text-amber-500" />
+              <div className="p-2 rounded-xl bg-coffee-500/10">
+                <Package className="h-5 w-5 text-coffee-500" />
               </div>
             </div>
           </div>
@@ -131,8 +131,8 @@ export default async function DashboardPage() {
                   {stats.brews.thisMonth} este mes
                 </p>
               </div>
-              <div className="p-2 rounded-xl bg-orange-500/10">
-                <Coffee className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-xl bg-coffee-500/10">
+                <Coffee className="h-5 w-5 text-coffee-500" />
               </div>
             </div>
           </div>
@@ -177,8 +177,8 @@ export default async function DashboardPage() {
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Rating promedio</CardTitle>
-            <div className="p-2 rounded-xl bg-amber-500/10">
-              <Star className="h-4 w-4 text-amber-500" />
+            <div className="p-2 rounded-xl bg-coffee-500/10">
+              <Star className="h-4 w-4 text-coffee-500" />
             </div>
           </CardHeader>
           <CardContent>
@@ -188,7 +188,7 @@ export default async function DashboardPage() {
                   {stats.brews.averageRating.toFixed(1)}
                   <span className="text-lg text-muted-foreground">/5</span>
                 </div>
-                <div className="text-amber-500 mt-1">
+                <div className="text-coffee-500 mt-1">
                   {"★".repeat(Math.round(stats.brews.averageRating))}
                   {"☆".repeat(5 - Math.round(stats.brews.averageRating))}
                 </div>
@@ -203,8 +203,8 @@ export default async function DashboardPage() {
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Estado de cafes</CardTitle>
-            <div className="p-2 rounded-xl bg-amber-500/10">
-              <Package className="h-4 w-4 text-amber-500" />
+            <div className="p-2 rounded-xl bg-coffee-500/10">
+              <Package className="h-4 w-4 text-coffee-500" />
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -320,7 +320,7 @@ export default async function DashboardPage() {
                         </p>
                       </div>
                       {brew.rating && (
-                        <Badge variant="outline" className="text-amber-500 ml-2 rounded-full">
+                        <Badge variant="outline" className="text-coffee-500 ml-2 rounded-full">
                           {"★".repeat(brew.rating)}
                         </Badge>
                       )}

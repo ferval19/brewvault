@@ -48,7 +48,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       {/* Logo */}
       <div className="p-6 pb-4">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Coffee className="h-6 w-6 text-amber-600" />
+          <Coffee className="h-6 w-6 text-coffee-600" />
           <h1 className="text-lg font-bold text-neutral-900 dark:text-white">
             BrewVault
           </h1>
@@ -58,7 +58,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       {/* Quick Action */}
       <div className="px-4 mb-4">
         <Link href="/brews/new">
-          <Button className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20">
+          <Button className="w-full rounded-xl bg-gradient-to-r from-coffee-600 to-coffee-500 hover:from-coffee-700 hover:to-coffee-600 text-white shadow-md shadow-coffee-600/20">
             <Plus className="h-4 w-4 mr-2" />
             Nueva Brew
           </Button>
@@ -175,11 +175,11 @@ function NavLink({
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
         isActive
-          ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
+          ? "bg-coffee-500/10 text-coffee-700 dark:text-coffee-300"
           : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
       )}
     >
-      <item.icon className={cn("h-5 w-5", isActive && "text-amber-600 dark:text-amber-400")} />
+      <item.icon className={cn("h-5 w-5", isActive && "text-coffee-600 dark:text-coffee-400")} />
       {item.name}
     </Link>
   )

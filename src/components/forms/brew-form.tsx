@@ -253,8 +253,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, favorites = [], 
       {!brew && favorites.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-amber-500/10">
-              <Star className="h-4 w-4 text-amber-500" />
+            <div className="p-1.5 rounded-lg bg-coffee-500/10">
+              <Star className="h-4 w-4 text-coffee-500" />
             </div>
             <h3 className="font-medium">Mis favoritas</h3>
           </div>

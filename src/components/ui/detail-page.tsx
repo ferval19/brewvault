@@ -96,7 +96,7 @@ export function DetailPageHero({
 
 interface DetailBadgeProps {
   children: React.ReactNode
-  variant?: "default" | "amber"
+  variant?: "default" | "amber" | "coffee"
 }
 
 export function DetailBadge({ children, variant = "default" }: DetailBadgeProps) {
@@ -106,7 +106,7 @@ export function DetailBadge({ children, variant = "default" }: DetailBadgeProps)
         "px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-medium",
         variant === "default"
           ? "bg-white/90 dark:bg-black/60"
-          : "bg-amber-500/90 text-white"
+          : "bg-coffee-500/90 text-white"
       )}
     >
       {children}

@@ -127,7 +127,7 @@ export default async function BrewDetailPage({
         {/* Badges de rating y precio */}
         <div className="flex flex-wrap gap-2">
           {brew.rating && (
-            <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-coffee-500/10 text-coffee-600 dark:text-coffee-400">
               <Star className="h-4 w-4 fill-current" />
               <span className="font-semibold">{brew.rating}/5</span>
             </div>

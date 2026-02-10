@@ -14,8 +14,8 @@ import { equipmentTypes } from "@/lib/validations/equipment"
 
 const typeGradients: Record<string, string> = {
   grinder: "from-gray-500/20 to-slate-600/20",
-  brewer: "from-amber-500/20 to-orange-500/20",
-  espresso_machine: "from-stone-600/20 to-amber-700/20",
+  brewer: "from-coffee-500/20 to-coffee-600/20",
+  espresso_machine: "from-stone-600/20 to-coffee-700/20",
   kettle: "from-blue-500/20 to-cyan-500/20",
   scale: "from-emerald-500/20 to-teal-500/20",
   accessory: "from-purple-500/20 to-pink-500/20",

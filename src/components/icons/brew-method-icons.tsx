@@ -358,28 +358,28 @@ export const brewMethodConfig: Record<
 > = {
   espresso: {
     icon: EspressoIcon,
-    color: "text-amber-600",
-    bgColor: "bg-amber-500/10",
+    color: "text-coffee-600",
+    bgColor: "bg-coffee-500/10",
   },
   doppio: {
     icon: DoppioIcon,
-    color: "text-amber-700",
-    bgColor: "bg-amber-600/10",
+    color: "text-coffee-700",
+    bgColor: "bg-coffee-600/10",
   },
   lungo: {
     icon: LungoIcon,
-    color: "text-orange-600",
-    bgColor: "bg-orange-500/10",
+    color: "text-coffee-600",
+    bgColor: "bg-coffee-500/10",
   },
   americano: {
     icon: AmericanoIcon,
-    color: "text-orange-500",
-    bgColor: "bg-orange-400/10",
+    color: "text-coffee-500",
+    bgColor: "bg-coffee-400/10",
   },
   ristretto: {
     icon: RistrettoIcon,
-    color: "text-amber-800",
-    bgColor: "bg-amber-700/10",
+    color: "text-coffee-700",
+    bgColor: "bg-coffee-700/10",
   },
   v60: {
     icon: V60Icon,

@@ -142,7 +142,7 @@ export function BrewCard({ brew }: BrewCardProps) {
                   </span>
                 )}
                 {brew.rating && (
-                  <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                  <span className="px-2 py-1 rounded-full bg-coffee-500/90 backdrop-blur-sm text-white text-sm font-medium">
                     {"★".repeat(brew.rating)}
                   </span>
                 )}

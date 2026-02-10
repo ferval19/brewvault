@@ -49,8 +49,8 @@ export default async function CuppingNoteDetailPage({
     ? note.total_score >= 85
       ? "bg-green-500/90"
       : note.total_score >= 75
-      ? "bg-amber-500/90"
-      : "bg-orange-500/90"
+      ? "bg-coffee-500/90"
+      : "bg-coffee-600/90"
     : "bg-gray-500/90"
 
   return (
@@ -61,8 +61,8 @@ export default async function CuppingNoteDetailPage({
         subtitle={roasterName}
         backHref="/cupping"
         editHref={`/cupping/${id}/edit`}
-        gradient="from-amber-400/20 to-orange-500/20"
-        fallbackIcon={<ClipboardList className="h-24 w-24 text-amber-600 opacity-20" />}
+        gradient="from-coffee-400/20 to-coffee-500/20"
+        fallbackIcon={<ClipboardList className="h-24 w-24 text-coffee-600 opacity-20" />}
         badges={
           <>
             {methodLabel && <DetailBadge>{methodLabel}</DetailBadge>}
@@ -91,7 +91,7 @@ export default async function CuppingNoteDetailPage({
               </div>
               <div className="h-2.5 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-amber-500 rounded-full transition-all"
+                  className="h-full bg-coffee-500 rounded-full transition-all"
                   style={{ width: `${((score.value ?? 0) / 10) * 100}%` }}
                 />
               </div>
@@ -122,7 +122,7 @@ export default async function CuppingNoteDetailPage({
             <DetailRow
               label="Valoracion"
               value={
-                <span className="text-amber-500">
+                <span className="text-coffee-500">
                   {"★".repeat(note.brews.rating)}{"☆".repeat(5 - note.brews.rating)}
                 </span>
               }

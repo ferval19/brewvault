@@ -3,6 +3,11 @@
  *
  * Centralized design constants for consistent styling across the app.
  * Use these tokens instead of hardcoding values in components.
+ *
+ * Color Palette: Coffee-inspired tones
+ * - Primary: Rich espresso brown (#6f4726 / coffee-700)
+ * - Accent: Warm crema (#c9a05e / crema-500)
+ * - Highlight: Golden roast (#b8854a / coffee-400)
  */
 
 // Spacing tokens for consistent vertical rhythm
@@ -37,8 +42,8 @@ export const shadows = {
   card: "shadow-sm hover:shadow-lg",
   /** Elevated elements (modals, dropdowns) */
   elevated: "shadow-lg",
-  /** FAB and floating buttons */
-  fab: "shadow-lg shadow-amber-500/30",
+  /** FAB and floating buttons - coffee brown glow */
+  fab: "shadow-lg shadow-coffee-600/30",
   /** No shadow */
   none: "shadow-none",
 } as const
@@ -60,29 +65,39 @@ export const colors = {
   // Status colors
   status: {
     active: "bg-emerald-500/90 text-white",
-    finished: "bg-neutral-500/90 text-white",
-    archived: "bg-amber-500/90 text-white",
+    finished: "bg-stone-500/90 text-white",
+    archived: "bg-coffee-500/90 text-white",
     lowStock: "bg-red-500/90 text-white",
     wishlist: "bg-purple-500/90 text-white",
   },
   // Stock indicator colors
   stock: {
     good: "bg-green-500",
-    warning: "bg-amber-500",
+    warning: "bg-coffee-400",
     low: "bg-red-500",
   },
   // Score colors
   score: {
     excellent: "bg-green-500/90",
-    good: "bg-amber-500/90",
-    average: "bg-orange-500/90",
-    poor: "bg-gray-500/90",
+    good: "bg-crema-500/90",
+    average: "bg-coffee-400/90",
+    poor: "bg-stone-500/90",
   },
-  // Accent/brand colors
+  // Accent/brand colors - Coffee palette
   brand: {
-    primary: "bg-amber-500",
-    primaryGradient: "bg-gradient-to-r from-amber-500 to-orange-500",
-    primaryHover: "hover:from-amber-600 hover:to-orange-600",
+    primary: "bg-coffee-600",
+    primaryGradient: "bg-gradient-to-r from-coffee-600 to-coffee-500",
+    primaryHover: "hover:from-coffee-700 hover:to-coffee-600",
+    accent: "bg-crema-500",
+    accentGradient: "bg-gradient-to-r from-crema-500 to-coffee-400",
+  },
+  // Coffee-specific semantic colors
+  coffee: {
+    espresso: "text-coffee-900 dark:text-coffee-100",
+    roast: "text-coffee-700 dark:text-coffee-300",
+    crema: "text-crema-500 dark:text-crema-400",
+    light: "bg-coffee-50 dark:bg-coffee-900/20",
+    medium: "bg-coffee-100 dark:bg-coffee-800/30",
   },
 } as const
 

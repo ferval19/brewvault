@@ -23,11 +23,11 @@ const roastLevelLabels: Record<string, string> = {
 }
 
 const roastLevelGradients: Record<string, string> = {
-  light: "from-amber-200/30 to-yellow-300/30",
-  "medium-light": "from-amber-300/30 to-orange-300/30",
-  medium: "from-amber-400/30 to-orange-400/30",
-  "medium-dark": "from-amber-600/30 to-orange-600/30",
-  dark: "from-amber-800/30 to-stone-700/30",
+  light: "from-coffee-200/30 to-yellow-300/30",
+  "medium-light": "from-coffee-300/30 to-coffee-400/30",
+  medium: "from-coffee-400/30 to-coffee-500/30",
+  "medium-dark": "from-coffee-600/30 to-coffee-700/30",
+  dark: "from-coffee-700/30 to-stone-700/30",
 }
 
 const statusLabels: Record<string, string> = {
@@ -62,8 +62,8 @@ export default async function BeanDetailPage({
   })()
 
   const gradient = bean.roast_level
-    ? roastLevelGradients[bean.roast_level] || "from-amber-400/30 to-orange-400/30"
-    : "from-amber-400/30 to-orange-400/30"
+    ? roastLevelGradients[bean.roast_level] || "from-coffee-400/30 to-coffee-500/30"
+    : "from-coffee-400/30 to-coffee-500/30"
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
@@ -82,7 +82,7 @@ export default async function BeanDetailPage({
               <DetailBadge>{roastLevelLabels[bean.roast_level] || bean.roast_level}</DetailBadge>
             )}
             {bean.personal_rating && (
-              <DetailBadge variant="amber">
+              <DetailBadge variant="coffee">
                 <span className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-current" />
                   {bean.personal_rating}/5
@@ -115,7 +115,7 @@ export default async function BeanDetailPage({
                 className={cn(
                   "h-full rounded-full transition-all",
                   stockPercentage > 50 && "bg-green-500",
-                  stockPercentage <= 50 && stockPercentage > 20 && "bg-amber-500",
+                  stockPercentage <= 50 && stockPercentage > 20 && "bg-coffee-500",
                   stockPercentage <= 20 && "bg-red-500"
                 )}
                 style={{ width: `${stockPercentage}%` }}

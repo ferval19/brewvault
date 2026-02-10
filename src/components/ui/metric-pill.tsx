@@ -15,7 +15,7 @@ const variantStyles = {
   muted: "bg-muted/30 text-muted-foreground",
   highlight: "bg-primary/10 text-primary",
   success: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  warning: "bg-coffee-500/10 text-coffee-600 dark:text-coffee-400",
 }
 
 const sizeStyles = {

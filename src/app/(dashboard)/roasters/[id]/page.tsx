@@ -31,7 +31,7 @@ export default async function RoasterDetailPage({
         title={roaster.name}
         backHref="/roasters"
         editHref={`/roasters/${id}/edit`}
-        gradient="from-stone-600/20 to-amber-700/20"
+        gradient="from-stone-600/20 to-coffee-700/20"
         fallbackIcon={<Coffee className="h-24 w-24 text-stone-600 opacity-20" />}
         badges={
           <>
@@ -44,7 +44,7 @@ export default async function RoasterDetailPage({
               </DetailBadge>
             )}
             {roaster.rating && (
-              <DetailBadge variant="amber">
+              <DetailBadge variant="coffee">
                 <span className="flex items-center gap-1">
                   <Star className="h-4 w-4 fill-current" />
                   {roaster.rating}/5
