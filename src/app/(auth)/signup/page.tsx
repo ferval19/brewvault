@@ -69,8 +69,13 @@ export default function SignupPage() {
         )}
 
         {success && (
-          <Alert>
-            <AlertDescription>{success}</AlertDescription>
+          <Alert className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-900">
+            <AlertDescription className="text-green-800 dark:text-green-200">
+              <p className="font-medium">{success}</p>
+              <p className="text-sm mt-1 opacity-80">
+                Revisa tambien tu carpeta de spam si no lo encuentras.
+              </p>
+            </AlertDescription>
           </Alert>
         )}
 

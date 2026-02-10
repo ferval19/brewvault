@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,7 +18,16 @@ import { loginSchema, type LoginInput } from "@/lib/validations/auth"
 import { login, signInWithOAuth } from "../actions"
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
+
+  // Handle callback errors from URL
+  useEffect(() => {
+    const errorParam = searchParams.get("error")
+    if (errorParam === "auth_callback_error") {
+      setError("Error al verificar tu cuenta. El enlace puede haber expirado. Intenta registrarte de nuevo.")
+    }
+  }, [searchParams])
   const [isLoading, setIsLoading] = useState(false)
   const [isOAuthLoading, setIsOAuthLoading] = useState<string | null>(null)
 
