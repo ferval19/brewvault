@@ -181,13 +181,13 @@ export default async function Home() {
             />
             <FeatureCard
               icon={<Timer className="h-6 w-6" />}
-              illustration={<ScaleIllustration className="w-16 h-16 text-emerald-600/60" />}
+              illustration={<ScaleIllustration className="w-16 h-16 text-coffee-600/60" />}
               title="Control de Inventario"
               description="Sigue el stock de tus cafes con alertas de frescura y agotamiento automaticas."
             />
             <FeatureCard
               icon={<Star className="h-6 w-6" />}
-              illustration={<GrinderIllustration className="w-16 h-16 text-gray-600/60" />}
+              illustration={<GrinderIllustration className="w-16 h-16 text-coffee-600/60" />}
               title="Notas de Cata SCA"
               description="Evalua con el protocolo profesional: fragancia, acidez, cuerpo, balance y mas."
             />
@@ -248,7 +248,7 @@ export default async function Home() {
                 <V60Illustration className="w-48 h-48 text-coffee-600/70 dark:text-coffee-400/50" />
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
-                <ScaleIllustration className="w-20 h-20 text-emerald-600/60" />
+                <ScaleIllustration className="w-20 h-20 text-coffee-500/60" />
               </div>
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-coffee-900/40 dark:to-coffee-800/40 rounded-xl flex items-center justify-center shadow-md overflow-hidden">
                 <CoffeeBeansIllustration className="w-16 h-16 text-coffee-700/60" />
