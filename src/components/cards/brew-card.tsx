@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, Clock, Thermometer, Euro } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, Clock, Thermometer, Euro, Check } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { MetricPill, MetricRow } from "@/components/ui/metric-pill"
 import {
@@ -21,6 +22,9 @@ import type { Brew } from "@/app/(dashboard)/brews/actions"
 
 interface BrewCardProps {
   brew: Brew
+  selectionMode?: boolean
+  selected?: boolean
+  onSelect?: () => void
 }
 
 function formatTime(seconds: number): string {
@@ -53,7 +57,7 @@ function calculateBrewPrice(brew: Brew): number | null {
   return pricePerGram * dose_grams
 }
 
-export function BrewCard({ brew }: BrewCardProps) {
+export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const methodConfig = getBrewMethodConfig(brew.brew_method)
@@ -62,10 +66,24 @@ export function BrewCard({ brew }: BrewCardProps) {
   const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
   const brewPrice = calculateBrewPrice(brew)
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (selectionMode && onSelect) {
+      e.preventDefault()
+      onSelect()
+    }
+  }
+
   return (
     <>
-      <Link href={`/brews/${brew.id}`} className="group block">
-        <div className="relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+      <Link
+        href={selectionMode ? "#" : `/brews/${brew.id}`}
+        className="group block"
+        onClick={handleClick}
+      >
+        <div className={cn(
+          "relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5",
+          selected && "ring-2 ring-primary border-primary"
+        )}>
           {/* Header with image or gradient */}
           <div className={`relative aspect-[16/10] bg-gradient-to-br ${methodConfig.gradient}`}>
             {brew.image_url ? (
@@ -85,45 +103,62 @@ export function BrewCard({ brew }: BrewCardProps) {
 
             {/* Top bar with actions */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
-                {formatDate(brew.brewed_at)}
-              </span>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+              <div className="flex items-center gap-2">
+                {/* Selection checkbox */}
+                {selectionMode && (
+                  <div
+                    className={cn(
+                      "w-6 h-6 rounded-full flex items-center justify-center transition-all",
+                      selected
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-white/90 dark:bg-black/60 backdrop-blur-sm"
+                    )}
                   >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href={`/brews/${brew.id}`}>
-                      <Eye className="mr-2 h-4 w-4" />
-                      Ver detalle
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href={`/brews/${brew.id}/edit`}>
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Editar
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="text-destructive"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setShowDeleteDialog(true)
-                    }}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Eliminar
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    {selected && <Check className="h-4 w-4" />}
+                  </div>
+                )}
+                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                  {formatDate(brew.brewed_at)}
+                </span>
+              </div>
+              {!selectionMode && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href={`/brews/${brew.id}`}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        Ver detalle
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/brews/${brew.id}/edit`}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Editar
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setShowDeleteDialog(true)
+                      }}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
             {/* Bottom overlay with method badge */}

@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Clock, Thermometer, Euro, MoreHorizontal, Pencil, Trash2, Eye, ChevronRight } from "lucide-react"
+import { Clock, Thermometer, Euro, MoreHorizontal, Pencil, Trash2, Eye, ChevronRight, Check } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -18,6 +19,9 @@ import type { Brew } from "./actions"
 
 interface BrewListItemProps {
   brews: Brew[]
+  selectionMode?: boolean
+  selectedIds?: Set<string>
+  onSelect?: (id: string) => void
 }
 
 function formatTime(seconds: number): string {
@@ -59,7 +63,7 @@ function calculateBrewPrice(brew: Brew): number | null {
   return (dose_grams / beans.weight_grams) * beans.price
 }
 
-export function BrewListItem({ brews }: BrewListItemProps) {
+export function BrewListItem({ brews, selectionMode, selectedIds, onSelect }: BrewListItemProps) {
   // Group brews by date
   const groupedBrews = brews.reduce((groups, brew) => {
     const key = getDateKey(brew.brewed_at)
@@ -95,7 +99,13 @@ export function BrewListItem({ brews }: BrewListItemProps) {
           {/* Brews List */}
           <div className="rounded-2xl border bg-card divide-y overflow-hidden">
             {group.brews.map((brew) => (
-              <ListRow key={brew.id} brew={brew} />
+              <ListRow
+                key={brew.id}
+                brew={brew}
+                selectionMode={selectionMode}
+                selected={selectedIds?.has(brew.id)}
+                onSelect={onSelect ? () => onSelect(brew.id) : undefined}
+              />
             ))}
           </div>
         </div>
@@ -104,19 +114,51 @@ export function BrewListItem({ brews }: BrewListItemProps) {
   )
 }
 
-function ListRow({ brew }: { brew: Brew }) {
+function ListRow({
+  brew,
+  selectionMode,
+  selected,
+  onSelect,
+}: {
+  brew: Brew
+  selectionMode?: boolean
+  selected?: boolean
+  onSelect?: () => void
+}) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const methodConfig = getBrewMethodConfig(brew.brew_method)
   const MethodIcon = methodConfig.icon
   const brewPrice = calculateBrewPrice(brew)
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (selectionMode && onSelect) {
+      e.preventDefault()
+      onSelect()
+    }
+  }
+
   return (
     <>
-      <div className="group relative">
+      <div className={cn("group relative", selected && "bg-primary/5")}>
         <Link
-          href={`/brews/${brew.id}`}
+          href={selectionMode ? "#" : `/brews/${brew.id}`}
           className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
+          onClick={handleClick}
         >
+          {/* Selection checkbox */}
+          {selectionMode && (
+            <div
+              className={cn(
+                "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all border-2",
+                selected
+                  ? "bg-primary border-primary text-primary-foreground"
+                  : "border-muted-foreground/30"
+              )}
+            >
+              {selected && <Check className="h-4 w-4" />}
+            </div>
+          )}
+
           {/* Method Icon */}
           <div className={`p-2.5 rounded-xl ${methodConfig.bgColor} shrink-0`}>
             <MethodIcon className={`h-5 w-5 ${methodConfig.color}`} />
@@ -175,44 +217,46 @@ function ListRow({ brew }: { brew: Brew }) {
             )}
           </div>
 
-          <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+          {!selectionMode && <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />}
         </Link>
 
-        {/* Actions Button */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href={`/brews/${brew.id}`}>
-                  <Eye className="mr-2 h-4 w-4" />
-                  Ver detalle
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/brews/${brew.id}/edit`}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Editar
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setShowDeleteDialog(true)
-                }}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Actions Button - hidden in selection mode */}
+        {!selectionMode && (
+          <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href={`/brews/${brew.id}`}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    Ver detalle
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/brews/${brew.id}/edit`}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Editar
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setShowDeleteDialog(true)
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Eliminar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </div>
 
       <DeleteBrewDialog

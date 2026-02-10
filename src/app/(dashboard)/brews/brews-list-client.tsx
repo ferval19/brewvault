@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useTransition } from "react"
 import { usePersistedState } from "@/hooks/use-persisted-state"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
   Search,
@@ -13,6 +14,10 @@ import {
   SlidersHorizontal,
   ChevronDown,
   X,
+  CheckSquare,
+  Square,
+  Trash2,
+  Loader2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -25,11 +30,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { BrewCard } from "@/components/cards/brew-card"
 import { BrewListItem } from "./brew-list-item"
 import { BrewTimeline } from "./brew-timeline"
 import { BrewsByBean } from "./brews-by-bean"
 import { getBrewMethodConfig } from "@/lib/brew-methods"
+import { deleteBrews } from "./actions"
 import type { Brew } from "./actions"
 
 type ViewMode = "grid" | "list" | "timeline" | "grouped"
@@ -49,12 +65,19 @@ function getDefaultViewMode(): ViewMode {
 }
 
 export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListClientProps) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:brews-view", getDefaultViewMode)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterMethod, setFilterMethod] = useState<string | null>(initialMethod || null)
   const [filterRating, setFilterRating] = useState<number | null>(null)
   const [sortBy, setSortBy] = useState<SortOption>("date")
   const [sortDesc, setSortDesc] = useState(true)
+
+  // Selection state
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   // Get unique methods used
   const usedMethods = useMemo(() => {
@@ -121,6 +144,51 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
     setFilterRating(null)
   }
 
+  // Selection helpers
+  function toggleSelection(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  function selectAll() {
+    setSelectedIds(new Set(filteredBrews.map((b) => b.id)))
+  }
+
+  function clearSelection() {
+    setSelectedIds(new Set())
+    setSelectionMode(false)
+  }
+
+  function toggleSelectionMode() {
+    if (selectionMode) {
+      clearSelection()
+    } else {
+      setSelectionMode(true)
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selectedIds.size === 0) return
+
+    startTransition(async () => {
+      const result = await deleteBrews(Array.from(selectedIds))
+      if (result.success) {
+        clearSelection()
+        router.refresh()
+      }
+    })
+    setShowDeleteDialog(false)
+  }
+
+  const allSelected = filteredBrews.length > 0 && selectedIds.size === filteredBrews.length
+
   return (
     <div className="space-y-3 sm:space-y-6">
       {/* Header */}
@@ -128,16 +196,47 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
         <div>
           <h1 className="text-xl sm:text-3xl font-bold">Mis Preparaciones</h1>
           <p className="text-sm text-muted-foreground">
-            {filteredBrews.length} {filteredBrews.length === 1 ? "preparacion" : "preparaciones"}
-            {hasActiveFilters && filteredBrews.length !== allBrews.length && ` de ${allBrews.length}`}
+            {selectionMode && selectedIds.size > 0 ? (
+              <span className="text-primary font-medium">
+                {selectedIds.size} {selectedIds.size === 1 ? "seleccionada" : "seleccionadas"}
+              </span>
+            ) : (
+              <>
+                {filteredBrews.length} {filteredBrews.length === 1 ? "preparacion" : "preparaciones"}
+                {hasActiveFilters && filteredBrews.length !== allBrews.length && ` de ${allBrews.length}`}
+              </>
+            )}
           </p>
         </div>
-        <Link href="/brews/new" className="hidden sm:block">
-          <Button size="lg" className="rounded-xl">
-            <Plus className="mr-2 h-5 w-5" />
-            Nueva preparacion
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {/* Selection mode toggle */}
+          {allBrews.length > 0 && (
+            <Button
+              variant={selectionMode ? "default" : "outline"}
+              size="sm"
+              className="rounded-xl"
+              onClick={toggleSelectionMode}
+            >
+              {selectionMode ? (
+                <>
+                  <X className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Cancelar</span>
+                </>
+              ) : (
+                <>
+                  <CheckSquare className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Seleccionar</span>
+                </>
+              )}
+            </Button>
+          )}
+          <Link href="/brews/new" className="hidden sm:block">
+            <Button size="lg" className="rounded-xl">
+              <Plus className="mr-2 h-5 w-5" />
+              Nueva preparacion
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Search + Controls Row */}
@@ -273,16 +372,51 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
         <EmptyState hasFilter={!!hasActiveFilters} onClear={clearFilters} />
       ) : (
         <>
+          {/* Select all row when in selection mode */}
+          {selectionMode && (
+            <div className="flex items-center gap-2 py-2 px-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={allSelected ? clearSelection : selectAll}
+                className="text-muted-foreground"
+              >
+                {allSelected ? (
+                  <>
+                    <CheckSquare className="h-4 w-4 mr-2 text-primary" />
+                    Deseleccionar todo
+                  </>
+                ) : (
+                  <>
+                    <Square className="h-4 w-4 mr-2" />
+                    Seleccionar todo ({filteredBrews.length})
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
+
           {viewMode === "grid" && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredBrews.map((brew) => (
-                <BrewCard key={brew.id} brew={brew} />
+                <BrewCard
+                  key={brew.id}
+                  brew={brew}
+                  selectionMode={selectionMode}
+                  selected={selectedIds.has(brew.id)}
+                  onSelect={() => toggleSelection(brew.id)}
+                />
               ))}
             </div>
           )}
 
           {viewMode === "list" && (
-            <BrewListItem brews={filteredBrews} />
+            <BrewListItem
+              brews={filteredBrews}
+              selectionMode={selectionMode}
+              selectedIds={selectedIds}
+              onSelect={toggleSelection}
+            />
           )}
 
           {viewMode === "timeline" && (
@@ -294,6 +428,58 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
           )}
         </>
       )}
+
+      {/* Bulk Action Bar */}
+      {selectionMode && selectedIds.size > 0 && (
+        <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="flex items-center gap-3 px-4 py-3 bg-card border rounded-2xl shadow-lg">
+            <span className="text-sm font-medium">
+              {selectedIds.size} {selectedIds.size === 1 ? "seleccionada" : "seleccionadas"}
+            </span>
+            <div className="w-px h-6 bg-border" />
+            <Button
+              variant="destructive"
+              size="sm"
+              className="rounded-xl"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Eliminar
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar preparaciones</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estas seguro de que quieres eliminar {selectedIds.size}{" "}
+              {selectedIds.size === 1 ? "preparacion" : "preparaciones"}?
+              Esta accion no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              disabled={isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Eliminando...
+                </>
+              ) : (
+                "Eliminar"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
     </div>
   )
