@@ -153,9 +153,6 @@ export function BeanCard({ bean }: BeanCardProps) {
               <h3 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors line-clamp-2">
                 {bean.name}
               </h3>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                {bean.roasters?.name || "Sin tostador"}
-              </p>
             </div>
 
             {/* Stock bar */}

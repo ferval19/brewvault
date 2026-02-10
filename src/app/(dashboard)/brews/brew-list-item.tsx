@@ -108,7 +108,6 @@ function ListRow({ brew }: { brew: Brew }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const methodConfig = getBrewMethodConfig(brew.brew_method)
   const MethodIcon = methodConfig.icon
-  const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
   const brewPrice = calculateBrewPrice(brew)
 
   return (
@@ -130,13 +129,13 @@ function ListRow({ brew }: { brew: Brew }) {
                 {brew.beans?.name || "Cafe desconocido"}
               </h3>
               {brew.rating && (
-                <span className="text-amber-500 text-sm shrink-0">
+                <span className="text-coffee-500 text-sm shrink-0">
                   {"★".repeat(brew.rating)}
                 </span>
               )}
             </div>
             <p className="text-sm text-muted-foreground truncate">
-              {brew.beans?.roasters?.name || "Sin tostador"} · {methodConfig.label}
+              {methodConfig.label}
             </p>
           </div>
 
@@ -144,9 +143,6 @@ function ListRow({ brew }: { brew: Brew }) {
           <div className="hidden md:flex items-center gap-4 text-sm shrink-0">
             <span className="font-mono">
               {brew.dose_grams}g → {brew.yield_grams || brew.water_grams}g
-            </span>
-            <span className="text-muted-foreground font-mono">
-              1:{ratio}
             </span>
             {brew.total_time_seconds && (
               <span className="flex items-center gap-1 text-muted-foreground">
@@ -169,9 +165,14 @@ function ListRow({ brew }: { brew: Brew }) {
           </div>
 
           {/* Metrics - Mobile (compact) */}
-          <div className="flex md:hidden items-center gap-2 text-xs text-muted-foreground shrink-0">
-            <span className="font-mono">{brew.dose_grams}g</span>
-            <span>1:{ratio}</span>
+          <div className="flex md:hidden items-center gap-2 text-xs shrink-0">
+            <span className="font-mono text-muted-foreground">{brew.dose_grams}g</span>
+            {brewPrice !== null && (
+              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                <Euro className="h-3 w-3" />
+                {brewPrice.toFixed(2)}
+              </span>
+            )}
           </div>
 
           <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />

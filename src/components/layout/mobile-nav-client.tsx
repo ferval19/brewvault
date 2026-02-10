@@ -69,10 +69,10 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
             active={pathname === "/brews" || pathname.startsWith("/brews/")}
           />
 
-          {/* FAB - Nueva Brew */}
+          {/* FAB - Contextual: Nuevo Café en /beans, Nueva Brew en el resto */}
           <div className="relative flex items-center justify-center flex-1 h-full">
             <Link
-              href="/brews/new"
+              href={pathname.startsWith("/beans") ? "/beans/new" : "/brews/new"}
               className="absolute -top-7 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-coffee-600 to-coffee-500 text-white shadow-lg shadow-coffee-600/30 hover:shadow-xl hover:shadow-coffee-600/40 hover:scale-105 transition-all z-10"
             >
               <Plus className="h-7 w-7" />

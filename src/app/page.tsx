@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import {
   Coffee,
   BookOpen,
@@ -29,13 +30,9 @@ export default async function Home() {
     const { data } = await supabase.auth.getUser()
     user = data?.user
 
+    // Si el usuario está logueado, redirigir al dashboard
     if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", user.id)
-        .single()
-      userName = profile?.full_name || user.email?.split("@")[0] || null
+      redirect("/dashboard")
     }
   } catch {
     // Si falla Supabase, mostramos la version no autenticada

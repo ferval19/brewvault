@@ -157,9 +157,6 @@ export function BrewCard({ brew }: BrewCardProps) {
               <h3 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
                 {brew.beans?.name || "Cafe desconocido"}
               </h3>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                {brew.beans?.roasters?.name || "Sin tostador"}
-              </p>
             </div>
 
             {/* Metrics row */}
@@ -167,11 +164,6 @@ export function BrewCard({ brew }: BrewCardProps) {
               <MetricPill
                 value={`${brew.dose_grams}g → ${brew.yield_grams || brew.water_grams}g`}
                 size="sm"
-              />
-              <MetricPill
-                value={`1:${ratio}`}
-                size="sm"
-                variant="muted"
               />
               {brew.total_time_seconds && (
                 <MetricPill

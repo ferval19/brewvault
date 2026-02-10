@@ -44,15 +44,17 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
               <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis
                   dataKey="week"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
+                  className="fill-muted-foreground"
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   allowDecimals={false}
+                  className="fill-muted-foreground"
                 />
                 <Tooltip
                   contentStyle={{
@@ -60,7 +62,9 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
                     fontSize: "12px",
+                    color: "hsl(var(--foreground))",
                   }}
+                  labelStyle={{ color: "hsl(var(--foreground))" }}
                   formatter={(value) => [`${value} brews`, "Preparaciones"]}
                 />
                 <Bar
@@ -155,9 +159,10 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
                 </defs>
                 <XAxis
                   dataKey="week"
-                  tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
+                  className="fill-muted-foreground"
                 />
                 <YAxis hide />
                 <Tooltip
@@ -166,7 +171,9 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
                     fontSize: "12px",
+                    color: "hsl(var(--foreground))",
                   }}
+                  labelStyle={{ color: "hsl(var(--foreground))" }}
                   formatter={(value) => [`${value}g`, "Cafe usado"]}
                 />
                 <Area
@@ -218,17 +225,19 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
                 <XAxis
                   type="number"
                   domain={[0, 5]}
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
+                  className="fill-muted-foreground"
                 />
                 <YAxis
                   type="category"
                   dataKey="methodLabel"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   width={80}
+                  className="fill-muted-foreground"
                 />
                 <Tooltip
                   contentStyle={{
@@ -236,7 +245,9 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
                     fontSize: "12px",
+                    color: "hsl(var(--foreground))",
                   }}
+                  labelStyle={{ color: "hsl(var(--foreground))" }}
                   formatter={(value, _name, props) => [
                     `${value}/5 (${(props.payload as { count: number }).count} brews)`,
                     "Rating promedio",
