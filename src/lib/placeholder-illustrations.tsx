@@ -11,7 +11,7 @@ export function CoffeeBeansIllustration({ className }: IllustrationProps) {
       viewBox="0 0 120 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-amber-600/40", className)}
+      className={cn("text-coffee-600/30", className)}
     >
       {/* Main bean */}
       <ellipse
@@ -69,7 +69,7 @@ export function V60Illustration({ className }: IllustrationProps) {
       viewBox="0 0 120 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-amber-600/40", className)}
+      className={cn("text-coffee-600/30", className)}
     >
       {/* Dripper cone */}
       <path
@@ -553,7 +553,7 @@ export function KalitaIllustration({ className }: IllustrationProps) {
       viewBox="0 0 120 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-amber-600/40", className)}
+      className={cn("text-coffee-600/30", className)}
     >
       {/* Flat bottom dripper */}
       <path
