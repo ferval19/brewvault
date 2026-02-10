@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useTransition } from "react"
 import { usePersistedState } from "@/hooks/use-persisted-state"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
   Search,
@@ -14,6 +15,10 @@ import {
   MapPin,
   Calendar,
   Package,
+  CheckSquare,
+  Square,
+  Trash2,
+  Loader2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,8 +31,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { BeanCard } from "./bean-card"
 import { BeanListItem } from "./bean-list-item"
+import { deleteBeans } from "./actions"
 import type { Bean } from "./actions"
 
 type ViewMode = "grid" | "list"
@@ -48,6 +64,8 @@ function getDefaultViewMode(): ViewMode {
 }
 
 export function BeansListClient({ beans: allBeans, initialStatus }: BeansListClientProps) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [viewMode, setViewMode] = usePersistedState<ViewMode>("brewvault:beans-view", getDefaultViewMode)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterStatus, setFilterStatus] = useState<StatusFilter>((initialStatus as StatusFilter) || "all")
@@ -55,6 +73,11 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
   const [filterRating, setFilterRating] = useState<number | null>(null)
   const [sortBy, setSortBy] = useState<SortOption>("roast_date")
   const [sortDesc, setSortDesc] = useState(true)
+
+  // Selection state
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   // Get unique origins
   const origins = useMemo(() => {
@@ -148,6 +171,51 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
     setFilterRating(null)
   }
 
+  // Selection helpers
+  function toggleSelection(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
+
+  function selectAll() {
+    setSelectedIds(new Set(filteredBeans.map((b) => b.id)))
+  }
+
+  function clearSelection() {
+    setSelectedIds(new Set())
+    setSelectionMode(false)
+  }
+
+  function toggleSelectionMode() {
+    if (selectionMode) {
+      clearSelection()
+    } else {
+      setSelectionMode(true)
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selectedIds.size === 0) return
+
+    startTransition(async () => {
+      const result = await deleteBeans(Array.from(selectedIds))
+      if (result.success) {
+        clearSelection()
+        router.refresh()
+      }
+    })
+    setShowDeleteDialog(false)
+  }
+
+  const allSelected = filteredBeans.length > 0 && selectedIds.size === filteredBeans.length
+
   return (
     <div className="space-y-3 sm:space-y-6">
       {/* Header */}
@@ -155,16 +223,47 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
         <div>
           <h1 className="text-xl sm:text-3xl font-bold">Mis Cafés</h1>
           <p className="text-sm text-muted-foreground">
-            {filteredBeans.length} {filteredBeans.length === 1 ? "café" : "cafés"}
-            {hasActiveFilters && filteredBeans.length !== allBeans.length && ` de ${allBeans.length}`}
+            {selectionMode && selectedIds.size > 0 ? (
+              <span className="text-primary font-medium">
+                {selectedIds.size} {selectedIds.size === 1 ? "seleccionado" : "seleccionados"}
+              </span>
+            ) : (
+              <>
+                {filteredBeans.length} {filteredBeans.length === 1 ? "café" : "cafés"}
+                {hasActiveFilters && filteredBeans.length !== allBeans.length && ` de ${allBeans.length}`}
+              </>
+            )}
           </p>
         </div>
-        <Link href="/beans/new" className="hidden sm:block">
-          <Button size="lg" className="rounded-xl">
-            <Plus className="mr-2 h-5 w-5" />
-            Nuevo cafe
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {/* Selection mode toggle */}
+          {allBeans.length > 0 && (
+            <Button
+              variant={selectionMode ? "default" : "outline"}
+              size="sm"
+              className="rounded-xl"
+              onClick={toggleSelectionMode}
+            >
+              {selectionMode ? (
+                <>
+                  <X className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Cancelar</span>
+                </>
+              ) : (
+                <>
+                  <CheckSquare className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Seleccionar</span>
+                </>
+              )}
+            </Button>
+          )}
+          <Link href="/beans/new" className="hidden sm:block">
+            <Button size="lg" className="rounded-xl">
+              <Plus className="mr-2 h-5 w-5" />
+              Nuevo cafe
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Search + Controls Row */}
@@ -324,19 +423,106 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
         <EmptyState hasFilter={!!hasActiveFilters} onClear={clearFilters} hasAnyBeans={allBeans.length > 0} />
       ) : (
         <>
+          {/* Select all row when in selection mode */}
+          {selectionMode && (
+            <div className="flex items-center gap-2 py-2 px-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={allSelected ? clearSelection : selectAll}
+                className="text-muted-foreground"
+              >
+                {allSelected ? (
+                  <>
+                    <CheckSquare className="h-4 w-4 mr-2 text-primary" />
+                    Deseleccionar todo
+                  </>
+                ) : (
+                  <>
+                    <Square className="h-4 w-4 mr-2" />
+                    Seleccionar todo ({filteredBeans.length})
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
+
           {viewMode === "grid" && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredBeans.map((bean) => (
-                <BeanCard key={bean.id} bean={bean} />
+                <BeanCard
+                  key={bean.id}
+                  bean={bean}
+                  selectionMode={selectionMode}
+                  selected={selectedIds.has(bean.id)}
+                  onSelect={() => toggleSelection(bean.id)}
+                />
               ))}
             </div>
           )}
 
           {viewMode === "list" && (
-            <BeanListItem beans={filteredBeans} />
+            <BeanListItem
+              beans={filteredBeans}
+              selectionMode={selectionMode}
+              selectedIds={selectedIds}
+              onSelect={toggleSelection}
+            />
           )}
         </>
       )}
+
+      {/* Bulk Action Bar */}
+      {selectionMode && selectedIds.size > 0 && (
+        <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="flex items-center gap-3 px-4 py-3 bg-card border rounded-2xl shadow-lg">
+            <span className="text-sm font-medium">
+              {selectedIds.size} {selectedIds.size === 1 ? "seleccionado" : "seleccionados"}
+            </span>
+            <div className="w-px h-6 bg-border" />
+            <Button
+              variant="destructive"
+              size="sm"
+              className="rounded-xl"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Eliminar
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar cafés</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estas seguro de que quieres eliminar {selectedIds.size}{" "}
+              {selectedIds.size === 1 ? "café" : "cafés"}?
+              Esta accion no se puede deshacer y se eliminaran tambien las preparaciones asociadas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              disabled={isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Eliminando...
+                </>
+              ) : (
+                "Eliminar"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
     </div>
   )

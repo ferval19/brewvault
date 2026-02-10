@@ -12,6 +12,7 @@ import {
   Package,
   Calendar,
   AlertTriangle,
+  Check,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -29,6 +30,9 @@ import type { Bean } from "./actions"
 
 interface BeanListItemProps {
   beans: Bean[]
+  selectionMode?: boolean
+  selectedIds?: Set<string>
+  onSelect?: (id: string) => void
 }
 
 function formatDate(dateStr: string | null): string {
@@ -47,7 +51,7 @@ function getDaysSinceRoast(dateStr: string | null): number | null {
   return Math.floor((now.getTime() - roastDate.getTime()) / (1000 * 60 * 60 * 24))
 }
 
-export function BeanListItem({ beans }: BeanListItemProps) {
+export function BeanListItem({ beans, selectionMode, selectedIds, onSelect }: BeanListItemProps) {
   // Group beans by roaster
   const groupedBeans = beans.reduce((groups, bean) => {
     const roasterName = bean.roasters?.name || "Sin tostador"
@@ -82,7 +86,13 @@ export function BeanListItem({ beans }: BeanListItemProps) {
           {/* Beans List */}
           <div className="rounded-2xl border bg-card divide-y overflow-hidden">
             {roasterBeans.map((bean) => (
-              <ListRow key={bean.id} bean={bean} />
+              <ListRow
+                key={bean.id}
+                bean={bean}
+                selectionMode={selectionMode}
+                selected={selectedIds?.has(bean.id)}
+                onSelect={onSelect ? () => onSelect(bean.id) : undefined}
+              />
             ))}
           </div>
         </div>
@@ -91,7 +101,17 @@ export function BeanListItem({ beans }: BeanListItemProps) {
   )
 }
 
-function ListRow({ bean }: { bean: Bean }) {
+function ListRow({
+  bean,
+  selectionMode,
+  selected,
+  onSelect,
+}: {
+  bean: Bean
+  selectionMode?: boolean
+  selected?: boolean
+  onSelect?: () => void
+}) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const daysSinceRoast = getDaysSinceRoast(bean.roast_date)
   const isLowStock = bean.current_weight_grams !== null &&
@@ -104,14 +124,36 @@ function ListRow({ bean }: { bean: Bean }) {
       ? Math.round((bean.current_weight_grams / bean.weight_grams) * 100)
       : null
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (selectionMode && onSelect) {
+      e.preventDefault()
+      onSelect()
+    }
+  }
+
   return (
     <>
-      <div className="group relative">
+      <div className={cn("group relative", selected && "bg-primary/5")}>
         <Link
-          href={`/beans/${bean.id}`}
+          href={selectionMode ? "#" : `/beans/${bean.id}`}
           className="block p-4 hover:bg-muted/50 transition-colors"
+          onClick={handleClick}
         >
           <div className="flex items-center gap-4">
+            {/* Selection checkbox */}
+            {selectionMode && (
+              <div
+                className={cn(
+                  "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all border-2",
+                  selected
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "border-muted-foreground/30"
+                )}
+              >
+                {selected && <Check className="h-4 w-4" />}
+              </div>
+            )}
+
             {/* Image or placeholder */}
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coffee-100 to-coffee-200 dark:from-coffee-900/30 dark:to-coffee-800/30 flex items-center justify-center shrink-0 overflow-hidden">
               {bean.photo_url ? (
@@ -188,7 +230,7 @@ function ListRow({ bean }: { bean: Bean }) {
               )}
             </div>
 
-            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+            {!selectionMode && <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />}
           </div>
 
           {/* Stock Bar - Always visible when there's stock data */}
@@ -215,41 +257,43 @@ function ListRow({ bean }: { bean: Bean }) {
           )}
         </Link>
 
-        {/* Actions Button */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href={`/beans/${bean.id}`}>
-                  <Eye className="mr-2 h-4 w-4" />
-                  Ver detalle
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/beans/${bean.id}/edit`}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Editar
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setShowDeleteDialog(true)
-                }}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Actions Button - hidden in selection mode */}
+        {!selectionMode && (
+          <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href={`/beans/${bean.id}`}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    Ver detalle
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/beans/${bean.id}/edit`}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Editar
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setShowDeleteDialog(true)
+                  }}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Eliminar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </div>
 
       <DeleteBeanDialog

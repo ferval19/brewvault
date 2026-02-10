@@ -186,6 +186,35 @@ export async function deleteBean(
   return { success: true, data: undefined }
 }
 
+export async function deleteBeans(
+  ids: string[]
+): Promise<ActionResult<{ deleted: number }>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  if (ids.length === 0) {
+    return { success: false, error: "No hay cafés seleccionados" }
+  }
+
+  const { error, count } = await supabase
+    .from("beans")
+    .delete({ count: "exact" })
+    .in("id", ids)
+    .eq("user_id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  revalidatePath("/beans")
+  revalidatePath("/dashboard")
+  return { success: true, data: { deleted: count || 0 } }
+}
+
 export async function getRoasters(): Promise<ActionResult<Roaster[]>> {
   const supabase = await createClient()
 

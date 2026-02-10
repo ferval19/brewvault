@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useMemo } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CoffeeBeansIllustration } from "@/lib/placeholder-illustrations"
 
@@ -21,6 +21,9 @@ import type { Bean } from "./actions"
 
 interface BeanCardProps {
   bean: Bean
+  selectionMode?: boolean
+  selected?: boolean
+  onSelect?: () => void
 }
 
 const roastLevelLabels: Record<string, string> = {
@@ -40,7 +43,7 @@ const roastLevelGradients: Record<string, string> = {
 }
 
 
-export function BeanCard({ bean }: BeanCardProps) {
+export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const stockPercentage =
@@ -61,10 +64,24 @@ export function BeanCard({ bean }: BeanCardProps) {
     ? roastLevelGradients[bean.roast_level] || "from-coffee-400/30 to-coffee-500/30"
     : "from-coffee-400/30 to-coffee-500/30"
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (selectionMode && onSelect) {
+      e.preventDefault()
+      onSelect()
+    }
+  }
+
   return (
     <>
-      <Link href={`/beans/${bean.id}`} className="group block">
-        <div className="relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+      <Link
+        href={selectionMode ? "#" : `/beans/${bean.id}`}
+        className="group block"
+        onClick={handleClick}
+      >
+        <div className={cn(
+          "relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5",
+          selected && "ring-2 ring-primary border-primary"
+        )}>
           {/* Header with image or gradient */}
           <div className={`relative aspect-[16/10] bg-gradient-to-br ${gradient}`}>
             {bean.photo_url ? (
@@ -84,43 +101,60 @@ export function BeanCard({ bean }: BeanCardProps) {
 
             {/* Top bar */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-              <StatusBadge status={isLowStock && bean.status === "active" ? "low_stock" : bean.status as "active" | "finished" | "archived"} />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+              <div className="flex items-center gap-2">
+                {/* Selection checkbox */}
+                {selectionMode && (
+                  <div
+                    className={cn(
+                      "w-6 h-6 rounded-full flex items-center justify-center transition-all",
+                      selected
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-white/90 dark:bg-black/60 backdrop-blur-sm"
+                    )}
                   >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href={`/beans/${bean.id}`}>
-                      <Eye className="mr-2 h-4 w-4" />
-                      Ver detalle
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href={`/beans/${bean.id}/edit`}>
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Editar
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="text-destructive"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setShowDeleteDialog(true)
-                    }}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Eliminar
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    {selected && <Check className="h-4 w-4" />}
+                  </div>
+                )}
+                <StatusBadge status={isLowStock && bean.status === "active" ? "low_stock" : bean.status as "active" | "finished" | "archived"} />
+              </div>
+              {!selectionMode && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href={`/beans/${bean.id}`}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        Ver detalle
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/beans/${bean.id}/edit`}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Editar
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setShowDeleteDialog(true)
+                      }}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
             {/* Bottom overlay */}
