@@ -70,18 +70,18 @@ export function BrewsPerDayChart({ data }: { data: { day: string; count: number 
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-card)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
                     fontSize: "12px",
-                    color: "hsl(var(--foreground))",
+                    color: "var(--color-foreground)",
                   }}
-                  labelStyle={{ color: "hsl(var(--foreground))" }}
+                  labelStyle={{ color: "var(--color-foreground)" }}
                   formatter={(value) => [`${value} brews`, "Preparaciones"]}
                 />
                 <Bar
                   dataKey="count"
-                  fill="hsl(var(--primary))"
+                  fill="#d97706"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
@@ -180,13 +180,13 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
                 <YAxis hide />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-card)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
                     fontSize: "12px",
-                    color: "hsl(var(--foreground))",
+                    color: "var(--color-foreground)",
                   }}
-                  labelStyle={{ color: "hsl(var(--foreground))" }}
+                  labelStyle={{ color: "var(--color-foreground)" }}
                   formatter={(value) => [`${value}g`, "Cafe usado"]}
                 />
                 <Area
@@ -255,13 +255,13 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-card)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
                     fontSize: "12px",
-                    color: "hsl(var(--foreground))",
+                    color: "var(--color-foreground)",
                   }}
-                  labelStyle={{ color: "hsl(var(--foreground))" }}
+                  labelStyle={{ color: "var(--color-foreground)" }}
                   formatter={(value, _name, props) => [
                     `${value}/5 (${(props.payload as { count: number }).count} brews)`,
                     "Rating promedio",

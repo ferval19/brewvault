@@ -51,7 +51,7 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
     <>
       {/* Floating Tab Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden pointer-events-none safe-area-pb">
-        <div className="flex items-end justify-center gap-3 px-4 pb-3">
+        <div className="flex items-center justify-center gap-3 px-4 pb-3">
           {/* Main pill tab bar */}
           <nav
             className={cn(
