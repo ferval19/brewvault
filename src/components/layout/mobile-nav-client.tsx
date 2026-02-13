@@ -26,14 +26,6 @@ interface MobileNavClientProps {
   } | null
 }
 
-const mainNavigation = [
-  { name: "Inicio", href: "/dashboard", icon: Home },
-  { name: "Brews", href: "/brews", icon: Coffee },
-  // FAB goes here (index 2)
-  { name: "Cafés", href: "/beans", icon: Package },
-  // More button (index 4)
-]
-
 const moreNavigation = [
   { name: "Equipo", href: "/equipment", icon: Gauge, description: "Cafeteras y molinos" },
   { name: "Catas", href: "/cupping", icon: ClipboardList, description: "Notas de cata SCA" },
@@ -49,68 +41,72 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
     (item) => pathname === item.href || pathname.startsWith(item.href + "/")
   )
 
+  const fabHref = pathname.startsWith("/beans")
+    ? "/beans/new"
+    : pathname.startsWith("/equipment")
+    ? "/equipment/new"
+    : "/brews/new"
+
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/60 dark:bg-white/[0.04] glass border-t border-white/20 dark:border-white/[0.06] md:hidden safe-area-pb overflow-visible">
-        <div className="flex items-center justify-around h-16 px-2 relative">
-          {/* Home */}
-          <NavItem
-            href="/dashboard"
-            icon={Home}
-            label="Inicio"
-            active={pathname === "/dashboard"}
-          />
-
-          {/* Brews */}
-          <NavItem
-            href="/brews"
-            icon={Coffee}
-            label="Brews"
-            active={pathname === "/brews" || pathname.startsWith("/brews/")}
-          />
-
-          {/* FAB - Contextual based on current section */}
-          <div className="relative flex items-center justify-center flex-1 h-full">
-            <Link
-              href={
-                pathname.startsWith("/beans") ? "/beans/new" :
-                pathname.startsWith("/equipment") ? "/equipment/new" :
-                "/brews/new"
-              }
-              className="absolute -top-7 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-coffee-600 to-coffee-500 text-white shadow-xl shadow-coffee-600/35 hover:shadow-2xl hover:shadow-coffee-600/45 hover:scale-105 transition-all z-10"
-            >
-              <Plus className="h-7 w-7" />
-            </Link>
-          </div>
-
-          {/* Cafés */}
-          <NavItem
-            href="/beans"
-            icon={Package}
-            label="Cafés"
-            active={pathname === "/beans" || pathname.startsWith("/beans/")}
-          />
-
-          {/* More */}
-          <button
-            onClick={() => setShowMore(true)}
+      {/* Floating Tab Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden pointer-events-none safe-area-pb">
+        <div className="flex items-end justify-center gap-3 px-4 pb-3">
+          {/* Main pill tab bar */}
+          <nav
             className={cn(
-              "relative flex flex-col items-center justify-center flex-1 h-full gap-1 text-xs font-medium transition-colors",
-              isMoreActive
-                ? "text-primary"
-                : "text-neutral-500 dark:text-neutral-400"
+              "pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-[28px]",
+              "bg-white/55 dark:bg-white/[0.08]",
+              "shadow-[0_8px_40px_-8px_rgba(0,0,0,0.12),inset_0_1px_0_0_rgba(255,255,255,0.4)]",
+              "dark:shadow-[0_8px_40px_-8px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.06)]",
+              "border border-white/30 dark:border-white/[0.08]",
+              "backdrop-blur-2xl backdrop-saturate-[1.8]",
+              "[-webkit-backdrop-filter:blur(40px)_saturate(1.8)]",
             )}
           >
-            <div className="relative">
-              <MoreHorizontal className={cn("h-5 w-5", isMoreActive && "text-primary")} />
-              {alertCount > 0 && <AlertBadge count={alertCount} />}
-            </div>
-            <span>Mas</span>
-          </button>
-        </div>
-      </nav>
+            <NavItem
+              href="/dashboard"
+              icon={Home}
+              label="Inicio"
+              active={pathname === "/dashboard"}
+            />
+            <NavItem
+              href="/brews"
+              icon={Coffee}
+              label="Brews"
+              active={pathname === "/brews" || pathname.startsWith("/brews/")}
+            />
+            <NavItem
+              href="/beans"
+              icon={Package}
+              label="Cafes"
+              active={pathname === "/beans" || pathname.startsWith("/beans/")}
+            />
+            <MoreButton
+              active={isMoreActive}
+              alertCount={alertCount}
+              onClick={() => setShowMore(true)}
+            />
+          </nav>
 
-      {/* Bottom Sheet para "Más" */}
+          {/* Floating FAB */}
+          <Link
+            href={fabHref}
+            className={cn(
+              "pointer-events-auto flex items-center justify-center w-[52px] h-[52px] rounded-full",
+              "bg-gradient-to-br from-coffee-600 to-coffee-500",
+              "shadow-[0_8px_24px_-4px_rgba(139,90,43,0.45)]",
+              "hover:shadow-[0_12px_32px_-4px_rgba(139,90,43,0.55)]",
+              "active:scale-95 hover:scale-105 transition-all duration-200",
+              "text-white",
+            )}
+          >
+            <Plus className="h-6 w-6" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Bottom Sheet para "Mas" */}
       <BottomSheet open={showMore} onOpenChange={setShowMore} title="Mas opciones">
         <div className="space-y-2">
           {moreNavigation.map((item) => {
@@ -148,29 +144,76 @@ function NavItem({
   icon: Icon,
   label,
   active,
-  badge,
 }: {
   href: string
   icon: React.ElementType
   label: string
   active: boolean
-  badge?: React.ReactNode
 }) {
   return (
     <Link
       href={href}
       className={cn(
-        "relative flex flex-col items-center justify-center flex-1 h-full gap-1 text-xs font-medium transition-colors",
+        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
         active
-          ? "text-primary"
-          : "text-neutral-500 dark:text-neutral-400"
+          ? "bg-white/50 dark:bg-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+          : "active:scale-95"
+      )}
+    >
+      <Icon
+        className={cn(
+          "h-[22px] w-[22px] transition-colors duration-200",
+          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+        )}
+      />
+      <span
+        className={cn(
+          "text-[10px] font-semibold leading-tight transition-colors duration-200",
+          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+        )}
+      >
+        {label}
+      </span>
+    </Link>
+  )
+}
+
+function MoreButton({
+  active,
+  alertCount,
+  onClick,
+}: {
+  active: boolean
+  alertCount: number
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
+        active
+          ? "bg-white/50 dark:bg-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+          : "active:scale-95"
       )}
     >
       <div className="relative">
-        <Icon className={cn("h-5 w-5", active && "text-primary")} />
-        {badge}
+        <MoreHorizontal
+          className={cn(
+            "h-[22px] w-[22px] transition-colors duration-200",
+            active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+          )}
+        />
+        {alertCount > 0 && <AlertBadge count={alertCount} />}
       </div>
-      <span>{label}</span>
-    </Link>
+      <span
+        className={cn(
+          "text-[10px] font-semibold leading-tight transition-colors duration-200",
+          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+        )}
+      >
+        Mas
+      </span>
+    </button>
   )
 }
