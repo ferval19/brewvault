@@ -243,7 +243,7 @@ function MetricCard({
   subvalue?: string
 }) {
   return (
-    <div className="rounded-2xl bg-card border p-5">
+    <div className="rounded-3xl glass-panel p-5">
       <div className="flex items-center gap-2 text-muted-foreground mb-2">
         {icon}
         <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
@@ -266,7 +266,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl bg-card border overflow-hidden">
+    <div className="rounded-3xl glass-panel overflow-hidden">
       <div className="px-6 py-4 border-b bg-muted/30">
         <h3 className="font-semibold flex items-center gap-2">
           {icon}

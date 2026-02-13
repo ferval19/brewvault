@@ -289,7 +289,7 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
         </div>
 
         {/* View Switcher - compact */}
-        <div className="flex items-center p-1 bg-muted rounded-xl" role="group" aria-label="Cambiar vista">
+        <div className="flex items-center p-1 bg-white/40 dark:bg-white/[0.06] glass-subtle rounded-xl" role="group" aria-label="Cambiar vista">
           <ViewButton active={viewMode === "grid"} onClick={() => setViewMode("grid")} icon={LayoutGrid} label="Vista en cuadricula" />
           <ViewButton active={viewMode === "list"} onClick={() => setViewMode("list")} icon={List} label="Vista en lista" />
         </div>
@@ -476,7 +476,7 @@ export function BeansListClient({ beans: allBeans, initialStatus }: BeansListCli
       {/* Bulk Action Bar */}
       {selectionMode && selectedIds.size > 0 && (
         <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50">
-          <div className="flex items-center gap-3 px-4 py-3 bg-card border rounded-2xl shadow-lg">
+          <div className="flex items-center gap-3 px-4 py-3 glass-panel rounded-3xl shadow-xl">
             <span className="text-sm font-medium">
               {selectedIds.size} {selectedIds.size === 1 ? "seleccionado" : "seleccionados"}
             </span>

@@ -144,21 +144,21 @@ export default async function BrewDetailPage({
 
       {/* Receta - Cards horizontales en móvil */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-2xl bg-card border p-4 text-center">
+        <div className="rounded-3xl glass-panel p-4 text-center">
           <div className="flex items-center justify-center gap-1.5 text-muted-foreground mb-2">
             <Scale className="h-4 w-4" />
             <span className="text-xs font-medium uppercase">Dosis</span>
           </div>
           <p className="text-2xl sm:text-3xl font-bold">{brew.dose_grams}<span className="text-base font-normal text-muted-foreground">g</span></p>
         </div>
-        <div className="rounded-2xl bg-card border p-4 text-center">
+        <div className="rounded-3xl glass-panel p-4 text-center">
           <div className="flex items-center justify-center gap-1.5 text-muted-foreground mb-2">
             <Coffee className="h-4 w-4" />
             <span className="text-xs font-medium uppercase">Ratio</span>
           </div>
           <p className="text-2xl sm:text-3xl font-bold">1:<span className="text-xl sm:text-2xl">{ratio}</span></p>
         </div>
-        <div className="rounded-2xl bg-card border p-4 text-center">
+        <div className="rounded-3xl glass-panel p-4 text-center">
           <div className="flex items-center justify-center gap-1.5 text-muted-foreground mb-2">
             <Droplets className="h-4 w-4" />
             <span className="text-xs font-medium uppercase">{brew.yield_grams ? "Yield" : "Agua"}</span>

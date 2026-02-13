@@ -39,9 +39,9 @@ export default async function Home() {
     user = null
   }
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-neutral-100/80 dark:bg-neutral-950 mesh-gradient">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/50 dark:bg-white/[0.04] glass border-b border-white/20 dark:border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-coffee-600" />
@@ -87,7 +87,7 @@ export default async function Home() {
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/50 dark:bg-white/[0.06] glass-subtle glass-border text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 sm:mb-8">
             <Star className="h-3 w-3 sm:h-4 sm:w-4 text-coffee-500" />
             Tu diario digital de cafe de especialidad
           </div>
@@ -122,7 +122,7 @@ export default async function Home() {
       {/* Visual Break - Coffee Illustration */}
       <section className="py-10 sm:py-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="relative bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-neutral-900 dark:to-neutral-800 rounded-2xl sm:rounded-3xl p-6 sm:p-12 overflow-hidden">
+          <div className="relative bg-white/40 dark:bg-white/[0.04] glass-panel rounded-2xl sm:rounded-3xl p-6 sm:p-12 overflow-hidden">
             <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-coffee-200/30 to-coffee-300/30 dark:from-coffee-900/20 dark:to-coffee-800/20 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-coffee-200/30 to-yellow-200/30 dark:from-coffee-900/20 dark:to-yellow-900/20 rounded-full blur-3xl" />
 
@@ -193,7 +193,7 @@ export default async function Home() {
       </section>
 
       {/* How it works */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-neutral-50 dark:bg-neutral-900/50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white/20 dark:bg-white/[0.02]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white mb-3 sm:mb-4">
@@ -241,13 +241,13 @@ export default async function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-coffee-100 to-coffee-200 dark:from-coffee-900/30 dark:to-coffee-800/30 rounded-3xl flex items-center justify-center overflow-hidden">
+              <div className="aspect-square bg-white/40 dark:bg-white/[0.04] glass-panel rounded-3xl flex items-center justify-center overflow-hidden">
                 <V60Illustration className="w-48 h-48 text-coffee-600/70 dark:text-coffee-400/50" />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/50 dark:bg-white/[0.06] glass-panel rounded-2xl flex items-center justify-center overflow-hidden">
                 <ScaleIllustration className="w-20 h-20 text-coffee-500/60" />
               </div>
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-coffee-900/40 dark:to-coffee-800/40 rounded-xl flex items-center justify-center shadow-md overflow-hidden">
+              <div className="absolute -top-4 -left-4 w-24 h-24 bg-white/50 dark:bg-white/[0.06] glass-panel rounded-xl flex items-center justify-center overflow-hidden">
                 <CoffeeBeansIllustration className="w-16 h-16 text-coffee-700/60" />
               </div>
             </div>
@@ -276,7 +276,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 sm:py-12 px-4 sm:px-6 border-t border-neutral-200 dark:border-neutral-800">
+      <footer className="py-8 sm:py-12 px-4 sm:px-6 border-t border-white/20 dark:border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:gap-6">
             <div className="flex items-center gap-2">
@@ -321,9 +321,9 @@ function FeatureCard({
   description: string
 }) {
   return (
-    <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors group">
+    <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl glass-panel hover:shadow-lg transition-all duration-300 group">
       <div className="flex items-start justify-between mb-3 sm:mb-4">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/40 dark:bg-white/[0.06] glass-subtle flex items-center justify-center">
           {icon}
         </div>
         {illustration && (

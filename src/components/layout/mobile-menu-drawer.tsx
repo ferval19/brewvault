@@ -63,8 +63,8 @@ export function MobileMenuDrawer() {
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-colors",
                   isActive
-                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
-                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    ? "bg-white/40 dark:bg-white/10 text-neutral-900 dark:text-white glass-subtle"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06]"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -74,7 +74,7 @@ export function MobileMenuDrawer() {
           })}
         </nav>
 
-        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4 space-y-3">
+        <div className="border-t border-white/20 dark:border-white/[0.06] pt-4 space-y-3">
           <div className="flex items-center justify-between px-4 py-2">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">Tema</span>
             <ThemeToggle />

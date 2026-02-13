@@ -61,7 +61,7 @@ export default async function RoasterDetailPage({
           href={roaster.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 p-4 rounded-2xl bg-card border hover:bg-muted/50 transition-colors"
+          className="flex items-center gap-3 p-4 rounded-3xl glass-panel hover:bg-white/20 dark:hover:bg-white/[0.04] transition-colors"
         >
           <div className="p-3 rounded-xl bg-primary/10">
             <Globe className="h-5 w-5 text-primary" />

@@ -31,7 +31,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
   return (
     <>
       <Link href={`/roasters/${roaster.id}`} className="group block">
-        <div className="relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+        <div className="relative overflow-hidden rounded-3xl glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
           {/* Header gradient */}
           <div className="relative aspect-[16/8] bg-gradient-to-br from-stone-600/20 to-amber-700/20">
             <div className="absolute inset-0 flex items-center justify-center">

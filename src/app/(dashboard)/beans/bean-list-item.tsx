@@ -85,7 +85,7 @@ export function BeanListItem({ beans, selectionMode, selectedIds, onSelect }: Be
           </div>
 
           {/* Beans List */}
-          <div className="rounded-2xl border bg-card divide-y overflow-hidden">
+          <div className="rounded-3xl overflow-hidden glass-panel divide-y divide-white/15 dark:divide-white/[0.06]">
             {roasterBeans.map((bean) => (
               <ListRow
                 key={bean.id}
@@ -137,7 +137,7 @@ function ListRow({
       <div className={cn("group relative", selected && "bg-primary/5")}>
         <Link
           href={selectionMode ? "#" : `/beans/${bean.id}`}
-          className="block p-4 hover:bg-muted/50 transition-colors"
+          className="block p-4 hover:bg-white/20 dark:hover:bg-white/[0.04] transition-colors"
           onClick={handleClick}
         >
           <div className="flex items-center gap-4">
@@ -156,7 +156,7 @@ function ListRow({
             )}
 
             {/* Image or placeholder */}
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coffee-100 to-coffee-200 dark:from-coffee-900/30 dark:to-coffee-800/30 flex items-center justify-center shrink-0 overflow-hidden">
+            <div className="w-12 h-12 rounded-xl bg-white/40 dark:bg-white/[0.06] flex items-center justify-center shrink-0 overflow-hidden">
               {bean.photo_url ? (
                 <img
                   src={bean.photo_url}
@@ -252,7 +252,7 @@ function ListRow({
           {/* Stock Bar - Always visible when there's stock data */}
           {stockPercentage !== null && bean.status === "active" && (
             <div className="mt-3 flex items-center gap-3">
-              <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+              <div className="flex-1 h-2 rounded-full bg-white/30 dark:bg-white/10 overflow-hidden">
                 <div
                   className={cn(
                     "h-full rounded-full transition-all",

@@ -44,7 +44,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
   const pathname = usePathname()
 
   return (
-    <aside className="h-full w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
+    <aside className="h-full w-64 bg-white/50 dark:bg-white/[0.03] glass border-r border-white/20 dark:border-white/[0.06] flex flex-col">
       {/* Logo */}
       <div className="p-6 pb-4">
         <Link href="/dashboard" className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       {/* Quick Action */}
       <div className="px-4 mb-4">
         <Link href="/brews/new">
-          <Button className="w-full rounded-xl bg-gradient-to-r from-coffee-600 to-coffee-500 hover:from-coffee-700 hover:to-coffee-600 text-white shadow-md shadow-coffee-600/20">
+          <Button className="w-full rounded-2xl bg-gradient-to-r from-coffee-600 to-coffee-500 hover:from-coffee-700 hover:to-coffee-600 text-white shadow-lg shadow-coffee-600/25">
             <Plus className="h-4 w-4 mr-2" />
             Nueva Brew
           </Button>
@@ -96,15 +96,15 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3">
+      <div className="p-4 border-t border-white/20 dark:border-white/[0.06] space-y-3">
         {/* Settings */}
         <Link
           href="/settings"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
             pathname.startsWith("/settings")
-              ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
-              : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+              ? "bg-white/40 dark:bg-white/10 text-neutral-900 dark:text-white glass-subtle"
+              : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06]"
           )}
         >
           <div className="relative">
@@ -116,7 +116,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
 
         {/* User Info */}
         {user && (
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/30 dark:bg-white/[0.05]">
             {user.avatar_url ? (
               <Image
                 src={user.avatar_url}
@@ -126,7 +126,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
                 className="rounded-full"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-white/40 dark:bg-white/10 flex items-center justify-center">
                 <User className="h-4 w-4 text-neutral-500" />
               </div>
             )}
@@ -143,7 +143,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
 
         {/* Theme & Logout */}
         <div className="flex items-center gap-2">
-          <div className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+          <div className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-white/30 dark:bg-white/[0.05]">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">Tema</span>
             <ThemeToggle />
           </div>
@@ -151,7 +151,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 rounded-xl text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              className="h-10 w-10 rounded-xl text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-white/30 dark:hover:bg-white/[0.06]"
             >
               <LogOut className="h-5 w-5" />
             </Button>
@@ -175,8 +175,8 @@ function NavLink({
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
         isActive
-          ? "bg-coffee-500/10 text-coffee-700 dark:text-coffee-300"
-          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
+          ? "bg-white/40 dark:bg-white/10 text-coffee-700 dark:text-coffee-300 glass-subtle glass-border"
+          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06] hover:text-neutral-900 dark:hover:text-white"
       )}
     >
       <item.icon className={cn("h-5 w-5", isActive && "text-coffee-600 dark:text-coffee-400")} />

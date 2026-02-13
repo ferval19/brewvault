@@ -433,7 +433,7 @@ export function BrewsListClient({ brews: allBrews, initialMethod }: BrewsListCli
       {/* Bulk Action Bar */}
       {selectionMode && selectedIds.size > 0 && (
         <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50">
-          <div className="flex items-center gap-3 px-4 py-3 bg-card border rounded-2xl shadow-lg">
+          <div className="flex items-center gap-3 px-4 py-3 glass-panel rounded-3xl shadow-xl">
             <span className="text-sm font-medium">
               {selectedIds.size} {selectedIds.size === 1 ? "seleccionada" : "seleccionadas"}
             </span>

@@ -1,8 +1,8 @@
 /**
- * Design Tokens - BrewVault
+ * Design Tokens - BrewVault (Liquid Glass Edition)
  *
  * Centralized design constants for consistent styling across the app.
- * Use these tokens instead of hardcoding values in components.
+ * Inspired by Apple's Liquid Glass design language (WWDC 2025).
  *
  * Color Palette: Coffee-inspired tones
  * - Primary: Rich espresso brown (#6f4726 / coffee-700)
@@ -22,30 +22,42 @@ export const spacing = {
   compact: "space-y-2",
 } as const
 
-// Border radius tokens
+// Border radius tokens - Liquid Glass uses generous radii
 export const radius = {
   /** Cards, modals, large containers */
-  card: "rounded-2xl",
+  card: "rounded-3xl",
   /** Buttons, inputs, smaller elements */
-  button: "rounded-xl",
+  button: "rounded-2xl",
   /** Badges, pills, tags */
   badge: "rounded-full",
   /** Form inputs */
-  input: "rounded-lg",
+  input: "rounded-xl",
   /** Small elements like checkboxes */
-  small: "rounded-md",
+  small: "rounded-lg",
 } as const
 
-// Shadow tokens
+// Shadow tokens - Liquid Glass specular highlights
 export const shadows = {
-  /** Default card shadow */
-  card: "shadow-sm hover:shadow-lg",
-  /** Elevated elements (modals, dropdowns) */
-  elevated: "shadow-lg",
+  /** Glass card shadow with specular highlight */
+  card: "glass-specular",
+  /** Elevated glass elements (modals, dropdowns) */
+  elevated: "shadow-xl glass-specular",
   /** FAB and floating buttons - coffee brown glow */
   fab: "shadow-lg shadow-coffee-600/30",
   /** No shadow */
   none: "shadow-none",
+} as const
+
+// Glass effect tokens
+export const glass = {
+  /** Standard glass panel (card, sidebar, nav) */
+  panel: "glass-panel",
+  /** Subtle glass (backgrounds, secondary elements) */
+  subtle: "glass-subtle",
+  /** Heavy glass (modals, focused elements) */
+  heavy: "glass-heavy",
+  /** Glass border only */
+  border: "glass-border",
 } as const
 
 // Animation tokens
@@ -57,7 +69,7 @@ export const animations = {
   /** Slower, more noticeable transitions */
   slow: "transition-all duration-300",
   /** Card hover lift effect */
-  lift: "hover:-translate-y-0.5",
+  lift: "hover:-translate-y-1",
 } as const
 
 // Color scheme tokens (using Tailwind color classes)

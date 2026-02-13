@@ -55,7 +55,7 @@ export default async function SettingsPage() {
       {/* Stats Hero */}
       {stats && (
         <div className="grid grid-cols-3 gap-4">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5">
+          <div className="relative overflow-hidden rounded-3xl glass-panel p-5">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -68,7 +68,7 @@ export default async function SettingsPage() {
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5">
+          <div className="relative overflow-hidden rounded-3xl glass-panel p-5">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -81,7 +81,7 @@ export default async function SettingsPage() {
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5">
+          <div className="relative overflow-hidden rounded-3xl glass-panel p-5">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">

@@ -130,7 +130,7 @@ export function DetailMetricCard({
   className,
 }: DetailMetricCardProps) {
   return (
-    <div className={cn("rounded-2xl bg-card border p-5", className)}>
+    <div className={cn("rounded-3xl glass-panel p-5", className)}>
       <div className="flex items-center gap-2 text-muted-foreground mb-2">
         <Icon className="h-4 w-4" />
         <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
@@ -172,7 +172,7 @@ interface DetailSectionProps {
 
 export function DetailSection({ title, icon: Icon, children, className }: DetailSectionProps) {
   return (
-    <div className={cn("rounded-2xl bg-card border overflow-hidden", className)}>
+    <div className={cn("rounded-3xl glass-panel overflow-hidden", className)}>
       <div className="px-6 py-4 border-b bg-muted/30">
         <h3 className="font-semibold flex items-center gap-2">
           {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}

@@ -71,7 +71,7 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4">
         <Link href="/brews/new">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 text-white hover:shadow-lg hover:shadow-coffee-500/25 transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Coffee className="h-5 w-5" />
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
           </div>
         </Link>
         <Link href="/beans/new">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-coffee-500 to-coffee-600 p-5 text-white hover:shadow-lg hover:shadow-coffee-500/25 transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-500 to-coffee-600 p-5 text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Package className="h-5 w-5" />
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
       {/* Main stats grid */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Link href="/beans" className="group">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                   {stats.beans.active} activos
                 </p>
               </div>
-              <div className="p-2 rounded-xl bg-coffee-500/10">
+              <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <Package className="h-5 w-5 text-coffee-500" />
               </div>
             </div>
@@ -120,7 +120,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/brews" className="group">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
                   {stats.brews.thisMonth} este mes
                 </p>
               </div>
-              <div className="p-2 rounded-xl bg-coffee-500/10">
+              <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <Coffee className="h-5 w-5 text-coffee-500" />
               </div>
             </div>
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/equipment" className="group">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
                 </p>
                 <p className="text-3xl font-bold mt-1">{stats.equipment.total}</p>
               </div>
-              <div className="p-2 rounded-xl bg-gray-500/10">
+              <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <Gauge className="h-5 w-5 text-gray-500" />
               </div>
             </div>
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/cupping" className="group">
-          <div className="relative overflow-hidden rounded-2xl bg-card border p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -163,7 +163,7 @@ export default async function DashboardPage() {
                 </p>
                 <p className="text-3xl font-bold mt-1">{stats.cupping.total}</p>
               </div>
-              <div className="p-2 rounded-xl bg-purple-500/10">
+              <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <ClipboardList className="h-5 w-5 text-purple-500" />
               </div>
             </div>
@@ -261,7 +261,7 @@ export default async function DashboardPage() {
                           {method.count} {method.count === 1 ? "prep" : "preps"}
                         </span>
                       </div>
-                      <div className="h-2.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-2.5 bg-white/30 dark:bg-white/10 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-primary rounded-full transition-all"
                           style={{ width: `${percentage}%` }}
@@ -305,7 +305,7 @@ export default async function DashboardPage() {
                     <Link
                       key={brew.id}
                       href={`/brews/${brew.id}`}
-                      className="flex items-center justify-between p-3 -mx-3 rounded-xl hover:bg-muted transition-colors"
+                      className="flex items-center justify-between p-3 -mx-3 rounded-xl hover:bg-white/30 dark:hover:bg-white/[0.06] transition-colors"
                     >
                       <div className="min-w-0">
                         <p className="font-medium truncate">

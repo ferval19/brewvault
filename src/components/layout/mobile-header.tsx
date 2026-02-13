@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 export function MobileHeader() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 md:hidden">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/60 dark:bg-white/[0.04] glass border-b border-white/20 dark:border-white/[0.06] md:hidden">
       <div className="flex items-center justify-between h-14 px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Coffee className="h-5 w-5 text-amber-600" />

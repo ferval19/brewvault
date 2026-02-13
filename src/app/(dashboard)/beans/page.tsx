@@ -92,7 +92,7 @@ function StatCard({
   variant?: "default" | "warning"
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-card border p-5">
+    <div className="relative overflow-hidden rounded-3xl p-5 glass-panel">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -103,7 +103,7 @@ function StatCard({
             {suffix && <span className="text-lg text-muted-foreground">{suffix}</span>}
           </p>
         </div>
-        <div className={`p-2 rounded-xl ${variant === "warning" ? "bg-amber-500/10" : "bg-primary/10"}`}>
+        <div className={`p-2 rounded-xl ${variant === "warning" ? "bg-amber-500/15" : "bg-white/30 dark:bg-white/10"}`}>
           <Icon className={`h-5 w-5 ${variant === "warning" ? "text-amber-500" : "text-primary"}`} />
         </div>
       </div>

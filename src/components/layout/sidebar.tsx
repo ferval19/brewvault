@@ -27,7 +27,7 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="h-full w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
+    <aside className="h-full w-64 bg-white/50 dark:bg-white/[0.03] glass border-r border-white/20 dark:border-white/[0.06] flex flex-col">
       <div className="p-6">
         <div className="flex items-center gap-2">
           <Coffee className="h-6 w-6 text-amber-600" />
@@ -52,8 +52,8 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
-                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    ? "bg-white/40 dark:bg-white/10 text-neutral-900 dark:text-white glass-subtle"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06]"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -64,7 +64,7 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800 space-y-1">
+      <div className="p-3 border-t border-white/20 dark:border-white/[0.06] space-y-1">
         <div className="flex items-center justify-between px-3 py-2">
           <span className="text-sm text-neutral-600 dark:text-neutral-400">Tema</span>
           <ThemeToggle />

@@ -81,7 +81,7 @@ export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardPr
         onClick={handleClick}
       >
         <div className={cn(
-          "relative overflow-hidden rounded-2xl bg-card border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5",
+          "relative overflow-hidden rounded-3xl glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
           selected && "ring-2 ring-primary border-primary"
         )}>
           {/* Header with image or gradient */}

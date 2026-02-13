@@ -22,7 +22,7 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/60 dark:bg-white/[0.04] glass border-t border-white/20 dark:border-white/[0.06] md:hidden">
       <div className="flex items-center justify-around h-16 px-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href ||

@@ -7,7 +7,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+    <div className="min-h-screen bg-neutral-100/80 dark:bg-neutral-950 mesh-gradient">
       {/* Mobile Header */}
       <MobileHeader />
 
