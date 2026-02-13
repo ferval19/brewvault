@@ -54,7 +54,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
 
             {/* Top bar */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+              <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-xs font-medium">
                 {typeLabel}
               </span>
               <DropdownMenu>
@@ -62,7 +62,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>

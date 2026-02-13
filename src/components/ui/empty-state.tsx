@@ -23,7 +23,7 @@ export function EmptyState({
 
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-      <div className="p-4 rounded-2xl bg-muted/50 mb-4">
+      <div className="p-4 rounded-2xl bg-white/35 dark:bg-white/[0.06] border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] mb-4">
         {Icon ? (
           <Icon className="h-10 w-10 text-muted-foreground" />
         ) : (
@@ -34,7 +34,7 @@ export function EmptyState({
       <p className="text-muted-foreground max-w-sm mb-6">{description}</p>
       {actionLabel && actionHref && (
         <Link href={actionHref}>
-          <Button className="rounded-xl">
+          <Button className="rounded-2xl">
             <Plus className="h-4 w-4 mr-2" />
             {actionLabel}
           </Button>

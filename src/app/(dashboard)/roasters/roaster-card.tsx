@@ -44,7 +44,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
             {/* Top bar */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
               {location && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-xs font-medium">
                   <MapPin className="h-3 w-3" />
                   {location}
                 </span>
@@ -54,7 +54,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
@@ -97,7 +97,7 @@ export function RoasterCard({ roaster }: RoasterCardProps) {
                 className="bg-white/90 dark:bg-black/60 backdrop-blur-sm"
               />
               {roaster.rating && (
-                <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-white text-sm font-medium">
                   {"★".repeat(roaster.rating)}
                 </span>
               )}

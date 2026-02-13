@@ -20,7 +20,7 @@ export function FormSection({
     <div className={cn("space-y-4", className)}>
       <div className="flex items-start gap-3">
         {Icon && (
-          <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+          <div className="p-2 rounded-xl bg-primary/10 border border-white/25 dark:border-white/[0.06] shrink-0">
             <Icon className="h-4 w-4 text-primary" />
           </div>
         )}

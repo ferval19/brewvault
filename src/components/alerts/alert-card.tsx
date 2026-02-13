@@ -67,7 +67,7 @@ export function AlertCard({ alert, compact = false }: AlertCardProps) {
   if (compact) {
     return (
       <div className={cn(
-        "flex items-start gap-3 p-3 rounded-lg transition-colors",
+        "flex items-start gap-3 p-3 rounded-2xl transition-colors",
         !alert.is_read && "bg-muted/50"
       )}>
         <div className={cn(

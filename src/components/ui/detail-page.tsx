@@ -55,14 +55,14 @@ export function DetailPageHero({
         <div className="flex items-start justify-between">
           <Link
             href={backHref}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-sm font-medium hover:bg-white dark:hover:bg-black/80 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-sm font-medium hover:bg-white dark:hover:bg-black/80 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             {backLabel}
           </Link>
           {editHref && (
             <Link href={editHref}>
-              <Button variant="secondary" size="sm" className="rounded-full backdrop-blur-sm">
+              <Button variant="secondary" size="sm" className="rounded-full backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
                 <Pencil className="mr-1.5 h-4 w-4" />
                 Editar
               </Button>
@@ -103,7 +103,7 @@ export function DetailBadge({ children, variant = "default" }: DetailBadgeProps)
   return (
     <span
       className={cn(
-        "px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-medium",
+        "px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-medium border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]",
         variant === "default"
           ? "bg-white/90 dark:bg-black/60"
           : "bg-coffee-500/90 text-white"
@@ -173,7 +173,7 @@ interface DetailSectionProps {
 export function DetailSection({ title, icon: Icon, children, className }: DetailSectionProps) {
   return (
     <div className={cn("rounded-3xl glass-panel overflow-hidden", className)}>
-      <div className="px-6 py-4 border-b bg-muted/30">
+      <div className="px-6 py-4 border-b border-white/15 dark:border-white/[0.04] bg-white/30 dark:bg-white/[0.04]">
         <h3 className="font-semibold flex items-center gap-2">
           {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
           {title}
@@ -193,7 +193,7 @@ interface DetailRowProps {
 
 export function DetailRow({ label, value }: DetailRowProps) {
   return (
-    <div className="flex justify-between items-center py-2">
+    <div className="flex justify-between items-center py-2 border-b border-white/15 dark:border-white/[0.04] last:border-0">
       <span className="text-muted-foreground">{label}</span>
       <span className="font-medium">{value}</span>
     </div>

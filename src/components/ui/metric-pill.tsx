@@ -11,7 +11,7 @@ interface MetricPillProps {
 }
 
 const variantStyles = {
-  default: "bg-muted/50 text-foreground",
+  default: "bg-white/35 dark:bg-white/[0.06] text-foreground border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]",
   muted: "bg-muted/30 text-muted-foreground",
   highlight: "bg-primary/10 text-primary",
   success: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
@@ -34,7 +34,7 @@ export function MetricPill({
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-lg font-medium",
+        "inline-flex items-center rounded-xl font-medium",
         variantStyles[variant],
         sizeStyles[size],
         className

@@ -97,7 +97,7 @@ export function BrewListItem({ brews, selectionMode, selectedIds, onSelect }: Br
           </div>
 
           {/* Brews List */}
-          <div className="rounded-2xl border bg-card divide-y overflow-hidden">
+          <div className="rounded-3xl overflow-hidden glass-panel divide-y divide-white/15 dark:divide-white/[0.06]">
             {group.brews.map((brew) => (
               <ListRow
                 key={brew.id}
@@ -142,7 +142,7 @@ function ListRow({
       <div className={cn("group relative", selected && "bg-primary/5")}>
         <Link
           href={selectionMode ? "#" : `/brews/${brew.id}`}
-          className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
+          className="flex items-center gap-4 p-4 hover:bg-white/20 dark:hover:bg-white/[0.04] transition-colors"
           onClick={handleClick}
         >
           {/* Selection checkbox */}

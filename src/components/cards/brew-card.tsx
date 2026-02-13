@@ -117,7 +117,7 @@ export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardPr
                     {selected && <Check className="h-4 w-4" />}
                   </div>
                 )}
-                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-xs font-medium">
+                <span className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-xs font-medium">
                   {formatDate(brew.brewed_at)}
                 </span>
               </div>
@@ -127,7 +127,7 @@ export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardPr
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="h-8 w-8 bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
@@ -164,20 +164,20 @@ export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardPr
             {/* Bottom overlay with method badge */}
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm text-sm font-medium">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-sm font-medium">
                   <MethodIcon className={`h-4 w-4 ${methodConfig.color}`} />
                   {methodConfig.label}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 {brewPrice !== null && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/90 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-white text-sm font-medium">
                     <Euro className="h-3.5 w-3.5" />
                     {brewPrice.toFixed(2)}
                   </span>
                 )}
                 {brew.rating && (
-                  <span className="px-2 py-1 rounded-full bg-coffee-500/90 backdrop-blur-sm text-white text-sm font-medium">
+                  <span className="px-2 py-1 rounded-full bg-coffee-500/90 backdrop-blur-sm border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-white text-sm font-medium">
                     {"★".repeat(brew.rating)}
                   </span>
                 )}

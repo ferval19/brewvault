@@ -123,7 +123,7 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 bg-white/60 dark:bg-black/30 glass-subtle hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="h-8 w-8 bg-white/60 dark:bg-black/30 glass-subtle border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] hover:bg-white dark:hover:bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
@@ -161,19 +161,19 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
               <div className="flex flex-wrap gap-2">
                 {bean.roast_level && (
-                  <span className="px-3 py-1.5 rounded-full bg-white/60 dark:bg-black/30 glass-subtle text-xs font-medium">
+                  <span className="px-3 py-1.5 rounded-full bg-white/60 dark:bg-black/30 glass-subtle border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-xs font-medium">
                     {roastLevelLabels[bean.roast_level] || bean.roast_level}
                   </span>
                 )}
                 {bean.origin_country && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/60 dark:bg-black/30 glass-subtle text-xs font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/60 dark:bg-black/30 glass-subtle border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-xs font-medium">
                     <MapPin className="h-3 w-3" />
                     {bean.origin_country}
                   </span>
                 )}
               </div>
               {bean.personal_rating && (
-                <span className="px-2 py-1 rounded-full bg-coffee-500/80 glass-subtle text-white text-sm font-medium">
+                <span className="px-2 py-1 rounded-full bg-coffee-500/80 glass-subtle border border-white/25 dark:border-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] text-white text-sm font-medium">
                   {"★".repeat(bean.personal_rating)}
                 </span>
               )}
