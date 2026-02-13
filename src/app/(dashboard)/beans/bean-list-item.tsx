@@ -13,6 +13,7 @@ import {
   Calendar,
   AlertTriangle,
   Check,
+  Coffee,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -211,6 +212,15 @@ function ListRow({
                   </p>
                 </div>
               )}
+              {bean.brew_count > 0 && (
+                <div className="text-center min-w-[50px]">
+                  <p className="text-xs text-muted-foreground">Brews</p>
+                  <p className="text-sm font-medium flex items-center justify-center gap-1">
+                    <Coffee className="h-3 w-3" />
+                    {bean.brew_count}
+                  </p>
+                </div>
+              )}
               {bean.personal_rating && (
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">Rating</p>
@@ -221,8 +231,14 @@ function ListRow({
               )}
             </div>
 
-            {/* Mobile: Stock + Rating compact */}
+            {/* Mobile: Brews + Rating compact */}
             <div className="flex md:hidden items-center gap-2 shrink-0">
+              {bean.brew_count > 0 && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Coffee className="h-3 w-3" />
+                  {bean.brew_count}
+                </span>
+              )}
               {bean.personal_rating && (
                 <span className="text-coffee-500 text-sm">
                   {"★".repeat(Math.min(bean.personal_rating, 3))}

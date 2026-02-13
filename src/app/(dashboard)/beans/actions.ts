@@ -36,6 +36,7 @@ export type Bean = {
   created_at: string
   updated_at: string
   roasters: { id: string; name: string } | null
+  brew_count: number
 }
 
 export type Roaster = {
@@ -58,7 +59,8 @@ export async function getBeans(): Promise<ActionResult<Bean[]>> {
       roasters (
         id,
         name
-      )
+      ),
+      brews (count)
     `)
     .order("created_at", { ascending: false })
 
@@ -66,7 +68,15 @@ export async function getBeans(): Promise<ActionResult<Bean[]>> {
     return { success: false, error: error.message }
   }
 
-  return { success: true, data: data as Bean[] }
+  const beans = (data || []).map((bean) => {
+    const { brews, ...rest } = bean as Record<string, unknown>
+    return {
+      ...rest,
+      brew_count: Array.isArray(brews) && brews.length > 0 ? (brews[0] as { count: number }).count : 0,
+    } as Bean
+  })
+
+  return { success: true, data: beans }
 }
 
 export async function getBean(id: string): Promise<ActionResult<Bean>> {

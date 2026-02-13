@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useMemo } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar, Check } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar, Check, Coffee } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CoffeeBeansIllustration } from "@/lib/placeholder-illustrations"
 
@@ -216,16 +216,24 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
             )}
 
             {/* Footer info */}
-            {daysFromRoast !== null && (
-              <div className="flex items-center gap-1.5 pt-3 border-t text-sm text-muted-foreground">
-                <Calendar className="h-3.5 w-3.5" />
-                <span>
-                  {daysFromRoast === 0
-                    ? "Tostado hoy"
-                    : daysFromRoast === 1
-                    ? "Hace 1 dia"
-                    : `Hace ${daysFromRoast} dias`}
-                </span>
+            {(daysFromRoast !== null || bean.brew_count > 0) && (
+              <div className="flex items-center gap-3 pt-3 border-t text-sm text-muted-foreground">
+                {daysFromRoast !== null && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {daysFromRoast === 0
+                      ? "Hoy"
+                      : daysFromRoast === 1
+                      ? "1 dia"
+                      : `${daysFromRoast} dias`}
+                  </span>
+                )}
+                {bean.brew_count > 0 && (
+                  <span className="flex items-center gap-1.5">
+                    <Coffee className="h-3.5 w-3.5" />
+                    {bean.brew_count} {bean.brew_count === 1 ? "brew" : "brews"}
+                  </span>
+                )}
               </div>
             )}
           </div>
