@@ -54,6 +54,7 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
         <div className="flex items-center justify-center gap-3 px-4 pb-3">
           {/* Main pill tab bar */}
           <nav
+            data-tour="mobile-nav"
             className={cn(
               "pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-[28px]",
               "bg-white/55 dark:bg-white/[0.08]",
@@ -92,11 +93,12 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
           {/* Floating FAB */}
           <Link
             href={fabHref}
+            data-tour="fab-button"
             className={cn(
               "pointer-events-auto flex items-center justify-center w-[52px] h-[52px] rounded-full",
               "bg-gradient-to-br from-coffee-600 to-coffee-500",
-              "shadow-[0_8px_24px_-4px_rgba(139,90,43,0.45)]",
-              "hover:shadow-[0_12px_32px_-4px_rgba(139,90,43,0.55)]",
+              "shadow-[0_8px_24px_-4px_rgba(139,90,43,0.45),inset_0_1px_0_0_rgba(255,255,255,0.25)]",
+              "hover:shadow-[0_12px_32px_-4px_rgba(139,90,43,0.55),inset_0_1px_0_0_rgba(255,255,255,0.25)]",
               "active:scale-95 hover:scale-105 transition-all duration-200",
               "text-white",
             )}
@@ -139,6 +141,19 @@ export function MobileNavClient({ alertCount }: MobileNavClientProps) {
   )
 }
 
+const navItemActive = [
+  "bg-white/55 dark:bg-white/[0.14]",
+  "border border-white/30 dark:border-white/[0.08]",
+  "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45),0_1px_4px_-1px_rgba(0,0,0,0.06)]",
+  "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_1px_4px_-1px_rgba(0,0,0,0.2)]",
+  "backdrop-blur-sm",
+]
+
+const navItemInactive = [
+  "border border-transparent",
+  "active:scale-95",
+]
+
 function NavItem({
   href,
   icon: Icon,
@@ -155,9 +170,7 @@ function NavItem({
       href={href}
       className={cn(
         "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
-        active
-          ? "bg-white/50 dark:bg-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
-          : "active:scale-95"
+        active ? navItemActive : navItemInactive
       )}
     >
       <Icon
@@ -192,9 +205,7 @@ function MoreButton({
       onClick={onClick}
       className={cn(
         "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
-        active
-          ? "bg-white/50 dark:bg-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
-          : "active:scale-95"
+        active ? navItemActive : navItemInactive
       )}
     >
       <div className="relative">

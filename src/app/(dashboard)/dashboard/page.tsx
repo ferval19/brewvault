@@ -69,7 +69,7 @@ export default async function DashboardPage() {
       )}
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-4">
+      <div data-tour="quick-actions" className="grid grid-cols-2 gap-4">
         <Link href="/brews/new" className="block h-full">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 h-full text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Main stats grid */}
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      <div data-tour="stats-grid" className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Link href="/beans" className="group">
           <div className="relative overflow-hidden rounded-3xl p-5 h-full glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
@@ -229,7 +229,9 @@ export default async function DashboardPage() {
       </div>
 
       {/* Charts */}
-      <DashboardCharts charts={stats.charts} />
+      <div data-tour="charts">
+        <DashboardCharts charts={stats.charts} />
+      </div>
 
       {/* Metodos mas usados y preparaciones recientes */}
       <div className="grid gap-6 lg:grid-cols-2">

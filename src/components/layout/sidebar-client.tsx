@@ -74,7 +74,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="px-4 flex-1 space-y-6">
+      <nav data-tour="sidebar-nav" className="px-4 flex-1 space-y-6">
         {/* Principal */}
         <div className="space-y-1">
           <p className="px-3 text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2">
@@ -104,15 +104,27 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 border-t border-white/25 dark:border-white/[0.06] space-y-3">
+      <div className="p-4 border-t border-white/20 dark:border-white/[0.06] space-y-3">
         {/* Settings */}
         <Link
           href="/settings"
           className={cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
+            "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200",
             pathname.startsWith("/settings")
-              ? "bg-white/50 dark:bg-white/[0.12] text-neutral-900 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] border border-white/30 dark:border-white/[0.08]"
-              : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.08]"
+              ? [
+                  "bg-white/55 dark:bg-white/[0.12]",
+                  "text-neutral-900 dark:text-white",
+                  "border border-white/35 dark:border-white/[0.08]",
+                  "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),0_2px_8px_-2px_rgba(0,0,0,0.06)]",
+                  "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_2px_8px_-2px_rgba(0,0,0,0.2)]",
+                  "backdrop-blur-sm",
+                ]
+              : [
+                  "text-neutral-600 dark:text-neutral-400",
+                  "hover:bg-white/35 dark:hover:bg-white/[0.08]",
+                  "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)]",
+                  "dark:hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]",
+                ]
           )}
         >
           <div className="relative">
@@ -124,7 +136,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
 
         {/* User Info */}
         {user && (
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/30 dark:bg-white/[0.05]">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-white/30 dark:bg-white/[0.05] border border-white/20 dark:border-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]">
             {user.avatar_url ? (
               <Image
                 src={user.avatar_url}
@@ -151,7 +163,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
 
         {/* Theme & Logout */}
         <div className="flex items-center gap-2">
-          <div className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-white/30 dark:bg-white/[0.05]">
+          <div className="flex-1 flex items-center justify-between px-3 py-2.5 rounded-2xl bg-white/30 dark:bg-white/[0.05] border border-white/20 dark:border-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">Tema</span>
             <ThemeToggle />
           </div>
@@ -159,7 +171,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 rounded-xl text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-white/30 dark:hover:bg-white/[0.06]"
+              className="h-10 w-10 rounded-2xl text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-white/30 dark:hover:bg-white/[0.06] transition-all duration-200"
             >
               <LogOut className="h-5 w-5" />
             </Button>
@@ -181,10 +193,23 @@ function NavLink({
     <Link
       href={item.href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
+        "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200",
         isActive
-          ? "bg-white/50 dark:bg-white/[0.12] text-coffee-700 dark:text-coffee-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] border border-white/30 dark:border-white/[0.08]"
-          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.08] hover:text-neutral-900 dark:hover:text-white"
+          ? [
+              "bg-white/55 dark:bg-white/[0.12]",
+              "text-coffee-700 dark:text-coffee-300",
+              "border border-white/35 dark:border-white/[0.08]",
+              "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),0_2px_8px_-2px_rgba(0,0,0,0.06)]",
+              "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_2px_8px_-2px_rgba(0,0,0,0.2)]",
+              "backdrop-blur-sm",
+            ]
+          : [
+              "text-neutral-600 dark:text-neutral-400",
+              "hover:bg-white/35 dark:hover:bg-white/[0.08]",
+              "hover:text-neutral-900 dark:hover:text-white",
+              "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)]",
+              "dark:hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]",
+            ]
       )}
     >
       <item.icon className={cn("h-5 w-5", isActive && "text-coffee-600 dark:text-coffee-400")} />

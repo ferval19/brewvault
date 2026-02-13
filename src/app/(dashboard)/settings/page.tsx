@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { headers } from "next/headers"
-import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar, ChevronRight, QrCode } from "lucide-react"
+import { User, Bell, Coffee, Flame, Cog, LogOut, Calendar, ChevronRight, QrCode, Map } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +12,7 @@ import { ProfileForm } from "./profile-form"
 import { SignOutButton } from "./sign-out-button"
 import { NotificationSettings } from "./notification-settings"
 import { QuickBrewUrls } from "./quick-brew-urls"
+import { ResetTourButton } from "./reset-tour-button"
 
 export const metadata = {
   title: "Configuracion",
@@ -217,6 +218,24 @@ export default async function SettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Tour */}
+      <Card className="rounded-2xl">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div className="space-y-1">
+            <CardTitle className="text-lg">Tour de la app</CardTitle>
+            <CardDescription>
+              Vuelve a ver el recorrido guiado por BrewVault
+            </CardDescription>
+          </div>
+          <div className="p-2 rounded-xl bg-blue-500/10">
+            <Map className="h-5 w-5 text-blue-500" />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <ResetTourButton />
+        </CardContent>
+      </Card>
 
       {/* Sign Out */}
       <Card className="rounded-2xl border-destructive/50">
