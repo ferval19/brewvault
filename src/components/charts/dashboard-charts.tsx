@@ -59,7 +59,7 @@ export function BrewsPerDayChart({ data }: { data: { day: string; count: number 
                   tickLine={false}
                   axisLine={false}
                   className="fill-muted-foreground"
-                  interval={1}
+                  interval={0}
                 />
                 <YAxis
                   tick={{ fontSize: 11 }}
@@ -153,7 +153,7 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
         <div>
           <CardTitle className="text-sm font-medium">Consumo de cafe</CardTitle>
           <p className="text-2xl font-bold mt-1">{totalGrams}g</p>
-          <p className="text-xs text-muted-foreground">ultimas 8 semanas</p>
+          <p className="text-xs text-muted-foreground">ultimos 7 dias</p>
         </div>
         <div className="p-2 rounded-xl bg-amber-500/10">
           <Package className="h-4 w-4 text-amber-500" />

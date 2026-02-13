@@ -114,9 +114,9 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
 
   // Chart data calculations
 
-  // 1. Brews per day (last 14 days)
+  // 1. Brews per day (last 7 days)
   const brewsPerDay: { day: string; count: number }[] = []
-  for (let i = 13; i >= 0; i--) {
+  for (let i = 6; i >= 0; i--) {
     const dayStart = new Date()
     dayStart.setDate(dayStart.getDate() - i)
     dayStart.setHours(0, 0, 0, 0)
@@ -128,7 +128,7 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
       return brewDate >= dayStart && brewDate < dayEnd
     }).length
 
-    const dayLabel = dayStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+    const dayLabel = dayStart.toLocaleDateString("es-ES", { weekday: "short", day: "numeric" })
     brewsPerDay.push({ day: dayLabel, count })
   }
 
@@ -143,24 +143,24 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
     .map(([rating, count]) => ({ rating: parseInt(rating), count }))
     .sort((a, b) => a.rating - b.rating)
 
-  // 3. Coffee consumption per week (last 8 weeks)
+  // 3. Coffee consumption per day (last 7 days)
   const coffeeConsumption: { week: string; grams: number }[] = []
-  for (let i = 7; i >= 0; i--) {
-    const weekStart = new Date()
-    weekStart.setDate(weekStart.getDate() - (i * 7 + weekStart.getDay()))
-    weekStart.setHours(0, 0, 0, 0)
-    const weekEnd = new Date(weekStart)
-    weekEnd.setDate(weekEnd.getDate() + 7)
+  for (let i = 6; i >= 0; i--) {
+    const dayStart = new Date()
+    dayStart.setDate(dayStart.getDate() - i)
+    dayStart.setHours(0, 0, 0, 0)
+    const dayEnd = new Date(dayStart)
+    dayEnd.setDate(dayEnd.getDate() + 1)
 
     const grams = brews
       .filter((b) => {
         const brewDate = new Date(b.brewed_at)
-        return brewDate >= weekStart && brewDate < weekEnd
+        return brewDate >= dayStart && brewDate < dayEnd
       })
       .reduce((sum, b) => sum + (b.dose_grams || 0), 0)
 
-    const weekLabel = weekStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
-    coffeeConsumption.push({ week: weekLabel, grams: Math.round(grams) })
+    const dayLabel = dayStart.toLocaleDateString("es-ES", { weekday: "short", day: "numeric" })
+    coffeeConsumption.push({ week: dayLabel, grams: Math.round(grams) })
   }
 
   // 4. Average rating by method
