@@ -12,12 +12,12 @@ export default function DashboardLayout({
       <MobileHeader />
 
       {/* Desktop Sidebar - hidden on mobile */}
-      <div className="hidden md:block md:fixed md:inset-y-0 md:w-64">
+      <div className="hidden md:block md:fixed md:inset-y-4 md:left-4 md:w-64 md:z-40">
         <SidebarWithAlerts />
       </div>
 
       {/* Main content */}
-      <main className="pt-16 pb-24 px-4 md:pt-8 md:pb-8 md:pl-72 md:pr-8">
+      <main className="pt-16 pb-24 px-4 md:pt-8 md:pb-8 md:pl-76 md:pr-8">
         <div className="max-w-6xl mx-auto">
           {children}
         </div>

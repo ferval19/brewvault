@@ -44,7 +44,15 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
   const pathname = usePathname()
 
   return (
-    <aside className="h-full w-64 bg-white/50 dark:bg-white/[0.03] glass border-r border-white/20 dark:border-white/[0.06] flex flex-col">
+    <aside className={cn(
+      "h-full w-64 flex flex-col rounded-3xl overflow-hidden",
+      "bg-white/55 dark:bg-white/[0.06]",
+      "border border-white/35 dark:border-white/[0.08]",
+      "shadow-[0_8px_40px_-8px_rgba(0,0,0,0.1),inset_0_1px_0_0_rgba(255,255,255,0.5)]",
+      "dark:shadow-[0_8px_40px_-8px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.06)]",
+      "backdrop-blur-2xl backdrop-saturate-[1.8]",
+      "[-webkit-backdrop-filter:blur(40px)_saturate(1.8)]",
+    )}>
       {/* Logo */}
       <div className="p-6 pb-4">
         <Link href="/dashboard" className="flex items-center gap-2">
@@ -58,7 +66,7 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       {/* Quick Action */}
       <div className="px-4 mb-4">
         <Link href="/brews/new">
-          <Button className="w-full rounded-2xl bg-gradient-to-r from-coffee-600 to-coffee-500 hover:from-coffee-700 hover:to-coffee-600 text-white shadow-lg shadow-coffee-600/25">
+          <Button className="w-full rounded-2xl bg-gradient-to-br from-coffee-600 to-coffee-500 hover:from-coffee-700 hover:to-coffee-600 text-white shadow-[0_8px_24px_-4px_rgba(139,90,43,0.4),inset_0_1px_0_0_rgba(255,255,255,0.25)] hover:shadow-[0_12px_32px_-4px_rgba(139,90,43,0.5),inset_0_1px_0_0_rgba(255,255,255,0.25)] transition-all duration-200">
             <Plus className="h-4 w-4 mr-2" />
             Nueva Brew
           </Button>
@@ -96,15 +104,15 @@ export function SidebarClient({ alertCount, user }: SidebarClientProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="p-4 border-t border-white/20 dark:border-white/[0.06] space-y-3">
+      <div className="p-4 border-t border-white/25 dark:border-white/[0.06] space-y-3">
         {/* Settings */}
         <Link
           href="/settings"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
             pathname.startsWith("/settings")
-              ? "bg-white/40 dark:bg-white/10 text-neutral-900 dark:text-white glass-subtle"
-              : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06]"
+              ? "bg-white/50 dark:bg-white/[0.12] text-neutral-900 dark:text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] border border-white/30 dark:border-white/[0.08]"
+              : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.08]"
           )}
         >
           <div className="relative">
@@ -175,8 +183,8 @@ function NavLink({
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
         isActive
-          ? "bg-white/40 dark:bg-white/10 text-coffee-700 dark:text-coffee-300 glass-subtle glass-border"
-          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.06] hover:text-neutral-900 dark:hover:text-white"
+          ? "bg-white/50 dark:bg-white/[0.12] text-coffee-700 dark:text-coffee-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] border border-white/30 dark:border-white/[0.08]"
+          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/30 dark:hover:bg-white/[0.08] hover:text-neutral-900 dark:hover:text-white"
       )}
     >
       <item.icon className={cn("h-5 w-5", isActive && "text-coffee-600 dark:text-coffee-400")} />
