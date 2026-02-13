@@ -7,14 +7,14 @@ import { OnboardingOverlay } from "./onboarding-overlay"
 import { OnboardingTooltip } from "./onboarding-tooltip"
 
 export function OnboardingTour() {
-  const { isActive, hasCompletedOnboarding, startTour } = useOnboarding()
+  const { isActive, hasCompletedOnboarding, isHydrated, startTour } = useOnboarding()
 
-  // Auto-start tour for new users
+  // Auto-start tour for new users (wait until localStorage is read)
   useEffect(() => {
-    if (!hasCompletedOnboarding && !isActive) {
+    if (isHydrated && !hasCompletedOnboarding && !isActive) {
       startTour()
     }
-  }, [hasCompletedOnboarding, isActive, startTour])
+  }, [isHydrated, hasCompletedOnboarding, isActive, startTour])
 
   if (!isActive) return null
 

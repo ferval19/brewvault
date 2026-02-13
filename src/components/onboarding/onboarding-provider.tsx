@@ -16,6 +16,7 @@ interface OnboardingContextValue {
   currentStep: number
   totalSteps: number
   hasCompletedOnboarding: boolean
+  isHydrated: boolean
   startTour: () => void
   nextStep: () => void
   prevStep: () => void
@@ -26,7 +27,7 @@ interface OnboardingContextValue {
 const OnboardingContext = createContext<OnboardingContextValue | null>(null)
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
-  const [hasCompleted, setHasCompleted] = usePersistedState(
+  const [hasCompleted, setHasCompleted, isHydrated] = usePersistedState(
     "brewvault-onboarding-completed",
     false
   )
@@ -70,13 +71,14 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       currentStep,
       totalSteps: tourSteps.length,
       hasCompletedOnboarding: hasCompleted,
+      isHydrated,
       startTour,
       nextStep,
       prevStep,
       skipTour,
       resetTour,
     }),
-    [isActive, currentStep, hasCompleted, startTour, nextStep, prevStep, skipTour, resetTour]
+    [isActive, currentStep, hasCompleted, isHydrated, startTour, nextStep, prevStep, skipTour, resetTour]
   )
 
   return (

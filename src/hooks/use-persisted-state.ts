@@ -13,7 +13,7 @@ import { useState, useEffect, useCallback } from "react"
 export function usePersistedState<T>(
   key: string,
   defaultValue: T | (() => T)
-): [T, (value: T | ((prev: T) => T)) => void] {
+): [T, (value: T | ((prev: T) => T)) => void, boolean] {
   // Get the actual default value (support function for lazy initialization)
   const getDefaultValue = (): T => {
     return typeof defaultValue === "function" ? (defaultValue as () => T)() : defaultValue
@@ -57,5 +57,5 @@ export function usePersistedState<T>(
     []
   )
 
-  return [value, setPersistedValue]
+  return [value, setPersistedValue, isInitialized]
 }
