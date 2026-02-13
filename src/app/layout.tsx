@@ -86,7 +86,16 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",
-    apple: "/apple-touch-icon.png",
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/apple-touch-icon-dark.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
   },
   manifest: "/site.webmanifest",
   alternates: {
