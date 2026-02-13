@@ -70,8 +70,8 @@ export default async function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-4">
-        <Link href="/brews/new">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
+        <Link href="/brews/new" className="block h-full">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-600 to-coffee-700 p-5 h-full text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Coffee className="h-5 w-5" />
@@ -83,8 +83,8 @@ export default async function DashboardPage() {
             </div>
           </div>
         </Link>
-        <Link href="/beans/new">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-500 to-coffee-600 p-5 text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
+        <Link href="/beans/new" className="block h-full">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-coffee-500 to-coffee-600 p-5 h-full text-white hover:shadow-xl hover:shadow-coffee-500/30 transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-white/20">
                 <Package className="h-5 w-5" />
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
       {/* Main stats grid */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Link href="/beans" className="group">
-          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <div className="relative overflow-hidden rounded-3xl p-5 h-full glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -120,7 +120,7 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/brews" className="group">
-          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <div className="relative overflow-hidden rounded-3xl p-5 h-full glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
@@ -139,13 +139,14 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/equipment" className="group">
-          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <div className="relative overflow-hidden rounded-3xl p-5 h-full glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
                   Equipos
                 </p>
                 <p className="text-3xl font-bold mt-1">{stats.equipment.total}</p>
+                <p className="text-sm text-muted-foreground mt-1">&nbsp;</p>
               </div>
               <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <Gauge className="h-5 w-5 text-gray-500" />
@@ -155,13 +156,14 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href="/cupping" className="group">
-          <div className="relative overflow-hidden rounded-3xl p-5 glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <div className="relative overflow-hidden rounded-3xl p-5 h-full glass-panel hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
                   Catas
                 </p>
                 <p className="text-3xl font-bold mt-1">{stats.cupping.total}</p>
+                <p className="text-sm text-muted-foreground mt-1">&nbsp;</p>
               </div>
               <div className="p-2 rounded-xl bg-white/30 dark:bg-white/10">
                 <ClipboardList className="h-5 w-5 text-purple-500" />
@@ -172,9 +174,9 @@ export default async function DashboardPage() {
       </div>
 
       {/* Secondary stats */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2">
         {/* Rating promedio */}
-        <Card className="rounded-2xl">
+        <Card className="rounded-3xl h-full">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Rating promedio</CardTitle>
             <div className="p-2 rounded-xl bg-coffee-500/10">
@@ -200,7 +202,7 @@ export default async function DashboardPage() {
         </Card>
 
         {/* Cafés por estado */}
-        <Card className="rounded-2xl">
+        <Card className="rounded-3xl h-full">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Estado de cafés</CardTitle>
             <div className="p-2 rounded-xl bg-coffee-500/10">
@@ -232,7 +234,7 @@ export default async function DashboardPage() {
       {/* Metodos mas usados y preparaciones recientes */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Top metodos */}
-        <Card className="rounded-2xl">
+        <Card className="rounded-3xl h-full">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
@@ -276,7 +278,7 @@ export default async function DashboardPage() {
         </Card>
 
         {/* Preparaciones recientes */}
-        <Card className="rounded-2xl">
+        <Card className="rounded-3xl h-full">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
               <Calendar className="h-5 w-5" />

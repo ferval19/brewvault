@@ -41,7 +41,7 @@ export function BrewsPerDayChart({ data }: { data: { day: string; count: number 
   const hasData = data.some(d => d.count > 0)
 
   return (
-    <Card className="rounded-3xl">
+    <Card className="rounded-3xl h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">Actividad diaria</CardTitle>
         <div className="p-2 rounded-xl bg-orange-500/10">
@@ -102,7 +102,7 @@ export function RatingDistributionChart({ data }: { data: { rating: number; coun
   const totalRatings = data.reduce((sum, d) => sum + d.count, 0)
 
   return (
-    <Card className="rounded-3xl">
+    <Card className="rounded-3xl h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">Distribucion de ratings</CardTitle>
         <div className="p-2 rounded-xl bg-amber-500/10">
@@ -148,7 +148,7 @@ export function CoffeeConsumptionChart({ data }: { data: { week: string; grams: 
   const totalGrams = data.reduce((sum, d) => sum + d.grams, 0)
 
   return (
-    <Card className="rounded-3xl">
+    <Card className="rounded-3xl h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-sm font-medium">Consumo de cafe</CardTitle>
@@ -220,7 +220,7 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
   }))
 
   return (
-    <Card className="rounded-3xl">
+    <Card className="rounded-3xl h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">Rating por metodo</CardTitle>
         <div className="p-2 rounded-xl bg-orange-500/10">
