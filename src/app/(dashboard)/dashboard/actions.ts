@@ -35,7 +35,7 @@ export type DashboardStats = {
   }[]
   // Chart data
   charts: {
-    brewsPerWeek: { week: string; count: number }[]
+    brewsPerDay: { day: string; count: number }[]
     ratingDistribution: { rating: number; count: number }[]
     coffeeConsumption: { week: string; grams: number }[]
     ratingByMethod: { method: string; avgRating: number; count: number }[]
@@ -114,22 +114,22 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
 
   // Chart data calculations
 
-  // 1. Brews per week (last 8 weeks)
-  const brewsPerWeek: { week: string; count: number }[] = []
-  for (let i = 7; i >= 0; i--) {
-    const weekStart = new Date()
-    weekStart.setDate(weekStart.getDate() - (i * 7 + weekStart.getDay()))
-    weekStart.setHours(0, 0, 0, 0)
-    const weekEnd = new Date(weekStart)
-    weekEnd.setDate(weekEnd.getDate() + 7)
+  // 1. Brews per day (last 14 days)
+  const brewsPerDay: { day: string; count: number }[] = []
+  for (let i = 13; i >= 0; i--) {
+    const dayStart = new Date()
+    dayStart.setDate(dayStart.getDate() - i)
+    dayStart.setHours(0, 0, 0, 0)
+    const dayEnd = new Date(dayStart)
+    dayEnd.setDate(dayEnd.getDate() + 1)
 
     const count = brews.filter((b) => {
       const brewDate = new Date(b.brewed_at)
-      return brewDate >= weekStart && brewDate < weekEnd
+      return brewDate >= dayStart && brewDate < dayEnd
     }).length
 
-    const weekLabel = weekStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
-    brewsPerWeek.push({ week: weekLabel, count })
+    const dayLabel = dayStart.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
+    brewsPerDay.push({ day: dayLabel, count })
   }
 
   // 2. Rating distribution
@@ -204,7 +204,7 @@ export async function getDashboardStats(): Promise<ActionResult<DashboardStats>>
         beans: brew.beans as unknown as { name: string } | null,
       })),
       charts: {
-        brewsPerWeek,
+        brewsPerDay,
         ratingDistribution,
         coffeeConsumption,
         ratingByMethod,

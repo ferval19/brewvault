@@ -30,20 +30,20 @@ function useIsMounted() {
 }
 
 interface ChartProps {
-  brewsPerWeek: { week: string; count: number }[]
+  brewsPerDay: { day: string; count: number }[]
   ratingDistribution: { rating: number; count: number }[]
   coffeeConsumption: { week: string; grams: number }[]
   ratingByMethod: { method: string; avgRating: number; count: number }[]
 }
 
-export function BrewsPerWeekChart({ data }: { data: { week: string; count: number }[] }) {
+export function BrewsPerDayChart({ data }: { data: { day: string; count: number }[] }) {
   const isMounted = useIsMounted()
   const hasData = data.some(d => d.count > 0)
 
   return (
     <Card className="rounded-2xl">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">Actividad semanal</CardTitle>
+        <CardTitle className="text-sm font-medium">Actividad diaria</CardTitle>
         <div className="p-2 rounded-xl bg-orange-500/10">
           <TrendingUp className="h-4 w-4 text-orange-500" />
         </div>
@@ -54,11 +54,12 @@ export function BrewsPerWeekChart({ data }: { data: { week: string; count: numbe
             <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={150}>
               <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis
-                  dataKey="week"
-                  tick={{ fontSize: 11 }}
+                  dataKey="day"
+                  tick={{ fontSize: 10 }}
                   tickLine={false}
                   axisLine={false}
                   className="fill-muted-foreground"
+                  interval={1}
                 />
                 <YAxis
                   tick={{ fontSize: 11 }}
@@ -287,7 +288,7 @@ export function RatingByMethodChart({ data }: { data: { method: string; avgRatin
 export function DashboardCharts({ charts }: { charts: ChartProps }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2">
-      <BrewsPerWeekChart data={charts.brewsPerWeek} />
+      <BrewsPerDayChart data={charts.brewsPerDay} />
       <RatingDistributionChart data={charts.ratingDistribution} />
       <CoffeeConsumptionChart data={charts.coffeeConsumption} />
       <RatingByMethodChart data={charts.ratingByMethod} />
