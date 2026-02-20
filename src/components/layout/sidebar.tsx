@@ -11,6 +11,7 @@ import {
   Gauge,
   Settings,
   LogOut,
+  BarChart2,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Cafés", href: "/beans", icon: Package },
   { name: "Brews", href: "/brews", icon: Coffee },
   { name: "Equipo", href: "/equipment", icon: Gauge },
+  { name: "Análisis", href: "/analytics", icon: BarChart2 },
   { name: "Ajustes", href: "/settings", icon: Settings },
 ]
 

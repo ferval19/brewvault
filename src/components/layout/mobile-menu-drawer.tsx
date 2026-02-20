@@ -18,11 +18,13 @@ import {
   Settings,
   LogOut,
   Coffee,
+  BarChart2,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const menuItems = [
+  { name: "Análisis", href: "/analytics", icon: BarChart2 },
   { name: "Notas de Cata", href: "/cupping", icon: ClipboardList },
   { name: "Configuracion", href: "/settings", icon: Settings },
 ]
