@@ -2,6 +2,8 @@ import { MobileHeader } from "@/components/layout/mobile-header"
 import { MobileNavWithAlerts, SidebarWithAlerts } from "@/components/layout/nav-with-alerts"
 import { OnboardingProvider } from "@/components/onboarding/onboarding-provider"
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour"
+import { PageTransition } from "@/components/layout/page-transition"
+import { AnimatedBackground } from "@/components/layout/animated-background"
 
 export default function DashboardLayout({
   children,
@@ -11,6 +13,9 @@ export default function DashboardLayout({
   return (
     <OnboardingProvider>
       <div className="min-h-screen bg-neutral-100/80 dark:bg-neutral-950 mesh-gradient">
+        {/* Animated floating blobs */}
+        <AnimatedBackground />
+
         {/* Mobile Header */}
         <MobileHeader />
 
@@ -19,10 +24,12 @@ export default function DashboardLayout({
           <SidebarWithAlerts />
         </div>
 
-        {/* Main content */}
-        <main className="pt-16 pb-24 px-4 md:pt-8 md:pb-8 md:pl-76 md:pr-8">
+        {/* Main content with page transition */}
+        <main className="pt-16 pb-28 px-4 md:pt-8 md:pb-8 md:pl-76 md:pr-8">
           <div className="max-w-6xl mx-auto">
-            {children}
+            <PageTransition>
+              {children}
+            </PageTransition>
           </div>
         </main>
 

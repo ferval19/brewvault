@@ -13,6 +13,7 @@ import {
   Plus,
   MoreHorizontal,
   ClipboardList,
+  BarChart2,
 } from "lucide-react"
 import { AlertBadge } from "@/components/alerts/alert-badge"
 import { BottomSheet, BottomSheetItem } from "./bottom-sheet"
@@ -27,6 +28,7 @@ interface MobileNavClientProps {
 }
 
 const moreNavigation = [
+  { name: "Análisis", href: "/analytics", icon: BarChart2, description: "Estadísticas y gráficas" },
   { name: "Equipo", href: "/equipment", icon: Gauge, description: "Cafeteras y molinos" },
   { name: "Catas", href: "/cupping", icon: ClipboardList, description: "Notas de cata SCA" },
   { name: "Ajustes", href: "/settings", icon: Settings, description: "Perfil y preferencias", showBadge: true },
@@ -169,20 +171,29 @@ function NavItem({
     <Link
       href={href}
       className={cn(
-        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
+        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5",
+        "transition-all duration-300 ease-out",
         active ? navItemActive : navItemInactive
       )}
     >
-      <Icon
-        className={cn(
-          "h-[22px] w-[22px] transition-colors duration-200",
-          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
-        )}
-      />
+      {/* Icon with spring pop when activated */}
+      <span
+        key={String(active)}
+        className={cn(active && "nav-item-active")}
+      >
+        <Icon
+          className={cn(
+            "h-[22px] w-[22px] transition-colors duration-300",
+            active ? "text-coffee-700 dark:text-amber-400" : "text-neutral-500 dark:text-neutral-400"
+          )}
+        />
+      </span>
       <span
         className={cn(
-          "text-[10px] font-semibold leading-tight transition-colors duration-200",
-          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+          "text-[10px] font-semibold leading-tight transition-all duration-300",
+          active
+            ? "text-coffee-700 dark:text-amber-400"
+            : "text-neutral-500 dark:text-neutral-400"
         )}
       >
         {label}
@@ -204,26 +215,32 @@ function MoreButton({
     <button
       onClick={onClick}
       className={cn(
-        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all duration-200",
+        "relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-4 py-1.5",
+        "transition-all duration-300 ease-out",
         active ? navItemActive : navItemInactive
       )}
     >
-      <div className="relative">
+      <span
+        key={String(active)}
+        className={cn("relative", active && "nav-item-active")}
+      >
         <MoreHorizontal
           className={cn(
-            "h-[22px] w-[22px] transition-colors duration-200",
-            active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+            "h-[22px] w-[22px] transition-colors duration-300",
+            active ? "text-coffee-700 dark:text-amber-400" : "text-neutral-500 dark:text-neutral-400"
           )}
         />
         {alertCount > 0 && <AlertBadge count={alertCount} />}
-      </div>
+      </span>
       <span
         className={cn(
-          "text-[10px] font-semibold leading-tight transition-colors duration-200",
-          active ? "text-coffee-700 dark:text-coffee-300" : "text-neutral-500 dark:text-neutral-400"
+          "text-[10px] font-semibold leading-tight transition-all duration-300",
+          active
+            ? "text-coffee-700 dark:text-amber-400"
+            : "text-neutral-500 dark:text-neutral-400"
         )}
       >
-        Mas
+        Más
       </span>
     </button>
   )

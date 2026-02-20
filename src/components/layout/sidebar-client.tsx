@@ -15,6 +15,7 @@ import {
   User,
   ClipboardList,
   Plus,
+  BarChart2,
 } from "lucide-react"
 import { signOut } from "@/app/(auth)/actions"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -38,6 +39,7 @@ const mainNavigation = [
 const collectionNavigation = [
   { name: "Equipo", href: "/equipment", icon: Gauge },
   { name: "Catas", href: "/cupping", icon: ClipboardList },
+  { name: "Análisis", href: "/analytics", icon: BarChart2 },
 ]
 
 export function SidebarClient({ alertCount, user }: SidebarClientProps) {
@@ -193,27 +195,49 @@ function NavLink({
     <Link
       href={item.href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200",
+        "group flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium",
+        "transition-all duration-300 ease-out",
         isActive
           ? [
               "bg-white/55 dark:bg-white/[0.12]",
               "text-coffee-700 dark:text-coffee-300",
               "border border-white/35 dark:border-white/[0.08]",
-              "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),0_2px_8px_-2px_rgba(0,0,0,0.06)]",
-              "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_2px_8px_-2px_rgba(0,0,0,0.2)]",
+              "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),0_2px_12px_-2px_rgba(0,0,0,0.08)]",
+              "dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_2px_12px_-2px_rgba(0,0,0,0.25)]",
               "backdrop-blur-sm",
             ]
           : [
-              "text-neutral-600 dark:text-neutral-400",
-              "hover:bg-white/35 dark:hover:bg-white/[0.08]",
-              "hover:text-neutral-900 dark:hover:text-white",
-              "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25)]",
-              "dark:hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]",
+              "text-neutral-500 dark:text-neutral-400",
+              "hover:bg-white/30 dark:hover:bg-white/[0.07]",
+              "hover:text-neutral-800 dark:hover:text-neutral-200",
+              "hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]",
+              "active:scale-[0.97]",
             ]
       )}
     >
-      <item.icon className={cn("h-5 w-5", isActive && "text-coffee-600 dark:text-coffee-400")} />
+      {/* Icon container — bounces on activation */}
+      <span
+        key={String(isActive)}
+        className={cn(
+          "shrink-0 flex items-center justify-center w-5 h-5",
+          isActive && "nav-item-active"
+        )}
+      >
+        <item.icon
+          className={cn(
+            "h-[18px] w-[18px] transition-colors duration-300",
+            isActive
+              ? "text-coffee-600 dark:text-amber-400"
+              : "text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300"
+          )}
+        />
+      </span>
       {item.name}
+
+      {/* Active indicator — small dot on the right */}
+      {isActive && (
+        <span className="ml-auto h-1.5 w-1.5 rounded-full bg-coffee-500 dark:bg-amber-400 shrink-0 animate-[fade-up_0.3s_ease_both]" />
+      )}
     </Link>
   )
 }
