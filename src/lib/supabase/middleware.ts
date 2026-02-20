@@ -37,13 +37,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Redirect /analytics to /dashboard
-  if (request.nextUrl.pathname.startsWith("/analytics")) {
-    const url = request.nextUrl.clone()
-    url.pathname = request.nextUrl.pathname.replace("/analytics", "/dashboard")
-    return NextResponse.redirect(url)
-  }
-
   // Protected routes - redirect to login if not authenticated
   const protectedPaths = [
     "/dashboard",
@@ -53,6 +46,7 @@ export async function updateSession(request: NextRequest) {
     "/cupping",
     "/alerts",
     "/settings",
+    "/analytics",
   ]
 
   // Skip middleware for API routes
