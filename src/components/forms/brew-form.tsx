@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ImageUpload } from "@/components/forms/image-upload"
+import { StockWarningDialog } from "@/components/forms/stock-warning-dialog"
 
 import {
   brewMethods,
@@ -61,6 +62,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedDrinkType, setSelectedDrinkType] = useState<string | null>(null)
+  const [showStockWarning, setShowStockWarning] = useState(false)
+  const [pendingSubmitData, setPendingSubmitData] = useState<BrewFormData | null>(null)
 
   const brewers = equipment.filter((e) => e.type === "brewer" || e.type === "espresso_machine")
   const grinders = equipment.filter((e) => e.type === "grinder")
@@ -120,23 +123,7 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
   const hasNoStock = selectedBean && selectedBean.current_weight_grams !== null && selectedBean.current_weight_grams <= 0
   const hasLowStock = selectedBean && selectedBean.current_weight_grams !== null && selectedBean.current_weight_grams > 0 && selectedBean.current_weight_grams < doseGrams
 
-  async function onSubmit(data: BrewFormData) {
-    if (!data.bean_id) {
-      setError("Debes seleccionar un cafe")
-      return
-    }
-    if (!data.brew_method) {
-      setError("Debes seleccionar un metodo")
-      return
-    }
-
-    // Check stock
-    const bean = beans.find(b => b.id === data.bean_id)
-    if (bean && bean.current_weight_grams !== null && bean.current_weight_grams <= 0) {
-      setError("Este cafe no tiene stock disponible. Selecciona otro o actualiza el inventario.")
-      return
-    }
-
+  async function submitBrew(data: BrewFormData) {
     setIsLoading(true)
     setError(null)
 
@@ -156,6 +143,34 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
       router.push("/brews")
       router.refresh()
     }
+  }
+
+  function handleContinueWithNoStock() {
+    setShowStockWarning(false)
+    if (pendingSubmitData) {
+      submitBrew(pendingSubmitData)
+    }
+  }
+
+  async function onSubmit(data: BrewFormData) {
+    if (!data.bean_id) {
+      setError("Debes seleccionar un cafe")
+      return
+    }
+    if (!data.brew_method) {
+      setError("Debes seleccionar un metodo")
+      return
+    }
+
+    // Si no hay stock, mostrar dialogo de advertencia en lugar de bloquear
+    const bean = beans.find(b => b.id === data.bean_id)
+    if (bean && bean.current_weight_grams !== null && bean.current_weight_grams <= 0) {
+      setPendingSubmitData(data)
+      setShowStockWarning(true)
+      return
+    }
+
+    await submitBrew(data)
   }
 
   return (
@@ -218,8 +233,8 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
               </SelectContent>
             </Select>
             {hasNoStock && (
-              <p className="text-sm text-destructive mt-1">
-                Este cafe no tiene stock. No podras crear la preparacion.
+              <p className="text-sm text-amber-600 dark:text-amber-500 mt-1">
+                Sin stock registrado. Al guardar podrás continuar o marcar como terminado.
               </p>
             )}
             {hasLowStock && !hasNoStock && (
@@ -505,6 +520,17 @@ export function BrewForm({ brew, defaultBrew, beans, equipment, defaultEquipment
         </Button>
       </div>
 
+      <StockWarningDialog
+        open={showStockWarning}
+        onOpenChange={setShowStockWarning}
+        beanId={pendingSubmitData?.bean_id || ""}
+        beanName={selectedBean?.name || ""}
+        onContinue={handleContinueWithNoStock}
+        onFinished={() => {
+          setValue("bean_id", "")
+          router.refresh()
+        }}
+      />
     </form>
   )
 }

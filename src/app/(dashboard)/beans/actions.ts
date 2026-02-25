@@ -225,6 +225,75 @@ export async function deleteBeans(
   return { success: true, data: { deleted: count || 0 } }
 }
 
+export type BeanBrewStats = {
+  brewCount: number
+  totalDoseGrams: number
+}
+
+export async function getBeanBrewStats(beanId: string): Promise<ActionResult<BeanBrewStats>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { data, error } = await supabase
+    .from("brews")
+    .select("dose_grams")
+    .eq("bean_id", beanId)
+    .eq("user_id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  const brewCount = data.length
+  const totalDoseGrams = data.reduce((sum, brew) => sum + (brew.dose_grams || 0), 0)
+
+  return { success: true, data: { brewCount, totalDoseGrams } }
+}
+
+export async function markBeanAsFinished(
+  beanId: string,
+  realInitialWeightGrams: number
+): Promise<ActionResult<undefined>> {
+  const supabase = await createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) {
+    return { success: false, error: "No autenticado" }
+  }
+
+  const { error } = await supabase
+    .from("beans")
+    .update({
+      weight_grams: realInitialWeightGrams,
+      current_weight_grams: 0,
+      status: "finished",
+    })
+    .eq("id", beanId)
+    .eq("user_id", userData.user.id)
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  // Descartar alertas de stock bajo activas para este cafe
+  await supabase
+    .from("alerts")
+    .update({ is_dismissed: true })
+    .eq("entity_id", beanId)
+    .eq("type", "low_stock")
+    .eq("is_dismissed", false)
+
+  revalidatePath("/beans")
+  revalidatePath(`/beans/${beanId}`)
+  revalidatePath("/brews")
+  revalidatePath("/dashboard")
+  return { success: true, data: undefined }
+}
+
 export async function getRoasters(): Promise<ActionResult<Roaster[]>> {
   const supabase = await createClient()
 
