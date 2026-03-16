@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   Check,
   Coffee,
+  Timer,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -50,6 +51,16 @@ function getDaysSinceRoast(dateStr: string | null): number | null {
   const roastDate = new Date(dateStr)
   const now = new Date()
   return Math.floor((now.getTime() - roastDate.getTime()) / (1000 * 60 * 60 * 24))
+}
+
+function getBrewSpanLabel(bean: Bean): string | null {
+  if (!bean.first_brew_at) return null
+  const first = new Date(bean.first_brew_at)
+  const end = bean.status === "active" ? new Date() : new Date(bean.last_brew_at!)
+  const days = Math.max(1, Math.floor((end.getTime() - first.getTime()) / (1000 * 60 * 60 * 24)))
+  if (days < 14) return `${days}d`
+  if (days < 60) return `${Math.floor(days / 7)} sem`
+  return `${Math.floor(days / 30)} m`
 }
 
 export function BeanListItem({ beans, selectionMode, selectedIds, onSelect }: BeanListItemProps) {
@@ -115,6 +126,7 @@ function ListRow({
 }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const daysSinceRoast = getDaysSinceRoast(bean.roast_date)
+  const brewSpanLabel = getBrewSpanLabel(bean)
   const isLowStock = bean.current_weight_grams !== null &&
     bean.low_stock_threshold_grams !== null &&
     bean.current_weight_grams <= bean.low_stock_threshold_grams &&
@@ -218,6 +230,15 @@ function ListRow({
                   <p className="text-sm font-medium flex items-center justify-center gap-1">
                     <Coffee className="h-3 w-3" />
                     {bean.brew_count}
+                  </p>
+                </div>
+              )}
+              {brewSpanLabel && (
+                <div className="text-center min-w-[50px]">
+                  <p className="text-xs text-muted-foreground">Duración</p>
+                  <p className="text-sm font-medium flex items-center justify-center gap-1 text-primary/70">
+                    <Timer className="h-3 w-3" />
+                    {brewSpanLabel}
                   </p>
                 </div>
               )}

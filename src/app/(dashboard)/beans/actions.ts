@@ -37,6 +37,8 @@ export type Bean = {
   updated_at: string
   roasters: { id: string; name: string } | null
   brew_count: number
+  first_brew_at: string | null
+  last_brew_at: string | null
 }
 
 export type Roaster = {
@@ -60,7 +62,7 @@ export async function getBeans(): Promise<ActionResult<Bean[]>> {
         id,
         name
       ),
-      brews (count)
+      brews (brewed_at)
     `)
     .order("created_at", { ascending: false })
 
@@ -70,9 +72,14 @@ export async function getBeans(): Promise<ActionResult<Bean[]>> {
 
   const beans = (data || []).map((bean) => {
     const { brews, ...rest } = bean as Record<string, unknown>
+    const brewDates = (Array.isArray(brews) ? brews as { brewed_at: string }[] : [])
+      .map((b) => b.brewed_at)
+      .sort()
     return {
       ...rest,
-      brew_count: Array.isArray(brews) && brews.length > 0 ? (brews[0] as { count: number }).count : 0,
+      brew_count: brewDates.length,
+      first_brew_at: brewDates.length > 0 ? brewDates[0] : null,
+      last_brew_at: brewDates.length > 0 ? brewDates[brewDates.length - 1] : null,
     } as Bean
   })
 
@@ -103,7 +110,23 @@ export async function getBean(id: string): Promise<ActionResult<Bean>> {
     return { success: false, error: error.message }
   }
 
-  return { success: true, data: data as Bean }
+  const { data: brewDates } = await supabase
+    .from("brews")
+    .select("brewed_at")
+    .eq("bean_id", id)
+    .order("brewed_at", { ascending: true })
+
+  const dates = (brewDates || []).map((b) => b.brewed_at)
+
+  return {
+    success: true,
+    data: {
+      ...data,
+      brew_count: dates.length,
+      first_brew_at: dates.length > 0 ? dates[0] : null,
+      last_brew_at: dates.length > 0 ? dates[dates.length - 1] : null,
+    } as Bean,
+  }
 }
 
 export async function createBean(

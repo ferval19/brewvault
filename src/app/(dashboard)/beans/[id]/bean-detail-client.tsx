@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowLeft, Pencil, MapPin, Mountain, Calendar, Star, Package } from "lucide-react"
+import { ArrowLeft, Pencil, MapPin, Mountain, Calendar, Star, Package, Timer } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -43,6 +43,14 @@ export function BeanDetailClient({ bean }: BeanDetailClientProps) {
     if (!bean.roast_date) return null
     const now = new Date()
     return Math.floor((now.getTime() - new Date(bean.roast_date).getTime()) / (1000 * 60 * 60 * 24))
+  })()
+
+  const brewSpan = (() => {
+    if (!bean.first_brew_at) return null
+    const first = new Date(bean.first_brew_at)
+    const end = bean.status === "active" ? new Date() : new Date(bean.last_brew_at!)
+    const days = Math.max(1, Math.floor((end.getTime() - first.getTime()) / (1000 * 60 * 60 * 24)))
+    return { days, label: days < 14 ? `${days}` : days < 60 ? `${Math.floor(days / 7)}` : `${Math.floor(days / 30)}`, unit: days < 14 ? (days === 1 ? "día" : "días") : days < 60 ? (Math.floor(days / 7) === 1 ? "semana" : "semanas") : (Math.floor(days / 30) === 1 ? "mes" : "meses") }
   })()
 
   const gradient = bean.roast_level
@@ -186,6 +194,14 @@ export function BeanDetailClient({ bean }: BeanDetailClientProps) {
             label="SCA Score"
             value={bean.sca_score.toString()}
             subvalue="/100"
+          />
+        )}
+        {brewSpan && (
+          <MetricCard
+            icon={<Timer className="h-4 w-4" />}
+            label="Duración"
+            value={brewSpan.label}
+            subvalue={brewSpan.unit}
           />
         )}
       </div>

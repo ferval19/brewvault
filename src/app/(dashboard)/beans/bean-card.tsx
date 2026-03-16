@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState, useMemo } from "react"
-import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar, Check, Coffee } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, AlertTriangle, MapPin, Calendar, Check, Coffee, Timer } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CoffeeBeansIllustration } from "@/lib/placeholder-illustrations"
 
@@ -59,6 +59,16 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
     const roastDate = new Date(bean.roast_date)
     return Math.floor((now.getTime() - roastDate.getTime()) / (1000 * 60 * 60 * 24))
   }, [bean.roast_date])
+
+  const brewSpanLabel = useMemo(() => {
+    if (!bean.first_brew_at) return null
+    const first = new Date(bean.first_brew_at)
+    const end = bean.status === "active" ? new Date() : new Date(bean.last_brew_at!)
+    const days = Math.max(1, Math.floor((end.getTime() - first.getTime()) / (1000 * 60 * 60 * 24)))
+    if (days < 14) return `${days}d`
+    if (days < 60) return `${Math.floor(days / 7)}sem`
+    return `${Math.floor(days / 30)}m`
+  }, [bean.first_brew_at, bean.last_brew_at, bean.status])
 
   const gradient = bean.roast_level
     ? roastLevelGradients[bean.roast_level] || "from-coffee-400/30 to-coffee-500/30"
@@ -216,7 +226,7 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
             )}
 
             {/* Footer info */}
-            {(daysFromRoast !== null || bean.brew_count > 0) && (
+            {(daysFromRoast !== null || bean.brew_count > 0 || brewSpanLabel) && (
               <div className="flex items-center gap-3 pt-3 border-t text-sm text-muted-foreground">
                 {daysFromRoast !== null && (
                   <span className="flex items-center gap-1.5">
@@ -232,6 +242,12 @@ export function BeanCard({ bean, selectionMode, selected, onSelect }: BeanCardPr
                   <span className="flex items-center gap-1.5">
                     <Coffee className="h-3.5 w-3.5" />
                     {bean.brew_count} {bean.brew_count === 1 ? "brew" : "brews"}
+                  </span>
+                )}
+                {brewSpanLabel && (
+                  <span className="flex items-center gap-1.5 ml-auto text-primary/70">
+                    <Timer className="h-3.5 w-3.5" />
+                    {brewSpanLabel}
                   </span>
                 )}
               </div>
