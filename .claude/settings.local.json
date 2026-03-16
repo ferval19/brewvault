@@ -43,7 +43,9 @@
       "WebFetch(domain:liquidglass-kit.dev)",
       "WebFetch(domain:liquidglassgen.com)",
       "WebFetch(domain:www.donnywals.com)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(gh run:*)",
+      "Bash(npx vercel:*)"
     ]
   }
 }

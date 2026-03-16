@@ -20,7 +20,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { createGoal, deleteGoal, GOAL_META, type GoalWithProgress, type GoalType } from "@/app/(dashboard)/goals/actions"
+import { createGoal, deleteGoal } from "@/app/(dashboard)/goals/actions"
+import { GOAL_META, type GoalWithProgress, type GoalType } from "@/app/(dashboard)/goals/types"
 
 interface GoalsWidgetProps {
   goals: GoalWithProgress[]
