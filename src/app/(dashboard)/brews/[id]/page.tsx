@@ -37,15 +37,6 @@ function formatDate(dateStr: string): string {
   })
 }
 
-function calculateBrewPrice(
-  doseGrams: number,
-  beanPrice: number | null | undefined,
-  beanWeight: number | null | undefined
-): number | null {
-  if (!beanPrice || !beanWeight || beanWeight === 0) return null
-  return (doseGrams / beanWeight) * beanPrice
-}
-
 export default async function BrewDetailPage({
   params,
 }: {
@@ -66,7 +57,7 @@ export default async function BrewDetailPage({
   const grindLabel = grindSizes.find((g) => g.value === brew.grind_size)?.label || brew.grind_size
   const filterLabel = filterTypes.find((f) => f.value === brew.filter_type)?.label || brew.filter_type
   const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
-  const brewPrice = calculateBrewPrice(brew.dose_grams, brew.beans?.price, brew.beans?.weight_grams)
+  const brewPrice = brew.cost_per_brew
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-8">

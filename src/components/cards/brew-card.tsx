@@ -48,15 +48,6 @@ function formatDate(dateStr: string): string {
   })
 }
 
-function calculateBrewPrice(brew: Brew): number | null {
-  const { beans, dose_grams } = brew
-  if (!beans?.price || !beans?.weight_grams || beans.weight_grams === 0) {
-    return null
-  }
-  const pricePerGram = beans.price / beans.weight_grams
-  return pricePerGram * dose_grams
-}
-
 export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
@@ -64,7 +55,7 @@ export function BrewCard({ brew, selectionMode, selected, onSelect }: BrewCardPr
   const MethodIcon = methodConfig.icon
   const MethodIllustration = getBrewMethodIllustration(brew.brew_method)
   const ratio = brew.ratio?.toFixed(1) || (brew.water_grams / brew.dose_grams).toFixed(1)
-  const brewPrice = calculateBrewPrice(brew)
+  const brewPrice = brew.cost_per_brew
 
   const handleClick = (e: React.MouseEvent) => {
     if (selectionMode && onSelect) {

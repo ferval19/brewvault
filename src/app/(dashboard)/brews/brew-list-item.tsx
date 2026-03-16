@@ -55,14 +55,6 @@ function getDateKey(dateStr: string): string {
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 }
 
-function calculateBrewPrice(brew: Brew): number | null {
-  const { beans, dose_grams } = brew
-  if (!beans?.price || !beans?.weight_grams || beans.weight_grams === 0) {
-    return null
-  }
-  return (dose_grams / beans.weight_grams) * beans.price
-}
-
 export function BrewListItem({ brews, selectionMode, selectedIds, onSelect }: BrewListItemProps) {
   // Group brews by date
   const groupedBrews = brews.reduce((groups, brew) => {
@@ -128,7 +120,7 @@ function ListRow({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const methodConfig = getBrewMethodConfig(brew.brew_method)
   const MethodIcon = methodConfig.icon
-  const brewPrice = calculateBrewPrice(brew)
+  const brewPrice = brew.cost_per_brew
 
   const handleClick = (e: React.MouseEvent) => {
     if (selectionMode && onSelect) {

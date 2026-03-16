@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/lib/supabase/server"
 import { brewSchema, type BrewInput } from "@/lib/validations/brews"
+import { recalculateBrewCosts } from "@/app/(dashboard)/beans/actions"
 
 export type ActionResult<T = undefined> =
   | { success: true; data: T; error?: never }
@@ -31,6 +32,7 @@ export type Brew = {
   notes: string | null
   rating: number | null
   image_url: string | null
+  cost_per_brew: number | null
   brewed_at: string
   created_at: string
   updated_at: string
@@ -225,6 +227,8 @@ export async function createBrew(
     }
   }
 
+  await recalculateBrewCosts(validatedFields.data.bean_id)
+
   revalidatePath("/brews")
   revalidatePath("/beans")
   revalidatePath("/alerts")
@@ -249,6 +253,13 @@ export async function updateBrew(
     return { success: false, error: firstError?.message || "Datos invalidos" }
   }
 
+  // Fetch current bean_id to handle bean changes
+  const { data: currentBrew } = await supabase
+    .from("brews")
+    .select("bean_id")
+    .eq("id", id)
+    .single()
+
   const { error } = await supabase
     .from("brews")
     .update(validatedFields.data)
@@ -257,6 +268,13 @@ export async function updateBrew(
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  // Recalculate for new bean
+  await recalculateBrewCosts(validatedFields.data.bean_id)
+  // Recalculate for old bean if it changed
+  if (currentBrew && currentBrew.bean_id !== validatedFields.data.bean_id) {
+    await recalculateBrewCosts(currentBrew.bean_id)
   }
 
   revalidatePath("/brews")
@@ -274,6 +292,13 @@ export async function deleteBrew(
     return { success: false, error: "No autenticado" }
   }
 
+  // Fetch bean_id before deleting to recalculate costs
+  const { data: brew } = await supabase
+    .from("brews")
+    .select("bean_id")
+    .eq("id", id)
+    .single()
+
   const { error } = await supabase
     .from("brews")
     .delete()
@@ -282,6 +307,10 @@ export async function deleteBrew(
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  if (brew?.bean_id) {
+    await recalculateBrewCosts(brew.bean_id)
   }
 
   revalidatePath("/brews")
@@ -302,6 +331,12 @@ export async function deleteBrews(
     return { success: false, error: "No hay preparaciones seleccionadas" }
   }
 
+  // Fetch bean_ids before deleting to recalculate costs
+  const { data: brewsToDelete } = await supabase
+    .from("brews")
+    .select("bean_id")
+    .in("id", ids)
+
   const { error, count } = await supabase
     .from("brews")
     .delete({ count: "exact" })
@@ -310,6 +345,12 @@ export async function deleteBrews(
 
   if (error) {
     return { success: false, error: error.message }
+  }
+
+  // Recalculate costs for each unique affected bean
+  if (brewsToDelete) {
+    const uniqueBeanIds = [...new Set(brewsToDelete.map((b) => b.bean_id).filter(Boolean))]
+    await Promise.all(uniqueBeanIds.map((beanId) => recalculateBrewCosts(beanId)))
   }
 
   revalidatePath("/brews")

@@ -138,6 +138,31 @@ export async function createBean(
   return { success: true, data: undefined }
 }
 
+export async function recalculateBrewCosts(beanId: string): Promise<void> {
+  const supabase = await createClient()
+
+  const { data: bean } = await supabase
+    .from("beans")
+    .select("price")
+    .eq("id", beanId)
+    .single()
+
+  if (!bean?.price) {
+    await supabase.from("brews").update({ cost_per_brew: null }).eq("bean_id", beanId)
+    return
+  }
+
+  const { count } = await supabase
+    .from("brews")
+    .select("*", { count: "exact", head: true })
+    .eq("bean_id", beanId)
+
+  if (!count || count === 0) return
+
+  const costPerBrew = bean.price / count
+  await supabase.from("brews").update({ cost_per_brew: costPerBrew }).eq("bean_id", beanId)
+}
+
 export async function updateBean(
   id: string,
   input: BeanInput
@@ -167,8 +192,11 @@ export async function updateBean(
     return { success: false, error: error.message }
   }
 
+  await recalculateBrewCosts(id)
+
   revalidatePath("/beans")
   revalidatePath(`/beans/${id}`)
+  revalidatePath("/brews")
   return { success: true, data: undefined }
 }
 
@@ -286,6 +314,8 @@ export async function markBeanAsFinished(
     .eq("entity_id", beanId)
     .eq("type", "low_stock")
     .eq("is_dismissed", false)
+
+  await recalculateBrewCosts(beanId)
 
   revalidatePath("/beans")
   revalidatePath(`/beans/${beanId}`)
