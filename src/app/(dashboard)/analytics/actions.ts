@@ -359,3 +359,72 @@ export async function getAnalyticsData(
     },
   }
 }
+
+export type ComparisonKPIs = {
+  totalBrews: number
+  avgRating: number | null
+  totalGrams: number
+}
+
+function getPreviousPeriodBounds(range: DateRange): { start: Date; end: Date } | null {
+  if (range === "all") return null
+
+  const now = new Date()
+  const end = new Date()
+  end.setHours(23, 59, 59, 999)
+
+  let daysBack = 0
+  switch (range) {
+    case "7d":  daysBack = 7;  break
+    case "30d": daysBack = 30; break
+    case "90d": daysBack = 90; break
+    case "1y":  daysBack = 365; break
+  }
+
+  const prevEnd = new Date(now)
+  prevEnd.setDate(prevEnd.getDate() - daysBack)
+  prevEnd.setHours(23, 59, 59, 999)
+
+  const prevStart = new Date(prevEnd)
+  prevStart.setDate(prevStart.getDate() - daysBack + 1)
+  prevStart.setHours(0, 0, 0, 0)
+
+  return { start: prevStart, end: prevEnd }
+}
+
+export async function getComparisonKPIs(
+  range: DateRange,
+  brewMethod?: string
+): Promise<ActionResult<ComparisonKPIs | null>> {
+  if (range === "all") return { success: true, data: null }
+
+  const supabase = await createClient()
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) return { success: false, error: "No autenticado" }
+
+  const bounds = getPreviousPeriodBounds(range)
+  if (!bounds) return { success: true, data: null }
+
+  let query = supabase
+    .from("brews")
+    .select("dose_grams, rating")
+    .gte("brewed_at", bounds.start.toISOString())
+    .lte("brewed_at", bounds.end.toISOString())
+
+  if (brewMethod && brewMethod !== "all") {
+    query = query.eq("brew_method", brewMethod)
+  }
+
+  const { data, error } = await query
+  if (error) return { success: false, error: error.message }
+
+  const rows = data || []
+  const totalBrews = rows.length
+  const ratings = rows.filter((r) => r.rating !== null).map((r) => r.rating as number)
+  const avgRating = ratings.length > 0
+    ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
+    : null
+  const totalGrams = Math.round(rows.reduce((sum, r) => sum + (r.dose_grams || 0), 0))
+
+  return { success: true, data: { totalBrews, avgRating, totalGrams } }
+}

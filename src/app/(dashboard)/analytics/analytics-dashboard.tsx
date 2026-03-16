@@ -35,12 +35,16 @@ import {
   Globe,
   Flame,
   Loader2,
+  TrendingDown,
+  GitCompare,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { brewMethods } from "@/lib/validations/brews"
 import {
   getAnalyticsData,
+  getComparisonKPIs,
   type AnalyticsData,
+  type ComparisonKPIs,
   type DateRange,
 } from "./actions"
 
@@ -87,23 +91,37 @@ function KpiCard({
   subtitle,
   icon: Icon,
   color,
+  delta,
 }: {
   title: string
   value: string
   subtitle?: string
   icon: React.ElementType
   color: string
+  delta?: { label: string; positive: boolean | null } | null
 }) {
   return (
     <div className="relative overflow-hidden rounded-3xl p-5 glass-panel">
       <div className="flex items-start justify-between">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
             {title}
           </p>
           <p className="text-2xl font-bold mt-1 truncate">{value}</p>
           {subtitle && (
             <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
+          )}
+          {delta && (
+            <div className={cn(
+              "inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded-full text-xs font-medium",
+              delta.positive === true && "bg-green-500/10 text-green-600 dark:text-green-400",
+              delta.positive === false && "bg-red-500/10 text-red-600 dark:text-red-400",
+              delta.positive === null && "bg-muted text-muted-foreground",
+            )}>
+              {delta.positive === true && <TrendingUp className="h-3 w-3" />}
+              {delta.positive === false && <TrendingDown className="h-3 w-3" />}
+              {delta.label}
+            </div>
           )}
         </div>
         <div className={cn("p-2 rounded-xl shrink-0", color)}>
@@ -668,27 +686,66 @@ export function AnalyticsDashboard({
   const [range, setRange] = useState<DateRange>(initialRange)
   const [method, setMethod] = useState<string>("all")
   const [isPending, startTransition] = useTransition()
+  const [compare, setCompare] = useState(false)
+  const [comparisonData, setComparisonData] = useState<ComparisonKPIs | null>(null)
+
+  async function fetchComparison(r: DateRange, m: string) {
+    const res = await getComparisonKPIs(r, m !== "all" ? m : undefined)
+    setComparisonData(res.success ? res.data : null)
+  }
 
   function handleRangeChange(newRange: DateRange) {
     setRange(newRange)
     startTransition(async () => {
-      const result = await getAnalyticsData(
-        newRange,
-        method !== "all" ? method : undefined
-      )
+      const result = await getAnalyticsData(newRange, method !== "all" ? method : undefined)
       if (result.success) setData(result.data)
+      if (compare) await fetchComparison(newRange, method)
     })
   }
 
   function handleMethodChange(newMethod: string) {
     setMethod(newMethod)
     startTransition(async () => {
-      const result = await getAnalyticsData(
-        range,
-        newMethod !== "all" ? newMethod : undefined
-      )
+      const result = await getAnalyticsData(range, newMethod !== "all" ? newMethod : undefined)
       if (result.success) setData(result.data)
+      if (compare) await fetchComparison(range, newMethod)
     })
+  }
+
+  function handleToggleCompare() {
+    const next = !compare
+    setCompare(next)
+    if (next) {
+      startTransition(async () => {
+        await fetchComparison(range, method)
+      })
+    } else {
+      setComparisonData(null)
+    }
+  }
+
+  function brewsDelta() {
+    if (!comparisonData) return null
+    const diff = data.totalBrews - comparisonData.totalBrews
+    if (diff === 0) return { label: "Sin cambio", positive: null as null }
+    return { label: `${diff > 0 ? "+" : ""}${diff} brews`, positive: diff > 0 }
+  }
+
+  function ratingDelta() {
+    if (!comparisonData || !data.avgRating || !comparisonData.avgRating) return null
+    const diff = Math.round((data.avgRating - comparisonData.avgRating) * 10) / 10
+    if (diff === 0) return { label: "Sin cambio", positive: null as null }
+    return { label: `${diff > 0 ? "+" : ""}${diff}★`, positive: diff > 0 }
+  }
+
+  function gramsDelta() {
+    if (!comparisonData) return null
+    const diff = data.totalGrams - comparisonData.totalGrams
+    if (diff === 0) return { label: "Sin cambio", positive: null as null }
+    const label = Math.abs(diff) >= 1000
+      ? `${diff > 0 ? "+" : ""}${(diff / 1000).toFixed(1)}kg`
+      : `${diff > 0 ? "+" : ""}${diff}g`
+    return { label, positive: diff > 0 }
   }
 
   return (
@@ -740,6 +797,23 @@ export function AnalyticsDashboard({
             ))}
           </div>
 
+          {/* Toggle comparar */}
+          {range !== "all" && (
+            <button
+              onClick={handleToggleCompare}
+              disabled={isPending}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border transition-all",
+                compare
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              )}
+            >
+              <GitCompare className="h-3.5 w-3.5" />
+              Comparar
+            </button>
+          )}
+
           {isPending && (
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
           )}
@@ -747,12 +821,19 @@ export function AnalyticsDashboard({
       </div>
 
       {/* KPI Cards */}
+      {compare && comparisonData && (
+        <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+          <GitCompare className="h-3.5 w-3.5" />
+          Comparando con el período anterior equivalente
+        </p>
+      )}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Total brews"
           value={data.totalBrews.toString()}
           icon={Coffee}
           color="bg-amber-500/10 text-amber-600"
+          delta={compare ? brewsDelta() : null}
         />
         <KpiCard
           title="Rating promedio"
@@ -765,6 +846,7 @@ export function AnalyticsDashboard({
           }
           icon={Star}
           color="bg-amber-500/10 text-amber-500"
+          delta={compare ? ratingDelta() : null}
         />
         <KpiCard
           title="Café consumido"
@@ -775,6 +857,7 @@ export function AnalyticsDashboard({
           }
           icon={Package}
           color="bg-orange-500/10 text-orange-500"
+          delta={compare ? gramsDelta() : null}
         />
         <KpiCard
           title="Método favorito"
