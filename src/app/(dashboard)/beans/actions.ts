@@ -166,24 +166,32 @@ export async function recalculateBrewCosts(beanId: string): Promise<void> {
 
   const { data: bean } = await supabase
     .from("beans")
-    .select("price")
+    .select("price, weight_grams")
     .eq("id", beanId)
     .single()
 
-  if (!bean?.price) {
+  if (!bean?.price || !bean?.weight_grams) {
     await supabase.from("brews").update({ cost_per_brew: null }).eq("bean_id", beanId)
     return
   }
 
-  const { count } = await supabase
+  const pricePerGram = bean.price / bean.weight_grams
+
+  const { data: brews } = await supabase
     .from("brews")
-    .select("*", { count: "exact", head: true })
+    .select("id, dose_grams")
     .eq("bean_id", beanId)
 
-  if (!count || count === 0) return
+  if (!brews || brews.length === 0) return
 
-  const costPerBrew = bean.price / count
-  await supabase.from("brews").update({ cost_per_brew: costPerBrew }).eq("bean_id", beanId)
+  await Promise.all(
+    brews.map((brew) =>
+      supabase
+        .from("brews")
+        .update({ cost_per_brew: pricePerGram * brew.dose_grams })
+        .eq("id", brew.id)
+    )
+  )
 }
 
 export async function updateBean(
