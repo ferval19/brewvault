@@ -18,6 +18,8 @@ import { DashboardCharts } from "@/components/charts/dashboard-charts"
 
 import { getDashboardStats } from "./actions"
 import { getAlerts, getUnreadAlertCount } from "@/app/(dashboard)/alerts/actions"
+import { getGoalsWithProgress } from "@/app/(dashboard)/goals/actions"
+import { GoalsWidget } from "@/components/goals/goals-widget"
 import { brewMethods } from "@/lib/validations/brews"
 
 export const metadata = {
@@ -32,10 +34,11 @@ function getGreeting(): string {
 }
 
 export default async function DashboardPage() {
-  const [result, alertsResult, alertCountResult] = await Promise.all([
+  const [result, alertsResult, alertCountResult, goalsResult] = await Promise.all([
     getDashboardStats(),
     getAlerts({ limit: 5 }),
     getUnreadAlertCount(),
+    getGoalsWithProgress(),
   ])
 
   if (!result.success) {
@@ -49,6 +52,7 @@ export default async function DashboardPage() {
   const stats = result.data
   const alerts = alertsResult.success ? alertsResult.data : []
   const alertCount = alertCountResult.success ? alertCountResult.data : 0
+  const goals = goalsResult.success ? goalsResult.data : []
   const greeting = getGreeting()
 
   return (
@@ -197,6 +201,9 @@ export default async function DashboardPage() {
 
         <DashboardCharts charts={stats.charts} />
       </div>
+
+      {/* Goals */}
+      <GoalsWidget goals={goals} compact />
 
       {/* Analytics CTA + Recent brews */}
       <div className="grid gap-6 lg:grid-cols-2">
