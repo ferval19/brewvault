@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { FlavorWheelSelector } from "@/components/forms/flavor-wheel-selector"
 
 import { scaCategories } from "@/lib/validations/cupping-notes"
 import { brewMethods } from "@/lib/validations/brews"
@@ -37,7 +38,6 @@ interface CuppingNoteFormData {
   uniformity: number | null
   clean_cup: number | null
   overall: number | null
-  flavor_descriptors_text: string
 }
 
 interface CuppingNoteFormProps {
@@ -54,6 +54,9 @@ export function CuppingNoteForm({
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [flavorDescriptors, setFlavorDescriptors] = useState<string[]>(
+    note?.flavor_descriptors || []
+  )
   const isEditing = !!note
 
   const {
@@ -74,7 +77,6 @@ export function CuppingNoteForm({
       uniformity: note?.uniformity ?? null,
       clean_cup: note?.clean_cup ?? null,
       overall: note?.overall ?? null,
-      flavor_descriptors_text: note?.flavor_descriptors?.join(", ") || "",
     },
   })
 
@@ -107,13 +109,6 @@ export function CuppingNoteForm({
     setIsLoading(true)
     setError(null)
 
-    const descriptors = data.flavor_descriptors_text
-      ? data.flavor_descriptors_text
-          .split(",")
-          .map((d) => d.trim())
-          .filter(Boolean)
-      : null
-
     const input = {
       brew_id: data.brew_id,
       fragrance: data.fragrance || null,
@@ -126,7 +121,7 @@ export function CuppingNoteForm({
       uniformity: data.uniformity || null,
       clean_cup: data.clean_cup || null,
       overall: data.overall || null,
-      flavor_descriptors: descriptors,
+      flavor_descriptors: flavorDescriptors.length > 0 ? flavorDescriptors : null,
     }
 
     const result = isEditing
@@ -226,20 +221,10 @@ export function CuppingNoteForm({
       {/* Descriptores de sabor */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Descriptores de sabor</h3>
-
-        <div className="space-y-2">
-          <Label htmlFor="flavor_descriptors_text">
-            Descriptores (separados por coma)
-          </Label>
-          <Input
-            id="flavor_descriptors_text"
-            placeholder="Ej: chocolate, caramelo, frutos rojos, citrico"
-            {...register("flavor_descriptors_text")}
-          />
-          <p className="text-xs text-muted-foreground">
-            Escribe los descriptores de sabor separados por comas
-          </p>
-        </div>
+        <FlavorWheelSelector
+          selected={flavorDescriptors}
+          onChange={setFlavorDescriptors}
+        />
       </div>
 
       {/* Botones */}
