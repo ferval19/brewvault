@@ -5,9 +5,11 @@ import { Coffee, ArrowRight, Clock, Star, Flame } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getEquipment } from "@/app/(dashboard)/equipment/actions"
 import { getQuickBrewStats } from "./actions"
+import { QuickBrewTemplates } from "./quick-brew-templates"
 import { equipmentTypes, espressoMachineSubtypes, grinderSubtypes } from "@/lib/validations/equipment"
 import { brewMethods } from "@/lib/validations/brews"
 import { createClient } from "@/lib/supabase/server"
+import { getFavoriteBrews, getActiveBeans } from "@/app/(dashboard)/brews/actions"
 
 export default async function QuickBrewPage({
   params,
@@ -24,9 +26,11 @@ export default async function QuickBrewPage({
     redirect(`/login?next=/quick-brew/${equipmentId}`)
   }
 
-  const [equipmentResult, statsResult] = await Promise.all([
+  const [equipmentResult, statsResult, favoritesResult, beansResult] = await Promise.all([
     getEquipment(equipmentId),
     getQuickBrewStats(equipmentId),
+    getFavoriteBrews(),
+    getActiveBeans(),
   ])
 
   if (!equipmentResult.success || !equipmentResult.data) {
@@ -35,6 +39,8 @@ export default async function QuickBrewPage({
 
   const equipment = equipmentResult.data
   const stats = statsResult.success ? statsResult.data : null
+  const favorites = favoritesResult.success ? favoritesResult.data : []
+  const beans = beansResult.success ? beansResult.data : []
 
   const typeLabel = equipmentTypes.find(t => t.value === equipment.type)?.label || equipment.type
   const subtypeLabel = equipment.subtype
@@ -146,6 +152,13 @@ export default async function QuickBrewPage({
             </div>
           </div>
         )}
+
+        {/* Quick Templates */}
+        <QuickBrewTemplates
+          favorites={favorites}
+          beans={beans}
+          equipmentId={equipmentId}
+        />
 
         {/* Last Brew */}
         {stats?.lastBrew && (
